@@ -45,29 +45,61 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
   });
 
   // Global Text Selection & Palm Rest Protection:
-  // Completely prevents iOS Safari / desktop browsers from selecting text or popping magnifier when resting a palm
+  // Completely prevents iOS Safari / desktop browsers from selecting text or popping
+  // the native "Search with AI" / "Copy" callout menu when writing or resting a palm
   useEffect(() => {
     if (!isOpen) return;
 
+    document.body.classList.add('scratchpad-active');
+
     const prevUserSelect = document.body.style.userSelect;
     const prevWebkitUserSelect = (document.body.style as unknown as { webkitUserSelect: string }).webkitUserSelect;
+    const prevWebkitTouchCallout = (document.body.style as unknown as { webkitTouchCallout: string }).webkitTouchCallout;
 
     document.body.style.userSelect = 'none';
     (document.body.style as unknown as { webkitUserSelect: string }).webkitUserSelect = 'none';
+    (document.body.style as unknown as { webkitTouchCallout: string }).webkitTouchCallout = 'none';
     window.getSelection()?.removeAllRanges();
 
     const preventSelectionEvent = (e: Event) => {
       e.preventDefault();
     };
 
-    document.addEventListener('selectstart', preventSelectionEvent);
-    document.addEventListener('contextmenu', preventSelectionEvent);
+    const clearSelection = () => {
+      window.getSelection()?.removeAllRanges();
+    };
+
+    document.addEventListener('selectstart', preventSelectionEvent, { capture: true });
+    document.addEventListener('contextmenu', preventSelectionEvent, { capture: true });
+    document.addEventListener('selectionchange', clearSelection);
 
     return () => {
+      document.body.classList.remove('scratchpad-active');
       document.body.style.userSelect = prevUserSelect;
       (document.body.style as unknown as { webkitUserSelect: string }).webkitUserSelect = prevWebkitUserSelect;
-      document.removeEventListener('selectstart', preventSelectionEvent);
-      document.removeEventListener('contextmenu', preventSelectionEvent);
+      (document.body.style as unknown as { webkitTouchCallout: string }).webkitTouchCallout = prevWebkitTouchCallout;
+      document.removeEventListener('selectstart', preventSelectionEvent, { capture: true });
+      document.removeEventListener('contextmenu', preventSelectionEvent, { capture: true });
+      document.removeEventListener('selectionchange', clearSelection);
+    };
+  }, [isOpen]);
+
+  // Native non-passive canvas listeners to guarantee suppression of iOS callouts
+  useEffect(() => {
+    if (!isOpen) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const preventNativeCallout = (e: Event) => {
+      e.preventDefault();
+    };
+
+    canvas.addEventListener('contextmenu', preventNativeCallout);
+    canvas.addEventListener('selectstart', preventNativeCallout);
+
+    return () => {
+      canvas.removeEventListener('contextmenu', preventNativeCallout);
+      canvas.removeEventListener('selectstart', preventNativeCallout);
     };
   }, [isOpen]);
 
@@ -165,14 +197,10 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
     const onTouchStart = (e: TouchEvent) => {
       // Check if Apple Pencil is present
       const hasStylus = Array.from(e.touches).some((t: any) => t.touchType === 'stylus');
-      if (hasStylus || isPenActiveRef.current) {
-        // Stylus is active! Do NOT call preventDefault, do NOT pinch-zoom, do NOT interrupt pen!
-        return;
-      }
 
-      if (e.touches.length === 2) {
+      if (e.touches.length === 2 && !hasStylus && !isPenActiveRef.current) {
+        // Two-finger pinch to zoom / pan
         e.preventDefault();
-        // Cancel any active finger drawing
         setIsDrawing(false);
         activePointerIdRef.current = null;
         lastPointRef.current = null;
@@ -188,6 +216,11 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
           initialMidpoint: mid,
           initialOffset: { ...offset },
         };
+      } else {
+        // Single finger, resting palm, or Apple Pencil:
+        // PREVENT DEFAULT to stop iOS Safari from starting tap-and-hold / text selection / "Search with AI" callout!
+        // Pointer events will continue firing cleanly for Apple Pencil writing and drawing.
+        e.preventDefault();
       }
     };
 
@@ -259,6 +292,16 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
   const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
     e.preventDefault();
 
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    // Capture pointer to bind tracking directly to canvas and bypass iOS gesture recognizers
+    try {
+      canvas.setPointerCapture(e.pointerId);
+    } catch {
+      // ignore
+    }
+
     const isPen = e.pointerType === 'pen';
 
     // Apple Pencil / Stylus ALWAYS takes absolute priority!
@@ -278,8 +321,6 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
       activePointerIdRef.current = e.pointerId;
     }
 
-    const canvas = canvasRef.current;
-    if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
@@ -339,6 +380,17 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
   };
 
   const handlePointerUp = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      try {
+        if (canvas.hasPointerCapture(e.pointerId)) {
+          canvas.releasePointerCapture(e.pointerId);
+        }
+      } catch {
+        // ignore
+      }
+    }
+
     if (activePointerIdRef.current === e.pointerId) {
       activePointerIdRef.current = null;
       if (e.pointerType === 'pen') {
@@ -351,6 +403,17 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
   };
 
   const handlePointerCancel = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      try {
+        if (canvas.hasPointerCapture(e.pointerId)) {
+          canvas.releasePointerCapture(e.pointerId);
+        }
+      } catch {
+        // ignore
+      }
+    }
+
     if (activePointerIdRef.current === e.pointerId) {
       activePointerIdRef.current = null;
       if (e.pointerType === 'pen') {
@@ -710,16 +773,22 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
           {/* Drawing Canvas */}
           <canvas
             ref={canvasRef}
+            className="scratchpad-canvas"
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onPointerCancel={handlePointerCancel}
+            onContextMenu={(e) => e.preventDefault()}
             style={{
               touchAction: 'none', // Prevents default gestures while writing
               cursor: tool === 'pen' ? 'crosshair' : 'cell',
               width: `${sheetDimensions.width}px`,
               height: `${sheetDimensions.height}px`,
-              display: 'block'
+              display: 'block',
+              userSelect: 'none',
+              WebkitUserSelect: 'none',
+              WebkitTouchCallout: 'none',
+              outline: 'none'
             }}
           />
         </div>

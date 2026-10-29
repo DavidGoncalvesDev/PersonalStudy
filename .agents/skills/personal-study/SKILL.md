@@ -8,8 +8,9 @@ description: >-
   granular 4-5 segment-per-chapter division, clear brown theme, 3-phase mastery
   progression (rich text -> 1-by-1 quiz with reset -> flashcards), non-resetting quiz state,
   per-device & per-person user login data isolation, text guide anchoring with amber highlights,
-  large fundamental explanations, scratchpad canvas with palm rejection, Apple Pencil priority,
-  faded graph paper grid & pinch/wheel zoom, "Copy for AI" formatted exercise clipboard feature,
+  large fundamental explanations, elimination of longest-option bias, uniform A-F option distribution,
+  live scratchpad question synchronization, iOS Apple Pencil callout suppression, scratchpad canvas with palm rejection,
+  Apple Pencil priority, faded graph paper grid & pinch/wheel zoom, "Copy for AI" formatted exercise clipboard feature,
   Exercise Zone (Random practice, Sudden Death & 50-Minute Comprehensive Exam),
   Preparation Score formulation, discipline deletion prevention, mobile optimization, and self-updating guidelines.
 ---
@@ -114,6 +115,13 @@ Each learning unit contains 3 distinct progressive phases:
 
 ### Phase 2: Level Quiz (1 Question at a Time • Immediate Reset on Error)
 - **Question Format**: Exactly **12 substantive questions** (4 elemental, 4 conceptual, 4 advanced) with **6 choices each (A–F)**.
+- **Strict Prohibition of Length Cues & Longest-Option Bias ("Anti-Verbosity Bias")**:
+  - The correct answer must **never** be predictably longer, more descriptive, or more grammatically complex than distractors.
+  - Distractors must match the correct answer in academic depth, technical vocabulary, sentence length, and structural detail (length variance should generally remain within ~15–25%).
+  - Across any question set or bank, the correct option must be the longest option in at most ~10–16.7% of questions (matching uniform random expectation among 6 choices), never dominating as the longest choice.
+- **Strict Uniform Option & Letter Distribution**:
+  - Across every 12-question quiz, correct choices must be strictly and uniformly distributed across A, B, C, D, E, F (exactly 2 of each letter per 12 questions).
+  - In aggregate question pools and exams, every letter option (A–F) must maintain an equal ~16.7% frequency.
 - **Strict Content Alignment Across All Levels**:
   - Every single question across all 8 levels is directly grounded in the concepts, definitions, and formulas taught in that specific Learning Unit's text guide.
   - Each question stores `section_reference` (e.g. `Section 3: Classification of Methods`) and `section_anchor` (e.g. `classification-of-multivariate-methods`).
@@ -203,15 +211,18 @@ Total maximum score: $40 + 20 + 20 + 10 + 10 = 100\%$.
 
 ## 8. Global Scratchpad / Calculation Canvas
 
-- **Openable Everywhere**: Available across all screens via a floating action button (FAB) at the bottom-right, top bar, and inside question cards.
+- **Openable Everywhere & Live Question Sync**:
+  - Available across all screens via a floating action button (FAB) at the bottom-right, top bar, and inside question cards.
+  - Clicking "Scratchpad / Notes" on ANY quiz question, exercise question, or exam question dynamically passes the currently active question (`onOpenScratchpad(currentQ)`), ensuring the corner HUD reference card matches the exact live question being solved rather than defaulting to Question 1.
 - **Apple Pencil & Stylus Priority**:
   - Uses `PointerEvent` with strict pen prioritization: when an Apple Pencil touches down (`e.pointerType === 'pen'`), it preempts any resting hand or touch contact and locks active drawing to the stylus.
   - Stylus touches (`touch.touchType === 'stylus'`) are bypassed by pinch-zoom listeners so resting palm contacts never trigger zoom or cancel active pen strokes.
-  - Avoids calling `setPointerCapture` on mobile WebKit to prevent premature `pointercancel` aborts.
   - Single tap immediately generates an initial round dot (`ctx.arc` / `ctx.fill`) so periods, decimal points, and dots render instantly.
-- **Palm Rejection & Text Selection Suppression**:
-  - Global suppression of text selection (`user-select: none`, `-webkit-user-select: none`, `-webkit-touch-callout: none`).
-  - Traps and prevents `selectstart` and `contextmenu` events while the scratchpad is active.
+- **Palm Rejection & iOS Callout Suppression ("Search with AI" / "Copy")**:
+  - Complete suppression of iOS 18 native edit callout menu (`[Copy | Search with AI | Look Up]`): `touch-action: none !important; -webkit-touch-callout: none !important; -webkit-user-select: none !important; user-select: none !important;` applied dynamically to `<body>` and `<canvas>` while scratchpad is open.
+  - Intercepts and cancels single-touch `touchstart` to suppress iOS long-press callout timers while preserving two-finger pinch-zoom gestures.
+  - Captures stylus/touch pointer events via `canvas.setPointerCapture(e.pointerId)` on pointerdown and releases on pointerup/cancel to prevent iOS callouts.
+  - Traps and prevents `selectstart`, `selectionchange`, and `contextmenu` events while the scratchpad is active.
 - **Faded Warm Graph Paper Grid**:
   - Rendered on a warm cream notepad sheet (`#fffdfa`) resting on a subtle desk surface (`#ece6dc`) with an authentic drop shadow.
   - Very subtle faded grid: 24px minor squares (`rgba(120, 53, 15, 0.04)`) and 120px major squares (`rgba(120, 53, 15, 0.12)`).

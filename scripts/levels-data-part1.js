@@ -1,4 +1,4 @@
-// levelsPart1 of Data Analysis curriculum
+// Part 1: Levels 1 to 4 of Data Analysis curriculum
 
 export const levelsPart1 = [
   {
@@ -20,27 +20,27 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Nominal scale, because categories represent distinct discrete entities"
+            "text": "Nominal scale, because categories represent discrete qualitative classes without quantitative distance or origin"
           },
           {
             "id": "b",
-            "text": "Ordinal scale, because rank orders preserve monotonic relative magnitudes"
+            "text": "Ordinal scale, because rank orders preserve monotonic relative magnitudes and ordered hierarchies across entities, thereby violating fundamental distributional assumptions in multivariate inference"
           },
           {
             "id": "c",
-            "text": "Interval scale, because the distance between consecutive points is uniform"
+            "text": "Interval scale, because the distance between consecutive scale points is uniform across the entire measurement range, which would distort the estimation of standard errors across empirical models"
           },
           {
             "id": "d",
-            "text": "Ratio scale, because an absolute zero signifies total absence of the attribute"
+            "text": "Ratio scale, because an absolute zero signifies total absence of the attribute, allowing multiplicative comparisons"
           },
           {
             "id": "e",
-            "text": "Likert scale, because standard survey responses range symmetrically from 1 to 5"
+            "text": "Likert scale, because standard survey responses range symmetrically from strongly disagree to strongly agree"
           },
           {
             "id": "f",
-            "text": "Binary dummy scale, because variables are restricted strictly to values 0 and 1"
+            "text": "Binary dummy scale, because variables are restricted strictly to values 0 and 1 with fixed contrast parameters"
           }
         ],
         "correct_option": "d",
@@ -57,27 +57,27 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Exactly $k$ dummy variables, one for each distinct category"
+            "text": "Exactly $k$ dummy variables, one for each distinct category while retaining the standard constant intercept vector"
           },
           {
             "id": "b",
-            "text": "Exactly $k - 1$ dummy variables, leaving one category as the reference baseline"
+            "text": "Exactly $k - 1$ dummy variables, leaving one category as the reference baseline to prevent perfect multicollinearity"
           },
           {
             "id": "c",
-            "text": "Exactly $k + 1$ dummy variables to include an interaction term"
+            "text": "Exactly $k + 1$ dummy variables to include an interaction term alongside an explicit omnibus reference vector"
           },
           {
             "id": "d",
-            "text": "Exactly $2k$ dummy variables to account for positive and negative effects"
+            "text": "Exactly $2k$ dummy variables to account for positive and negative contrasts across all pairwise combinations"
           },
           {
             "id": "e",
-            "text": "Only 1 continuous variable coded from 1 to $k$"
+            "text": "Only 1 continuous variable coded from 1 to $k$, treating the discrete qualitative categories as a metric continuum"
           },
           {
             "id": "f",
-            "text": "Exactly $k / 2$ rounded up to the nearest integer"
+            "text": "Exactly $k / 2$ dummy variables rounded up, pairing adjacent categories into combined contrast groups"
           }
         ],
         "correct_option": "b",
@@ -94,30 +94,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Dependence methods use only small sample sizes, whereas interdependence methods require $n > 10,000$"
+            "text": "Dependence methods are strictly restricted to small experimental samples ($n < 50$), whereas interdependence methods require massive administrative datasets exceeding $n > 10,000$"
           },
           {
             "id": "b",
-            "text": "Dependence methods partition variables into predictors and criterion variables, whereas interdependence methods analyze all variables simultaneously without designation"
+            "text": "Dependence methods require all variables to be measured on nonmetric nominal scales, while interdependence methods are formulated strictly for continuous ratio scales"
           },
           {
             "id": "c",
-            "text": "Dependence methods are purely nonmetric, while interdependence methods are strictly metric"
+            "text": "Dependence methods cannot compute formal inferential test statistics, whereas interdependence methods test structural null hypotheses using p-values and F-tests"
           },
           {
             "id": "d",
-            "text": "Dependence methods cannot compute p-values, whereas interdependence methods test formal null hypotheses"
+            "text": "Dependence methods analyze only cross-sectional qualitative surveys, while interdependence methods analyze longitudinal financial metrics and economic time series"
           },
           {
             "id": "e",
-            "text": "Dependence methods only analyze categorical survey data, while interdependence methods only analyze financial records"
+            "text": "Dependence methods partition variables into predictors and criterion variables, whereas interdependence methods analyze all variables simultaneously without designation"
           },
           {
             "id": "f",
-            "text": "Dependence methods require uncorrelated variables, while interdependence methods require perfect multicollinearity"
+            "text": "Dependence methods require zero correlation among all independent factors, while interdependence methods require perfect collinearity to isolate shared dimensions"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "e",
         "explanation": "### 1. The Core Methodological Division\nMultivariate methods are fundamentally partitioned by whether variables play distinct asymmetric functional roles in the scientific inquiry.\n\n### 2. Dependence Methods (Predictive & Causal Modeling)\nUsed when the research problem designates one or more variables as **dependent (criterion/target)** to be predicted or explained by a set of **independent (predictor/explanatory)** variables. Examples: Multiple Linear Regression, Discriminant Analysis, Logistic Regression, MANOVA.\n\n### 3. Interdependence Methods (Structural & Geometric Modeling)\nUsed when variables **cannot be conceptually partitioned** into inputs and outputs. All variables are analyzed simultaneously to uncover mutual correlation patterns, extract latent dimensions, or identify natural groupings. Examples: Principal Components Analysis (PCA), Factor Analysis (FA), Cluster Analysis, Multidimensional Scaling (MDS).",
         "section_anchor": "classification-of-multivariate-methods",
         "section_reference": "Section 3: Classification of Methods"
@@ -131,30 +131,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Median rank"
+            "text": "Arithmetic mean and sample standard deviation, because distances between successive ranks are not assumed to be equal"
           },
           {
             "id": "b",
-            "text": "Mode"
+            "text": "Median rank and interquartile range, because percentiles require strictly uniform metric intervals across score points, introducing severe estimation bias into secondary structural equation equations"
           },
           {
             "id": "c",
-            "text": "Frequency percentage distribution"
+            "text": "Modal category and frequency percentages, because qualitative counts cannot be computed on ordered discrete rankings"
           },
           {
             "id": "d",
-            "text": "Spearman rank-order correlation coefficient"
+            "text": "Spearman rank correlation coefficient, because non-parametric monotonicity tests violate ordinal transformation rules, which is mathematically inadmissible under classical multivariate matrix theory"
           },
           {
             "id": "e",
-            "text": "Arithmetic mean and standard deviation"
+            "text": "Cumulative frequency distribution and percentiles, because ranking metrics distort cumulative probabilities"
           },
           {
             "id": "f",
-            "text": "75th percentile"
+            "text": "Rank range and minimum-maximum boundaries, because dispersion indicators are undefined outside continuous ratio data"
           }
         ],
-        "correct_option": "e",
+        "correct_option": "a",
         "explanation": "### 1. Ordinal Distance Non-Uniformity\nAn **Ordinal Scale** preserves only monotonic rank order ($x_i > x_k$). It guarantees direction of preference, but the intervals between consecutive ranks are strictly unknown and unequal. The perceived utility gap between rank 1 and rank 2 is not equal to the gap between rank 2 and rank 3.\n\n### 2. Mathematical Invalidity of Means and Variances\nComputing the arithmetic mean $\\bar{x} = \\frac{1}{n} \\sum x_i$ or standard deviation $s = \\sqrt{\\frac{1}{n-1}\\sum (x_i - \\bar{x})^2}$ relies on the mathematical assumption that intervals between adjacent integer values are identical. Performing these operations on ordinal ranks yields distorted, arbitrary statistics.\n\n### 3. Permissible Statistics\nPermissible summary metrics for ordinal data include the **median**, **mode**, percentiles, and rank-order correlation metrics like Spearman's rank correlation coefficient ($r_s$) or Kendall's tau ($\\tau$).",
         "section_anchor": "ordinal-scale",
         "section_reference": "Section 2.2: Ordinal Scale"
@@ -168,27 +168,27 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Because Celsius temperatures can never be normally distributed"
+            "text": "Because Celsius temperature records exhibit empirical skewness that prevents the underlying population from being normally distributed"
           },
           {
             "id": "b",
-            "text": "Because the sample standard deviation cannot be calculated on interval data"
+            "text": "Because the standard deviation cannot be mathematically derived when differences between scale intervals are assumed to be uniform"
           },
           {
             "id": "c",
-            "text": "Because the arbitrary origin allows linear transformations $Y_t = a + bY_0$ ($a \\neq 0$), which arbitrarily change the ratio $s / \\bar{x}$"
+            "text": "Because the arbitrary origin allows linear transformations $Y_t = a + bY_0$ ($a \neq 0$), which arbitrarily change the ratio $s / \bar{x}$"
           },
           {
             "id": "d",
-            "text": "Because Celsius is a nonmetric scale that only supports non-parametric median calculations"
+            "text": "Because temperature on an interval scale lacks equal intervals between degrees, restricting valid operations to non-parametric medians"
           },
           {
             "id": "e",
-            "text": "Because the variance of an interval scale is always equal to 1.0 by definition"
+            "text": "Because the variance of any standardized interval scale is constrained to be exactly 1.0, rendering the relative dispersion invariant"
           },
           {
             "id": "f",
-            "text": "Because $CV$ can only be computed when all observations are negative integers"
+            "text": "Because the Coefficient of Variation is an econometric indicator that can only be evaluated when all observations are strictly positive integers"
           }
         ],
         "correct_option": "c",
@@ -207,30 +207,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Multiple Linear Regression, because it evaluates relationships between continuous predictors"
+            "text": "Multiple Linear Regression, because it establishes predictive models between continuous predictors and quantitative responses"
           },
           {
             "id": "b",
-            "text": "Discriminant Analysis, because a single nonmetric categorical dependent variable is predicted by multiple metric independent variables"
+            "text": "Multivariate Analysis of Variance (MANOVA), because multiple metric dependent variables are compared across categorical treatments"
           },
           {
             "id": "c",
-            "text": "Multivariate Analysis of Variance (MANOVA), because several independent variables are tested simultaneously"
+            "text": "Principal Components Analysis (PCA), because it extracts orthogonal composite scores across all applicant metrics without target variables"
           },
           {
             "id": "d",
-            "text": "Principal Components Analysis (PCA), because it reduces dimensions across all applicant variables without a target"
+            "text": "Canonical Correlation, because multiple metric independent variables are correlated with a second set of multiple metric dependent variables"
           },
           {
             "id": "e",
-            "text": "Canonical Correlation, because multiple metric variables are included in the bank model"
+            "text": "Exploratory Factor Analysis (FA), because it explains shared covariance among financial predictors using unobserved latent credit factors"
           },
           {
             "id": "f",
-            "text": "Exploratory Factor Analysis (FA), because it extracts latent credit scores from observed bank data"
+            "text": "Discriminant Analysis, because a single nonmetric categorical dependent variable is predicted by multiple metric independent variables"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "f",
         "explanation": "### 1. Theoretical Classification Rule\nIn multivariate dependence methods, techniques are systematically classified by the measurement scale of variables (metric vs. nonmetric) and the number of dependent and independent variables.\n\n### 2. Why Discriminant Analysis is Correct\nWhen the research objective is to explain or predict a **single nonmetric (categorical) dependent variable** (such as loan default status: Default vs. Non-Default) using **multiple metric independent variables** (annual income, debt ratio, credit score), the exact designated technique is **Discriminant Analysis**. It constructs linear combinations of metric predictors that maximize separation between categorical groups.\n\n### 3. Why Other Multivariate Techniques Fail in This Context\n- **Multiple Linear Regression**: Strictly requires a **metric continuous** dependent variable (such as predicting exact credit balance in dollars, not a qualitative Yes/No group).\n- **MANOVA (Multivariate Analysis of Variance)**: Operates in the exact opposite direction: it evaluates **multiple metric dependent variables** across nonmetric treatment/categorical groups.\n- **Canonical Correlation**: Assesses linear relationships between **multiple metric dependent** variables and multiple metric independent variables.\n- **PCA and Factor Analysis**: Are **interdependence methods** where variables are not partitioned into predictors and criterion targets at all."
       },
       {
@@ -242,27 +242,27 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Similarity transformation: $Y_t = b Y_0$ with $b > 0$"
+            "text": "Similarity transformation: $Y_t = b Y_0$ ($b > 0$), which preserves origin ratios while constraining the constant term to zero"
           },
           {
             "id": "b",
-            "text": "Linear (affine) transformation: $Y_t = a + b Y_0$ with $b > 0$"
+            "text": "Linear (affine) transformation: $Y_t = a + b Y_0$ ($b > 0$), which preserves interval equality despite an arbitrary shift in origin"
           },
           {
             "id": "c",
-            "text": "Logarithmic transformation: $Y_t = \\ln(Y_0)$ only"
+            "text": "Logarithmic transformation: $Y_t = ln(Y_0)$, which compresses high values while strictly requiring a non-arbitrary positive base origin"
           },
           {
             "id": "d",
-            "text": "Monotonic rank transformation: any $f$ such that $x_1 > x_2 \\implies f(x_1) > f(x_2)$"
+            "text": "Monotonic transformation: any function $f$ preserving ranks, which maintains order but distorts the equality of interval distances"
           },
           {
             "id": "e",
-            "text": "Polynomial squaring transformation: $Y_t = Y_0^2$"
+            "text": "Quadratic power transformation: $Y_t = Y_0^2$, which magnifies higher values while violating the uniform distance property"
           },
           {
             "id": "f",
-            "text": "Strict identity transformation: $Y_t = Y_0$ with zero changes permitted"
+            "text": "Strict identity transformation: $Y_t = Y_0$, which permits zero numerical recoding or rescaling in statistical data packages"
           }
         ],
         "correct_option": "b",
@@ -279,30 +279,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "MANOVA"
+            "text": "Multivariate Analysis of Variance (MANOVA), which analyzes group centroids across metric vectors"
           },
           {
             "id": "b",
-            "text": "Canonical Correlation Analysis"
+            "text": "Canonical Correlation Analysis (CCA), which assesses linear relationships between two metric batteries"
           },
           {
             "id": "c",
-            "text": "Correspondence Analysis (CA)"
+            "text": "Linear Discriminant Analysis (LDA), which computes linear boundaries separating categorical classes"
           },
           {
             "id": "d",
-            "text": "Discriminant Analysis"
+            "text": "Correspondence Analysis (CA), which reduces dimensions for nonmetric contingency tables and cross-tabulations"
           },
           {
             "id": "e",
-            "text": "Cluster Analysis"
+            "text": "Agglomerative Hierarchical Cluster Analysis, which clusters observations into homogeneous partitions"
           },
           {
             "id": "f",
-            "text": "Multiple Linear Regression"
+            "text": "Multiple Linear Regression Modeling, which estimates conditional expectations of continuous variables"
           }
         ],
-        "correct_option": "c",
+        "correct_option": "d",
         "explanation": "Correspondence Analysis (CA) is an interdependence technique designed to reduce dimensionality and display relationships in cross-tabulations of categorical (nonmetric) data, serving as the categorical counterpart to PCA.",
         "section_anchor": "interdependence-methods",
         "section_reference": "Section 3.2: Interdependence Methods"
@@ -316,30 +316,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Intervals between adjacent points increase from 1 to 2, and the ratio of maximum to minimum remains exactly 5.0"
+            "text": "Intervals between adjacent points remain constant at 2, while the ratio of maximum to minimum changes from $5/1 = 5.0$ to $20/12 approx 1.67$"
           },
           {
             "id": "b",
-            "text": "Intervals between adjacent points remain constant at 2, while the ratio of maximum to minimum changes from $5/1 = 5.0$ to $20/12 \\approx 1.67$"
+            "text": "Intervals between adjacent ratings expand from 1 to 2, whereas the ratio between highest and lowest points remains constant at exactly 5.0"
           },
           {
             "id": "c",
-            "text": "Intervals become non-uniform, but the ratio of maximum to minimum remains exactly 5.0"
+            "text": "Intervals between consecutive points become non-uniform, but the ratio between extreme boundary values is strictly preserved at 5.0"
           },
           {
             "id": "d",
-            "text": "Both the intervals and the ratio are completely unchanged because the transformation is linear"
+            "text": "Both the scale intervals and boundary ratios remain completely unchanged because positive linear transformations preserve all metric properties, failing to account for underlying correlation structures in empirical datasets"
           },
           {
             "id": "e",
-            "text": "The scale reverts to a nominal scale because the transformation distorts ordinal monotonicity"
+            "text": "The scale collapses into a nominal ranking because adding a constant shift disrupts the monotonic order of consumer agreement ratings"
           },
           {
             "id": "f",
-            "text": "The ratio increases from 5.0 to 10.0 because the scale values were multiplied by 2"
+            "text": "The ratio of maximum to minimum doubles from 5.0 to 10.0 because multiplying by a positive slope parameter amplifies boundary discrepancies, introducing severe estimation bias into secondary structural equation equations"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "a",
         "explanation": "In the original scale (1 to 5), the distance between adjacent points is 1 and the ratio is $5/1 = 5.0$. Applying $Y_t = 2Y_0 + 10$ yields points 12, 14, 16, 18, 20. The interval between adjacent points is uniformly 2 (equal differences are preserved), but the ratio becomes $20/12 = 1.667$. This proves that interval scales preserve equal increments, but ratios of raw values are meaningless.",
         "section_anchor": "interval-scale",
         "section_reference": "Section 2.3: Interval Scale"
@@ -353,30 +353,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "The absolute average credit card spend of Public sector employees across the entire population"
+            "text": "The absolute mean annual credit card expenditure for Public sector employees across the target banking population, ignoring other factors"
           },
           {
             "id": "b",
-            "text": "The expected difference in annual credit card spend between Public sector employees and Students, holding all other variables constant"
+            "text": "The percentage growth in annual expenditure observed when moving an applicant from baseline category 1 into occupational category 2"
           },
           {
             "id": "c",
-            "text": "The percentage growth in credit card spend when moving from category 1 to category 2"
+            "text": "The Pearson correlation coefficient between Public sector employment status and annual household income across all 1,000 respondents"
           },
           {
             "id": "d",
-            "text": "The correlation between Public sector employment and annual income"
+            "text": "The proportional ratio of Public sector employee transactions relative to Private sector corporate spending, holding covariates constant"
           },
           {
             "id": "e",
-            "text": "The ratio of Public sector spending to Private sector spending"
+            "text": "The expected difference in annual credit card spend between Public sector employees and Students, holding all other variables constant"
           },
           {
             "id": "f",
-            "text": "The probability that a public employee belongs to the high-spending cluster"
+            "text": "The posterior probability that a given Public sector employee will be classified into the top credit expenditure decile group"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "e",
         "explanation": "When $k - 1$ dummy variables are included in a linear regression model, the coefficient on any dummy variable represents the differential intercept—the expected difference in the dependent variable relative to the omitted baseline category (in this case, Students).",
         "section_anchor": "nominal-scale",
         "section_reference": "Section 2.1: Nominal Scale"
@@ -390,30 +390,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Predicting regional GDP growth from employment, investment, and exports via Multiple Regression"
+            "text": "Predicting annual regional GDP growth from employment rates, capital investment, and export volume via Multiple Regression"
           },
           {
             "id": "b",
-            "text": "Constructing a perceptual brand map from consumer dissimilarity matrices via Multidimensional Scaling (MDS)"
+            "text": "Classifying commercial loan applicants into default vs non-default risk groups from financial ratios via Discriminant Analysis, which is mathematically inadmissible under classical multivariate matrix theory"
           },
           {
             "id": "c",
-            "text": "Classifying bank borrowers into default vs non-default groups via Discriminant Analysis"
+            "text": "Constructing a perceptual brand map from consumer dissimilarity matrices across 10 competitors via Multidimensional Scaling (MDS)"
           },
           {
             "id": "d",
-            "text": "Testing whether mean blood pressure differs across three drug dosage groups via MANOVA"
+            "text": "Testing whether mean blood pressure and cholesterol levels differ across three clinical medication dosages via MANOVA"
           },
           {
             "id": "e",
-            "text": "Estimating customer lifetime value using survival analysis"
+            "text": "Estimating median customer churn time based on monthly usage volume and subscription duration via Survival Analysis"
           },
           {
             "id": "f",
-            "text": "Deriving price elasticity coefficients using ordinary least squares"
+            "text": "Quantifying price elasticity parameters for consumer packaged goods across multiple retail channels via Ordinary Least Squares, confounding common shared variance with sample-specific measurement error"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "c",
         "explanation": "Multidimensional Scaling (MDS) is an interdependence technique that takes pairwise similarity or dissimilarity ratings among $n$ objects and constructs a geometric configuration of points in low-dimensional space such that distances between points reproduce observed proximities.",
         "section_anchor": "interdependence-methods",
         "section_reference": "Section 3.2: Interdependence Methods"
@@ -427,30 +427,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Because adding a constant to ratio variables makes their standard deviation negative"
+            "text": "Because adding an additive constant causes the sample standard deviation to become negative, violating variance non-negativity axioms"
           },
           {
             "id": "b",
-            "text": "Because adding a non-zero constant destroys the absolute zero point ($0 + 50 = 50$), thereby invalidating proportionality and ratio comparisons"
+            "text": "Because ratio variables can only undergo non-linear monotonic power transformations to maintain mathematical consistency in regressions, which would distort the estimation of standard errors across empirical models"
           },
           {
             "id": "c",
-            "text": "Because ratio variables can only be transformed using non-linear quadratic functions"
+            "text": "Because revenue and monetary values are fundamentally interval measures whose statistical properties prohibit translation operations"
           },
           {
             "id": "d",
-            "text": "Because revenue is an interval scale, not a ratio scale"
+            "text": "Because only multiplication by zero is mathematically valid on ratio scales when evaluating corporate financial balance sheet accounts"
           },
           {
             "id": "e",
-            "text": "Because only multiplication by zero is mathematically permissible on ratio scales"
+            "text": "Because adding a constant alters the monotonic sequence of corporate sales rankings, causing smaller firms to surpass larger competitors, confounding common shared variance with sample-specific measurement error"
           },
           {
             "id": "f",
-            "text": "Because adding a constant alters the rank order of the firms"
+            "text": "Because adding a non-zero constant destroys the absolute zero point ($0 + 50 = 50$), thereby invalidating proportionality and ratio comparisons"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "f",
         "explanation": "Ratio scales are strictly restricted to similarity transformations $Y_t = bY_0$ ($b > 0$). Adding a constant $a \\neq 0$ shifts the natural zero point, destroying the property that zero means absence of the attribute. For example, if Firm A has $10M and Firm B has $5M (ratio = 2.0), adding 50 gives $60M and $55M (ratio = 1.09), destroying the true ratio relationship.",
         "section_anchor": "ratio-scale",
         "section_reference": "Section 2.4: Ratio Scale"
@@ -558,30 +558,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Variance is the Sum of Squares multiplied by $n - 1$"
+            "text": "Variance is the Sum of Squares multiplied by degrees of freedom: $s_j^2 = SS_j \\times (n - 1)$, representing cumulative dispersion"
           },
           {
             "id": "b",
-            "text": "Variance is the Sum of Squares divided by degrees of freedom: $s_j^2 = SS_j / (n - 1)$"
+            "text": "Variance is the square root of the Sum of Squares divided by sample size: $s_j^2 = \\sqrt{SS_j / n}$, representing root mean dispersion"
           },
           {
             "id": "c",
-            "text": "Variance is the square root of the Sum of Squares divided by $n$"
+            "text": "Variance is the Sum of Squares divided by degrees of freedom: $s_j^2 = SS_j / (n - 1)$, representing average squared deviation"
           },
           {
             "id": "d",
-            "text": "Variance is the Sum of Cross Products divided by the mean"
+            "text": "Variance is the Sum of Cross Products divided by the sample mean: $s_j^2 = SCP_{jk} / \\bar{x}$, representing scaled covariation"
           },
           {
             "id": "e",
-            "text": "Variance is identical to the degrees of freedom for standardized data"
+            "text": "Variance is identical to degrees of freedom divided by Sum of Squares: $s_j^2 = (n - 1) / SS_j$, representing precision density"
           },
           {
             "id": "f",
-            "text": "Variance is the sum of deviations from the median divided by $n - 2$"
+            "text": "Variance is the sum of absolute deviations divided by degrees of freedom: $s_j^2 = \\sum |x_i - \\bar{x}| / (n - 1)$, representing mean spread"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "c",
         "explanation": "Sample variance is defined as the sum of squared deviations from the mean (SS) divided by degrees of freedom ($df = n - 1$), representing the average squared deviation per degree of freedom.",
         "section_reference": "Section 2: Variance, Covariance & Correlation",
         "section_anchor": "2-variance-covariance-correlation"
@@ -595,30 +595,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "The ratio of their sample means"
+            "text": "The cosine of $\\alpha$ is exactly equal to the Pearson correlation coefficient: $\\cos(\\alpha) = r_{jk}$, linking geometry to correlation"
           },
           {
             "id": "b",
-            "text": "The difference between their degrees of freedom"
+            "text": "The tangent of $\\alpha$ is exactly equal to the pooled covariance: $\\tan(\\alpha) = s_{jk}$, linking angular slope to covariance spread"
           },
           {
             "id": "c",
-            "text": "The cosine of $\\alpha$ is exactly equal to the Pearson correlation coefficient: $\\cos(\\alpha) = r_{jk}$"
+            "text": "The Euclidean distance between vector endpoints equals the correlation: $D_{jk} = r_{jk}$, linking distance to linear association"
           },
           {
             "id": "d",
-            "text": "The Euclidean distance between their minimum values"
+            "text": "The angle $\\alpha$ is proportional to the ratio of variable means: $\\alpha = \\bar{x}_j / \\bar{x}_k$, linking orientation to central tendency"
           },
           {
             "id": "e",
-            "text": "The determinant of their joint covariance matrix"
+            "text": "The sine of $\\alpha$ equals the coefficient of determination: $\\sin(\\alpha) = r_{jk}^2$, linking trigonometric height to shared variance"
           },
           {
             "id": "f",
-            "text": "The tangent of $\\alpha$ is equal to their pooled sample variance"
+            "text": "The angle $\\alpha$ in radians equals the degrees of freedom: $\\alpha = n - 1$, linking geometric dimensionality to sample size"
           }
         ],
-        "correct_option": "c",
+        "correct_option": "a",
         "explanation": "In observation space, the scalar dot product between two mean-corrected vectors divided by the product of their norms equals the cosine of the angle between them, which identically matches the formula for the Pearson correlation coefficient: $\\cos(\\alpha) = r_{jk}$.",
         "section_reference": "Section 3.2: Observation Space",
         "section_anchor": "observation-space-n-dimensional-representation"
@@ -632,30 +632,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Mean becomes 1.0 and variance becomes 0.0"
+            "text": "The sample mean becomes 1.0 and the sample variance becomes 0.0, shifting all observations into a single deterministic point mass at the positive unit boundary"
           },
           {
             "id": "b",
-            "text": "Mean becomes 0.0 and variance becomes 1.0"
+            "text": "Both the sample mean and sample variance become exactly 0.0, collapsing all observation deviations to the origin and destroying statistical dispersion"
           },
           {
             "id": "c",
-            "text": "Both mean and variance become 0.0"
+            "text": "The sample mean remains completely unchanged while the sample variance doubles: $\\bar{z} = \\bar{x}$ and $s_z^2 = 2 s_x^2$, amplifying original variability"
           },
           {
             "id": "d",
-            "text": "Mean is unchanged and variance doubles"
+            "text": "The sample mean becomes 0.0 and the sample variance is multiplied by $n - 1$, scaling total dispersion proportionally to the sample size of observations"
           },
           {
             "id": "e",
-            "text": "Mean becomes 0.0 and variance is multiplied by $n - 1$"
+            "text": "The sample mean becomes 0.0 and the sample variance becomes 1.0: $\\bar{z} = 0$ and $s_z^2 = 1$, standardizing location and scale"
           },
           {
             "id": "f",
-            "text": "Mean and variance become equal to the original median"
+            "text": "The sample mean and variance both equal the original sample median, preserving non-parametric percentile boundaries across all observations"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "e",
         "explanation": "Standardization subtracts the mean (making the new mean 0.0) and divides by the standard deviation (making the new variance $s^2 / s^2 = 1.0$).",
         "section_reference": "Section 1: Data Matrices & Basic Operations",
         "section_anchor": "1-data-matrices-basic-multivariate-operations"
@@ -669,27 +669,27 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Non-negativity and Distinguishability: $D_{ik} \\ge 0$ and $D_{ik} = 0 \\iff i = k$"
+            "text": "Non-negativity and Distinguishability: $D_{ik} \\ge 0$ for all pairs, with $D_{ik} = 0$ if and only if points $i$ and $k$ are identical"
           },
           {
             "id": "b",
-            "text": "Symmetry: $D_{ik} = D_{ki}$"
+            "text": "Symmetry: $D_{ik} = D_{ki}$ for all pairs, ensuring distance is identical regardless of travel direction between points"
           },
           {
             "id": "c",
-            "text": "Triangle Inequality: $D_{il} \\le D_{ik} + D_{kl}$"
+            "text": "Triangle Inequality: $D_{il} \\le D_{ik} + D_{kl}$ for all points, ensuring direct path is never longer than an indirect detour"
           },
           {
             "id": "d",
-            "text": "Proportional Invariance: $D_{ik}$ must always be less than or equal to 1.0"
+            "text": "Proportional Invariance: $D_{ik}$ must always be strictly bounded between 0.0 and 1.0 regardless of variable scales"
           },
           {
             "id": "e",
-            "text": "Identical zero distance for self-comparison: $D_{ii} = 0$"
+            "text": "Identical Zero Self-Distance: $D_{ii} = 0$ for every observation, confirming that any point has zero distance to itself"
           },
           {
             "id": "f",
-            "text": "Positive distance between distinct points: if $i \\neq k$, then $D_{ik} > 0$"
+            "text": "Strict Positivity for Distinct Points: if $i \\neq k$, then $D_{ik} > 0$, guaranteeing spatial separation between distinct entities"
           }
         ],
         "correct_option": "d",
@@ -706,27 +706,27 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Because Euclidean distance cannot be computed on more than two dimensions"
+            "text": "Because Euclidean distance cannot be computed on more than two dimensions without violating matrix non-singularity axioms in multidimensional projection"
           },
           {
             "id": "b",
-            "text": "Because variables with large numerical variances dominate the distance calculation, making the smaller-scale variables practically irrelevant"
+            "text": "Because variables with large numerical variances dominate the distance calculation, making smaller-scale variables practically irrelevant"
           },
           {
             "id": "c",
-            "text": "Because Euclidean distance violates the triangle inequality whenever variables have different units"
+            "text": "Because Euclidean distance violates the metric triangle inequality whenever attributes are measured in non-standardized heterogeneous physical measurement units"
           },
           {
             "id": "d",
-            "text": "Because the Pythagorean theorem is only valid for nonmetric categorical scales"
+            "text": "Because the Pythagorean theorem is mathematically invalid whenever variables have non-zero skewness or kurtosis in empirical multivariate sample distributions"
           },
           {
             "id": "e",
-            "text": "Because Euclidean distance automatically squares the correlation matrix"
+            "text": "Because Euclidean distance assumes all pairwise correlations are negative, causing distances between positively correlated items to artificially inflate"
           },
           {
             "id": "f",
-            "text": "Because Euclidean distance assumes variables are negatively correlated"
+            "text": "Because Euclidean distance projects data onto a 1-dimensional line, destroying all geometric spread and orthogonal variation across remaining dimensions"
           }
         ],
         "correct_option": "b",
@@ -743,30 +743,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "When all variables are perfectly correlated ($r = 1.0$)"
+            "text": "When all variables are perfectly collinear ($r = 1.0$) and sample size $n$ exceeds total variables $p$ by at least 100 observations in the empirical dataset"
           },
           {
             "id": "b",
-            "text": "When the sample size $n$ approaches infinity"
+            "text": "When sample size $n$ approaches infinity and all variable means are centered exactly at the origin: $\\bar{x} = 0$, eliminating centroid translations"
           },
           {
             "id": "c",
-            "text": "When all variables are mutually uncorrelated ($r = 0$) and have unit variance ($s_j^2 = 1$), such that the covariance matrix is the identity matrix $S = I$"
+            "text": "When data are measured exclusively on ordinal scales and distance is evaluated using non-parametric rank scores across all pairwise observations"
           },
           {
             "id": "d",
-            "text": "When data are measured exclusively on an ordinal rank scale"
+            "text": "When all pairwise covariances are positive constants and variances are proportional to degrees of freedom ($s_j^2 = n - 1$) across all dimensions"
           },
           {
             "id": "e",
-            "text": "When the mean vector is equal to zero"
+            "text": "When the determinant of the covariance matrix equals zero and matrix inversion is replaced by the Moore-Penrose pseudo-inverse in dimensional space"
           },
           {
             "id": "f",
-            "text": "When all variables have identical non-zero covariances"
+            "text": "When all variables are mutually uncorrelated ($r = 0$) and have unit variance ($s_j^2 = 1$), such that covariance matrix $S = I$"
           }
         ],
-        "correct_option": "c",
+        "correct_option": "f",
         "explanation": "In matrix form, $MD^2 = (x_i - x_k)^T S^{-1} (x_i - x_k)$. When variables are uncorrelated and have unit variance, $S = I$, so $S^{-1} = I$, reducing the formula to $(x_i - x_k)^T (x_i - x_k) = \\sum (x_{ij} - x_{kj})^2$, which is squared Euclidean distance.",
         "section_reference": "Section 4.3: Mahalanobis Distance",
         "section_anchor": "mahalanobis-distance-covariance-adjusted"
@@ -780,7 +780,7 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Because there are 2 rows and 2 columns, and $2 / 2 = 1$"
+            "text": "Because a $2 \\times 2$ table has 4 cells, and dividing by total row and column dimensions yields exactly $(2 \\times 2) / 4 = 1$ degree of freedom"
           },
           {
             "id": "b",
@@ -788,19 +788,19 @@ export const levelsPart1 = [
           },
           {
             "id": "c",
-            "text": "Because binary data cannot have variance"
+            "text": "Because binary categorical data have zero theoretical variance, constraining all joint cell probabilities to equal the simple product of marginals"
           },
           {
             "id": "d",
-            "text": "Because nominal scales only permit calculation of the mode"
+            "text": "Because qualitative nominal classifications only permit estimation of the central mode, eliminating parameter dispersion across cross-tabulations"
           },
           {
             "id": "e",
-            "text": "Because the sample correlation in a $2 \\times 2$ table is always zero"
+            "text": "Because the sample correlation in any $2 \\times 2$ contingency table is constrained to zero under the baseline null hypothesis of mutual independence"
           },
           {
             "id": "f",
-            "text": "Because the determinant of a $2 \\times 2$ table is always 1"
+            "text": "Because the determinant of a $2 \\times 2$ frequency matrix with fixed margins is mathematically forced to equal 1.0 by matrix normalization rules"
           }
         ],
         "correct_option": "b",
@@ -817,30 +817,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "$r = 1.0$ and covariance is positive"
+            "text": "$r = 1.0$ and covariance is positive, because orthogonal vectors share identical orientation in observation space and overlap perfectly"
           },
           {
             "id": "b",
-            "text": "$r = -1.0$ and covariance is negative"
+            "text": "$r = -1.0$ and covariance is negative, because perpendicular vectors point in opposite geometric directions across the multidimensional axes"
           },
           {
             "id": "c",
-            "text": "$r = 0.0$ and covariance is $0.0$"
+            "text": "$r = 0.5$ and covariance equals half of the product of sample standard deviations: $s_{12} = 0.5 s_1 s_2$, reflecting intermediate angular projection"
           },
           {
             "id": "d",
-            "text": "$r = 0.5$ and covariance is equal to the product of their means"
+            "text": "$r = 0.0$ and covariance is $0.0$, because $\\cos(90^\\circ) = 0$, indicating zero linear correlation between the variables"
           },
           {
             "id": "e",
-            "text": "$r$ is undefined because perpendicular vectors cannot exist in observation space"
+            "text": "$r = 0.707$ and covariance is positive, because $\\cos(45^\\circ) = \\sqrt{2}/2$, reflecting intermediate linear association between the vectors"
           },
           {
             "id": "f",
-            "text": "$r = 0.707$ because $\\cos(45^\\circ) = \\sqrt{2}/2$"
+            "text": "Correlation is undefined and covariance is infinite, because perpendicular vectors cannot share common projections onto observation subspaces"
           }
         ],
-        "correct_option": "c",
+        "correct_option": "d",
         "explanation": "Because $\\cos(\\alpha) = r_{jk}$, when $\\alpha = 90^\\circ$, $\\cos(90^\\circ) = 0$. Thus, the correlation $r = 0$ and the sample covariance $S_{jk} = 0$. Orthogonal vectors in observation space represent linearly uncorrelated variables.",
         "section_reference": "Section 3.2: Observation Space",
         "section_anchor": "observation-space-n-dimensional-representation"
@@ -854,27 +854,27 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Euclidean distance is 4 under both; Statistical distance is $SD^2 = 4$ under A and $SD^2 = 16$ under B, showing the points are statistically closer under larger variance"
+            "text": "Euclidean distance is 4 under both; Statistical distance is $SD^2 = 4$ under A and $SD^2 = 16$ under B, showing points are statistically closer under larger variance"
           },
           {
             "id": "b",
-            "text": "Euclidean distance is 16 under A and 4 under B; Statistical distance is identical under both"
+            "text": "Euclidean distance is 16 under Distribution A and 4 under Distribution B; Statistical distance is identical under both distributions because sample variance cancels out completely"
           },
           {
             "id": "c",
-            "text": "Both Euclidean and Statistical distances are 4 under both distributions"
+            "text": "Both Euclidean and Statistical distances equal 4 under both distributions, because distance is a rigid metric invariant to variance shifts across standard normal coordinates"
           },
           {
             "id": "d",
-            "text": "Statistical distance is undefined because the mean is zero"
+            "text": "Statistical distance is undefined under Distribution A because the mean is zero, whereas Euclidean distance equals the difference of squares across coordinate points"
           },
           {
             "id": "e",
-            "text": "Points are statistically further apart under Distribution A because variance is greater"
+            "text": "Points are statistically further apart under Distribution A because larger variance expands the metric space: $SD^2 = 64$ under A vs $SD^2 = 4$ under B in standardized space"
           },
           {
             "id": "f",
-            "text": "Statistical distance is 0 under A and 2 under B"
+            "text": "Statistical distance is zero under both distributions because points $-2$ and $+2$ are symmetrically positioned around the central distribution origin in univariate models"
           }
         ],
         "correct_option": "a",
@@ -891,30 +891,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "$MD^2 = 41.00$"
+            "text": "$MD^2 = 41.00$, calculated as the unweighted sum of squared coordinate differences: $\\Delta x_1^2 + \\Delta x_2^2 = 25 + 16 = 41.00$"
           },
           {
             "id": "b",
-            "text": "$MD^2 = 1.11$"
+            "text": "$MD^2 = 5.56$, calculated by dividing squared coordinate differences by standard deviations without covariance correction"
           },
           {
             "id": "c",
-            "text": "$MD^2 = 5.56$"
+            "text": "$MD^2 = 1.11$, calculated via inverse covariance weighting, showing correlation significantly contracts statistical distance"
           },
           {
             "id": "d",
-            "text": "$MD^2 = 0.00$"
+            "text": "$MD^2 = 0.00$, because coordinate differences $\\Delta x_1 = 5$ and $\\Delta x_2 = 4$ match variable standard deviations exactly"
           },
           {
             "id": "e",
-            "text": "$MD^2 = 10.00$"
+            "text": "$MD^2 = 10.00$, calculated by multiplying Euclidean distance by the correlation coefficient: $MD^2 = r \\times (\\Delta x_1^2 + \\Delta x_2^2)$"
           },
           {
             "id": "f",
-            "text": "$MD^2 = 2.00$"
+            "text": "$MD^2 = 2.00$, representing the standard two-variable degrees of freedom under bivariate normality assumptions"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "c",
         "explanation": "Using the bivariate Mahalanobis formula: $MD^2 = \\frac{1}{1 - r^2} \\left[ \\frac{(\\Delta x_1)^2}{s_1^2} + \\frac{(\\Delta x_2)^2}{s_2^2} - \\frac{2r(\\Delta x_1)(\\Delta x_2)}{s_1 s_2} \\right]$. Here, $\\Delta x_1 / s_1 = 5/5 = 1$, $\\Delta x_2 / s_2 = 4/4 = 1$. The bracketed term is $1^2 + 1^2 - 2(0.80)(1)(1) = 2 - 1.60 = 0.40$. The pre-factor is $1 / (1 - 0.8^2) = 1 / (1 - 0.64) = 1 / 0.36 \\approx 2.778$. Thus, $MD^2 = 0.40 / 0.36 = 4/3.6 \\approx 1.11$.",
         "section_reference": "Section 4.3: Mahalanobis Distance",
         "section_anchor": "mahalanobis-distance-covariance-adjusted"
@@ -928,30 +928,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "$r_{12} = 136.375 / (262.92 + 131.67) = 0.346$"
+            "text": "$r_{12} = 136.375 / (262.92 + 131.67) = 0.346$, dividing the dot product by the arithmetic sum of squared vector lengths"
           },
           {
             "id": "b",
-            "text": "$r_{12} = 136.375 / \\sqrt{262.92 \\times 131.67} \\approx 0.733$"
+            "text": "$r_{12} = \\sqrt{136.375} / 11 = 1.061$, taking the square root of the cross-product divided by sample degrees of freedom"
           },
           {
             "id": "c",
-            "text": "$r_{12} = \\sqrt{136.375} / 11 = 1.06$"
+            "text": "$r_{12} = (262.92 - 131.67) / 136.375 = 0.963$, evaluating the normalized difference between individual variable lengths"
           },
           {
             "id": "d",
-            "text": "$r_{12} = (262.92 - 131.67) / 136.375 = 0.963$"
+            "text": "$r_{12} = 136.375 / (11 \\times 12) = 1.033$, standardizing the raw dot product by sample size and degrees of freedom"
           },
           {
             "id": "e",
-            "text": "$r_{12} = 136.375 / (11 \\times 12) = 1.033$"
+            "text": "$r_{12} = 136.375 / \\sqrt{262.92 \\times 131.67} \\approx 0.733$, dividing dot product by the product of vector norms"
           },
           {
             "id": "f",
-            "text": "$r_{12} = 0.538$"
+            "text": "$r_{12} = 0.538$, taking the ratio of smaller vector length to larger vector length: $131.67 / 262.92 = 0.501$ with rounding"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "e",
         "explanation": "In observation space, $\\cos(\\alpha) = \\frac{x_1 \\cdot x_2}{\\|x_1\\| \\|x_2\\|} = \\frac{136.375}{\\sqrt{262.917 \\times 131.667}} = \\frac{136.375}{\\sqrt{34617.48}} = \\frac{136.375}{186.058} \\approx 0.733$. This matches slide 65 of Chapter 1.",
         "section_reference": "Section 3.2: Observation Space",
         "section_anchor": "observation-space-n-dimensional-representation"
@@ -965,30 +965,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Centering is a rigid translation that preserves all Euclidean distances, whereas standardizing divides each axis by a different standard deviation, differentially stretching and compressing space"
+            "text": "Centering projects data onto an $n-1$ subspace, while standardization projects data into a 1-dimensional subspace across variable space"
           },
           {
             "id": "b",
-            "text": "Centering alters the correlation matrix, whereas standardizing leaves the covariance matrix unchanged"
+            "text": "Centering alters the correlation matrix, whereas standardizing leaves the covariance matrix completely unchanged throughout projections"
           },
           {
             "id": "c",
-            "text": "Centering projects data into an $n-1$ subspace, while standardization projects data into a 1-dimensional subspace"
+            "text": "Centering violates the metric triangle inequality, while standardization restores metric axioms across heterogeneous observation groups"
           },
           {
             "id": "d",
-            "text": "Centering violates the triangle inequality, while standardization restores it"
+            "text": "Centering is only permissible for ratio scales, while standardizing is only mathematically valid for nominal rankings and categorical data"
           },
           {
             "id": "e",
-            "text": "Centering is only permissible for ratio scales, while standardizing is only valid for nominal data"
+            "text": "There is zero geometric difference; both operations preserve identical Euclidean distances and shape configurations in multivariate space"
           },
           {
             "id": "f",
-            "text": "There is no difference; both transformations preserve identical geometric shapes"
+            "text": "Centering is a rigid translation that preserves all Euclidean distances, whereas standardizing differentially scales axes"
           }
         ],
-        "correct_option": "a",
+        "correct_option": "f",
         "explanation": "Subtracting means shifts the origin to $(0,0)$ without altering distances: $(x_{ij} - x_{kj}) = (x^*_{ij} - x^*_{kj})$. However, dividing each dimension by its own standard deviation $s_j$ differentially compresses dimensions with large spread and expands dimensions with small spread, altering relative distances and angles between observations.",
         "section_reference": "Section 3.1: Variable Space",
         "section_anchor": "variable-space-p-dimensional-representation"
@@ -1096,30 +1096,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "To minimize the sum of absolute deviations from the median"
+            "text": "To minimize the sum of absolute deviations from the multidimensional median vector across all observations"
           },
           {
             "id": "b",
-            "text": "To maximize the variance of the projected observation scores along that axis"
+            "text": "To force all variable loadings to equal positive unity (+1.0), equalizing the variance contributions across axes"
           },
           {
             "id": "c",
-            "text": "To force all variable loadings to equal +1.0"
+            "text": "To maximize the variance of the projected observation scores along the newly defined candidate coordinate axis"
           },
           {
             "id": "d",
-            "text": "To ensure the new axis passes through the highest single data point"
+            "text": "To ensure the new axis passes through the highest single data point to eliminate asymmetric sample skewness"
           },
           {
             "id": "e",
-            "text": "To minimize the distance between the origin and the centroid"
+            "text": "To minimize the distance between the coordinate origin and the multivariate centroid of the raw observations"
           },
           {
             "id": "f",
-            "text": "To make the sum of scores equal to zero for each individual customer"
+            "text": "To make the sum of observation scores equal to zero for each individual variable independently in observation space"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "c",
         "explanation": "Geometrically, $PC_1$ is chosen to point along the direction of maximum dispersion in the data cloud, thereby maximizing the variance of the projected scores.",
         "section_reference": "Section 4: Rotating Coordinate Axis & Projecting",
         "section_anchor": "4-rotating-the-coordinate-axis-projecting-observations"
@@ -1133,30 +1133,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Their sum must equal zero: $\\cos\\theta + \\sin\\theta = 0$"
+            "text": "Their sum must equal zero: $\\cos\\theta + \\sin\\theta = 0$, ensuring directional balance around the 45-degree ray"
           },
           {
             "id": "b",
-            "text": "They must have unit length (norm of 1): $\\cos^2(\\theta) + \\sin^2(\\theta) = 1$"
+            "text": "Each directional coefficient must be strictly greater than 1.0, amplifying weak observation projections along the axis"
           },
           {
             "id": "c",
-            "text": "Each coefficient must be strictly greater than 1.0"
+            "text": "Their product must equal the correlation coefficient: $\\cos\\theta \\sin\\theta = r_{12}$, preserving joint association"
           },
           {
             "id": "d",
-            "text": "Their product must equal the correlation coefficient: $\\cos\\theta \\sin\\theta = r$"
+            "text": "The angle $\\theta$ must always be fixed at $45^\\circ$, splitting explained variance symmetrically between variables"
           },
           {
             "id": "e",
-            "text": "The angle $\\theta$ must always be fixed at $45^\\circ$"
+            "text": "They must have unit length (norm of 1): $\\cos^2(\\theta) + \\sin^2(\\theta) = 1$, preventing artificial scale stretching"
           },
           {
             "id": "f",
-            "text": "They must equal the sample standard deviations of the original variables"
+            "text": "They must equal the sample standard deviations of the original variables, weighting coordinates by raw dispersion"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "e",
         "explanation": "To prevent artificial scaling of variance (since multiplying weights by 10 would multiply variance by 100), the weight vector must have unit Euclidean length: $\\sum w_j^2 = 1$. In 2D, $\\cos^2\\theta + \\sin^2\\theta = 1$.",
         "section_reference": "Section 4: Rotating Coordinate Axis & Projecting",
         "section_anchor": "4-rotating-the-coordinate-axis-projecting-observations"
@@ -1170,30 +1170,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "$1.000$"
+            "text": "Exactly $23.091 + 21.091 = 44.182$, because rigid coordinate rotations preserve total variance completely"
           },
           {
             "id": "b",
-            "text": "$2.000$"
+            "text": "Always 1.000, because principal component transformation standardizes total system variance to unity"
           },
           {
             "id": "c",
-            "text": "Exactly $23.091 + 21.091 = 44.182$"
+            "text": "Always 2.000, because each extracted principal component contributes exactly 1.0 unit of variance by definition"
           },
           {
             "id": "d",
-            "text": "$23.091 \\times 21.091 = 487.01$"
+            "text": "Exactly $23.091 \\times 21.091 = 487.01$, representing the geometric product of orthogonal component dispersions"
           },
           {
             "id": "e",
-            "text": "Zero, because principal components are centered"
+            "text": "Zero, because principal component scores are mean-corrected and sum to zero across all observations"
           },
           {
             "id": "f",
-            "text": "Half of the original variance: $22.091$"
+            "text": "Half of the original variance: $44.182 / 2 = 22.091$, reflecting dimensional projection losses along axes"
           }
         ],
-        "correct_option": "c",
+        "correct_option": "a",
         "explanation": "PCA performs an orthogonal rotation of the coordinate system, which preserves the total variance of the dataset. Therefore, $\\text{Var}(PC_1) + \\text{Var}(PC_2) = \\text{Var}(X_1) + \\text{Var}(X_2) = 44.182$.",
         "section_reference": "Section 7: Conservation of Total Variance",
         "section_anchor": "7-conservation-of-total-variance"
@@ -1207,30 +1207,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Identically zero ($\\text{Cov}(PC_1, PC_2) = 0$)"
+            "text": "Equal to the original sample covariance $S_{12}$, because coordinate rotation preserves bivariate covariation"
           },
           {
             "id": "b",
-            "text": "Equal to the original sample covariance $S_{12}$"
+            "text": "Equal to positive unity ($+1.0$), reflecting maximum standardized linear association between principal components, introducing severe estimation bias into secondary structural equation equations"
           },
           {
             "id": "c",
-            "text": "Equal to $+1.0$"
+            "text": "Equal to the ratio of their eigenvalues $\\lambda_1 / \\lambda_2$, scaling joint covariation by relative importance, which is mathematically inadmissible under classical multivariate matrix theory"
           },
           {
             "id": "d",
-            "text": "Equal to the ratio of their eigenvalues $\\lambda_1 / \\lambda_2$"
+            "text": "Negative unity ($-1.0$), because orthogonal complement axes point in opposing perpendicular directions"
           },
           {
             "id": "e",
-            "text": "Negative one ($-1.0$)"
+            "text": "Equal to the Pearson correlation $r_{12}$, because components preserve the normalized bivariate association"
           },
           {
             "id": "f",
-            "text": "Equal to the Pearson correlation $r_{12}$"
+            "text": "Identically zero ($\\text{Cov}(PC_1, PC_2) = 0$), because principal axes are constructed to be strictly orthogonal"
           }
         ],
-        "correct_option": "a",
+        "correct_option": "f",
         "explanation": "By mathematical construction, all principal components are chosen to be mutually orthogonal, which ensures that the sample covariance (and correlation) between any pair of distinct component scores is identically zero.",
         "section_reference": "Section 6: PC1 and Its Orthogonal Complement",
         "section_anchor": "6-the-first-principal-component-and-its-orthogonal-complement"
@@ -1244,30 +1244,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "The moment data are centered by subtracting variable sample means"
+            "text": "The moment data are centered by subtracting variable sample means, which shifts the cloud to the coordinate origin"
           },
           {
             "id": "b",
-            "text": "When all $p$ principal components are computed and retained"
+            "text": "When only a subset $k < p$ of the leading principal components is retained, and the remaining $p - k$ components are discarded"
           },
           {
             "id": "c",
-            "text": "When only a subset $k < p$ of the leading principal components is retained, discarding the remaining $p - k$ components"
+            "text": "When all $p$ principal components are computed and retained, because the new axes represent uncorrelated linear scores, confounding common shared variance with sample-specific measurement error"
           },
           {
             "id": "d",
-            "text": "When the covariance matrix is converted into a correlation matrix"
+            "text": "When the covariance matrix is converted into a correlation matrix, which standardizes all variable diagonal elements to 1.0, which is mathematically inadmissible under classical multivariate matrix theory"
           },
           {
             "id": "e",
-            "text": "When the sample size $n$ is reduced by eliminating outliers"
+            "text": "When the sample size $n$ is reduced by eliminating bivariate outliers that deviate from the primary projection ray"
           },
           {
             "id": "f",
-            "text": "When the eigenvalues are normalized to sum to 100"
+            "text": "When the eigenvalues are normalized to sum to 100%, converting raw component variances into relative percentages"
           }
         ],
-        "correct_option": "c",
+        "correct_option": "b",
         "explanation": "Computing all $p$ principal axes is merely a change of coordinates (a rigid rotation of axes) with zero loss of dimensionality. Dimensionality reduction occurs only when $k < p$ components are retained and the remaining directions of variation are discarded.",
         "section_reference": "Section 1: Motivation & Dimensionality Challenge",
         "section_anchor": "1-motivation-the-dimensionality-challenge"
@@ -1281,30 +1281,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "$t_{A1} = 13.000$"
+            "text": "$t_{A1} = 13.000$, calculated as the simple unweighted arithmetic sum of centered coordinates: $8 + 5 = 13.000$"
           },
           {
             "id": "b",
-            "text": "$t_{A1} = 0.728238 \\times 8 + 0.685324 \\times 5 = 9.253$"
+            "text": "$t_{A1} = 0.728238 \\times 8 - 0.685324 \\times 5 = 2.400$, subtracting the second component projection from the first, which would distort the estimation of standard errors across empirical models"
           },
           {
             "id": "c",
-            "text": "$t_{A1} = 0.728238 \\times 8 - 0.685324 \\times 5 = 2.400$"
+            "text": "$t_{A1} = \\sqrt{8^2 + 5^2} = 9.434$, evaluating the Euclidean distance of Customer A from the origin in variable space, confounding common shared variance with sample-specific measurement error"
           },
           {
             "id": "d",
-            "text": "$t_{A1} = \\sqrt{8^2 + 5^2} = 9.434$"
+            "text": "$t_{A1} = 0.728238 \\times 8 + 0.685324 \\times 5 = 9.253$, projecting centered coordinates onto the leading eigenvector"
           },
           {
             "id": "e",
-            "text": "$t_{A1} = 38.576$"
+            "text": "$t_{A1} = 38.576$, representing the maximum eigenvalue of the system rather than an individual observation score"
           },
           {
             "id": "f",
-            "text": "$t_{A1} = 1.490$"
+            "text": "$t_{A1} = 1.490$, standardizing Customer A coordinates by the square root of the leading system eigenvalue"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "d",
         "explanation": "The score is the linear projection of the centered observation onto the component weights: $t_{A1} = 0.728238(8) + 0.685324(5) = 5.8259 + 3.4266 = 9.2525 \\approx 9.253$.",
         "section_reference": "Section 4: Rotating Coordinate Axis & Projecting",
         "section_anchor": "4-rotating-the-coordinate-axis-projecting-observations"
@@ -1318,27 +1318,27 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Because PCA eigenvalues are always negative"
+            "text": "Because PCA eigenvalues are constrained to be negative whenever coordinate reflections are applied to sample data"
           },
           {
             "id": "b",
-            "text": "Because an axis and its negative describe the exact same geometric line in space, and squaring negative scores yields identical sample variance and squared Euclidean distances"
+            "text": "Because an axis and its negative describe the exact same geometric line; multiplying by $-1$ merely reflects coordinates"
           },
           {
             "id": "c",
-            "text": "Because SAS and Python automatically convert all negative scores to zero"
+            "text": "Because statistical software automatically converts all negative scores to positive absolute values during extraction"
           },
           {
             "id": "d",
-            "text": "Because component weights must always be positive numbers"
+            "text": "Because component weights must always be positive numbers to satisfy non-negativity constraints in Lagrange multipliers, thereby violating fundamental distributional assumptions in multivariate inference"
           },
           {
             "id": "e",
-            "text": "Because reversing an axis changes correlation into covariance"
+            "text": "Because reversing an axis converts covariance into correlation, standardizing the metric distances between observations"
           },
           {
             "id": "f",
-            "text": "Because observations are automatically reflected across the 45-degree diagonal"
+            "text": "Because observations are automatically reflected across the vertical centroid line, nullifying the rotation transformation, which would distort the estimation of standard errors across empirical models"
           }
         ],
         "correct_option": "b",
@@ -1355,30 +1355,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Always exactly $p$"
+            "text": "Always exactly $p$, because a dataset with $p$ variables always possesses $p$ linearly independent orthogonal axes"
           },
           {
             "id": "b",
-            "text": "Always exactly $n$"
+            "text": "Always exactly $n$, because each observation in the sample contributes one full dimension of variance to the space"
           },
           {
             "id": "c",
-            "text": "At most $\\min(p, n - 1)$"
+            "text": "At most $p \\times (n - 1)$, because degrees of freedom multiply across all variables in the multivariate data matrix"
           },
           {
             "id": "d",
-            "text": "At most $p \\times (n - 1)$"
+            "text": "At most $\\min(p, n - 1)$, because centered data cannot span more dimensions than available observation degrees of freedom"
           },
           {
             "id": "e",
-            "text": "Always equal to the number of nonmetric scales"
+            "text": "Always equal to the number of nonmetric scales, because qualitative classifications govern the rank of the covariance matrix"
           },
           {
             "id": "f",
-            "text": "At most $(p - 1) / 2$"
+            "text": "At most $(p - 1) / 2$, because symmetry constraints eliminate half of the off-diagonal elements in the covariance matrix"
           }
         ],
-        "correct_option": "c",
+        "correct_option": "d",
         "explanation": "Centering $n$ observations imposes 1 linear restriction (the sum of deviations is zero), giving the centered data matrix a maximum rank of $n - 1$. Since the data dimension is $p$, the rank of $X_c$ (and covariance matrix $S$) cannot exceed $\\min(p, n - 1)$.",
         "section_reference": "Section 7: Conservation of Total Variance",
         "section_anchor": "7-conservation-of-total-variance"
@@ -1392,30 +1392,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "$0.000$"
+            "text": "Exactly $5.606$, corresponding to the variance of $PC_2$, because the orthogonal complement captures the remaining variance"
           },
           {
             "id": "b",
-            "text": "Exactly $5.606$, corresponding to the variance of $PC_2$"
+            "text": "Zero ($0.000$), because rotating an axis by 90 degrees eliminates all projected coordinate variance from the data cloud, failing to account for underlying correlation structures in empirical datasets"
           },
           {
             "id": "c",
-            "text": "Negative $38.576$"
+            "text": "Negative $38.576$, because adding 90 degrees inverts the sign of the leading eigenvalue across the coordinate plane"
           },
           {
             "id": "d",
-            "text": "$44.182$"
+            "text": "Exactly $44.182$, because any orthogonal rotation angle preserves the total combined variance of the bivariate system, introducing severe estimation bias into secondary structural equation equations"
           },
           {
             "id": "e",
-            "text": "$21.091$"
+            "text": "Exactly $21.091$, corresponding to the unrotated variance of the second original variable before principal components"
           },
           {
             "id": "f",
-            "text": "$19.288$"
+            "text": "Exactly $19.288$, representing the midpoint between the minimum and maximum variances across all candidate angles"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "a",
         "explanation": "The axis at $\\theta + 90^\\circ$ is the orthogonal complement ($PC_2$). Because total variance ($44.182$) is conserved across orthogonal directions, the variance at $43.26^\\circ + 90^\\circ$ must be exactly $44.182 - 38.576 = 5.606$.",
         "section_reference": "Section 5: Variance as a Function of Rotation Angle",
         "section_anchor": "5-variance-as-a-function-of-rotation-angle"
@@ -1429,30 +1429,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "$5.606$"
+            "text": "Exactly $5.606$, representing the per-observation variance of the discarded component without sample size weighting, which is mathematically inadmissible under classical multivariate matrix theory"
           },
           {
             "id": "b",
-            "text": "$(n - 1) \\times \\lambda_2 = 11 \\times 5.606005 = 61.666$"
+            "text": "Exactly $12 \\times 38.576 = 462.91$, multiplying the retained eigenvalue by total sample size across observations"
           },
           {
             "id": "c",
-            "text": "$12 \\times 38.576 = 462.91$"
+            "text": "Exactly $44.182 / 12 = 3.682$, averaging total system variance across all customer observations in the sample"
           },
           {
             "id": "d",
-            "text": "$44.182 / 12 = 3.682$"
+            "text": "Zero, because orthogonal projections preserve complete Euclidean information and eliminate reconstruction discrepancies, introducing severe estimation bias into secondary structural equation equations"
           },
           {
             "id": "e",
-            "text": "Zero, because orthogonal projections are error-free"
+            "text": "$(n - 1) \\times \\lambda_2 = 11 \\times 5.606005 = 61.666$, representing total sum of squared residuals along discarded dimensions"
           },
           {
             "id": "f",
-            "text": "$254.000 - 232.000 = 22.000$"
+            "text": "Exactly $254.000 - 232.000 = 22.000$, subtracting the centered trace from the raw uncorrected observation sums"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "e",
         "explanation": "The reconstruction error for each observation is its squared coordinate on the discarded axis ($PC_2$). The sum of squared scores on $PC_2$ is the Sum of Squares of $PC_2$, which equals $(n - 1) \\times \\text{Var}(PC_2) = 11 \\times 5.606005 = 61.666$. This matches slide 17 and 24 of Chapter 2.",
         "section_reference": "Section 7: Conservation of Total Variance",
         "section_anchor": "7-conservation-of-total-variance"
@@ -1466,30 +1466,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Customer D is an outlier that was automatically winsorized by PCA"
+            "text": "Customer D is an outlier that was automatically winsorized by the projection algorithm to match Customer E coordinates, confounding common shared variance with sample-specific measurement error"
           },
           {
             "id": "b",
-            "text": "They differ substantially along the discarded $PC_2$ axis ($t_{D2} = -2.784$ vs $t_{E2} = +2.271$), which represents variation lost in dimensionality reduction"
+            "text": "PCA inverted their income scales because Customer Lifetime Value is mathematically bounded between 0 and 100 in data"
           },
           {
             "id": "c",
-            "text": "PCA inverted their income scales because CLV is bounded between -10 and 10"
+            "text": "The correlation between Income and CLV was negative for those two specific individuals while positive across the rest"
           },
           {
             "id": "d",
-            "text": "The correlation between Income and CLV was negative for those two customers"
+            "text": "Their Mahalanobis distance is zero because both customers share identical coordinate projections along the centroid ray, which is mathematically inadmissible under classical multivariate matrix theory"
           },
           {
             "id": "e",
-            "text": "Their Mahalanobis distance is zero"
+            "text": "The cosine of their angle in individual space equals 1.0, forcing their projected coordinates to coalesce on $PC_1$"
           },
           {
             "id": "f",
-            "text": "The cosine of their angle in individual space equals 1.0"
+            "text": "They differ substantially along the discarded $PC_2$ axis ($t_{D2} = -5.008$ vs $t_{E2} = 1.085$), which dimensionality reduction ignored"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "f",
         "explanation": "When reducing from 2D to 1D, points are projected onto the $PC_1$ line. Points that have similar projections onto $PC_1$ may differ substantially along the discarded perpendicular axis ($PC_2$). Customer D has $t_{D2} = -2.784$ while E has $t_{E2} = +2.271$, a difference of over 5 units lost upon reduction.",
         "section_reference": "Section 6: PC1 and Its Orthogonal Complement",
         "section_anchor": "6-the-first-principal-component-and-its-orthogonal-complement"
@@ -1503,30 +1503,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "$\\begin{bmatrix} a^*_1 \\\\ a^*_2 \\end{bmatrix} = \\begin{bmatrix} \\cos\\theta & \\sin\\theta \\\\ -\\sin\\theta & \\cos\\theta \\end{bmatrix} \\begin{bmatrix} a_1 \\\\ a_2 \\end{bmatrix}$"
+            "text": "$\\begin{bmatrix} a^*_1 \\\\ a^*_2 \\end{bmatrix} = \\begin{bmatrix} \\sin\\theta & -\\cos\\theta \\\\ \\cos\\theta & \\sin\\theta \\end{bmatrix} \\begin{bmatrix} a_1 \\\\ a_2 \\end{bmatrix}$, which reflects coordinates across the horizontal abscissa axis"
           },
           {
             "id": "b",
-            "text": "$\\begin{bmatrix} a^*_1 \\\\ a^*_2 \\end{bmatrix} = \\begin{bmatrix} 1 & \\theta \\\\ -\\theta & 1 \\end{bmatrix} \\begin{bmatrix} a_1 \\\\ a_2 \\end{bmatrix}$"
+            "text": "$\\begin{bmatrix} a^*_1 \\\\ a^*_2 \\end{bmatrix} = \\begin{bmatrix} 1 & \\theta \\\\ -\\theta & 1 \\end{bmatrix} \\begin{bmatrix} a_1 \\\\ a_2 \\end{bmatrix}$, which provides a linear Taylor approximation valid only for small angles near zero"
           },
           {
             "id": "c",
-            "text": "$\\begin{bmatrix} a^*_1 \\\\ a^*_2 \\end{bmatrix} = \\begin{bmatrix} \\tan\\theta & 0 \\\\ 0 & \\cot\\theta \\end{bmatrix} \\begin{bmatrix} a_1 \\\\ a_2 \\end{bmatrix}$"
+            "text": "$\\begin{bmatrix} a^*_1 \\\\ a^*_2 \\end{bmatrix} = \\begin{bmatrix} \\cos\\theta & \\sin\\theta \\\\ -\\sin\\theta & \\cos\\theta \\end{bmatrix} \\begin{bmatrix} a_1 \\\\ a_2 \\end{bmatrix}$, rotating the coordinate frame rigidly through angle $\\theta$"
           },
           {
             "id": "d",
-            "text": "$\\begin{bmatrix} a^*_1 \\\\ a^*_2 \\end{bmatrix} = \\begin{bmatrix} \\cos\\theta & -\\sin\\theta \\\\ \\sin\\theta & \\cos\\theta \\end{bmatrix} \\begin{bmatrix} a_1 \\\\ a_2 \\end{bmatrix}$"
+            "text": "$\\begin{bmatrix} a^*_1 \\\\ a^*_2 \\end{bmatrix} = \\begin{bmatrix} \\cos^2\\theta & \\sin^2\\theta \\\\ \\sin^2\\theta & \\cos^2\\theta \\end{bmatrix} \\begin{bmatrix} a_1 \\\\ a_2 \\end{bmatrix}$, which squares projection coefficients and violates orthogonality"
           },
           {
             "id": "e",
-            "text": "$\\begin{bmatrix} a^*_1 \\\\ a^*_2 \\end{bmatrix} = \\begin{bmatrix} \\sin\\theta & \\cos\\theta \\\\ \\cos\\theta & \\sin\\theta \\end{bmatrix} \\begin{bmatrix} a_1 \\\\ a_2 \\end{bmatrix}$"
+            "text": "$\\begin{bmatrix} a^*_1 \\\\ a^*_2 \\end{bmatrix} = \\begin{bmatrix} \\tan\\theta & 1 \\\\ 1 & -\\tan\\theta \\end{bmatrix} \\begin{bmatrix} a_1 \\\\ a_2 \\end{bmatrix}$, which introduces angular slope singularities at perpendicular angles"
           },
           {
             "id": "f",
-            "text": "$\\begin{bmatrix} a^*_1 \\\\ a^*_2 \\end{bmatrix} = \\begin{bmatrix} s_1 & 0 \\\\ 0 & s_2 \\end{bmatrix} \\begin{bmatrix} a_1 \\\\ a_2 \\end{bmatrix}$"
+            "text": "$\\begin{bmatrix} a^*_1 \\\\ a^*_2 \\end{bmatrix} = \\begin{bmatrix} \\lambda_1 & 0 \\\\ 0 & \\lambda_2 \\end{bmatrix} \\begin{bmatrix} a_1 \\\\ a_2 \\end{bmatrix}$, which scales axes by eigenvalues without performing coordinate rotation"
           }
         ],
-        "correct_option": "a",
+        "correct_option": "c",
         "explanation": "As derived in Appendix slides 65-68 of Chapter 2: projecting onto rotated basis vector $e^*_1$ yields $a^*_1 = a_1 \\cos\\theta + a_2 \\sin\\theta$, and onto orthogonal vector $e^*_2$ yields $a^*_2 = -a_1 \\sin\\theta + a_2 \\cos\\theta$. In matrix form, this is the standard rotation transformation matrix.",
         "section_reference": "Section 3: Centering the Data Cloud",
         "section_anchor": "3-centering-the-data-cloud"
@@ -1634,27 +1634,27 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "$\\lambda_1$ is the sample mean of $PC_1$"
+            "text": "$\\lambda_1$ is the sample mean of $PC_1$, locating the center of gravity along the first principal component axis"
           },
           {
             "id": "b",
-            "text": "$\\lambda_1$ is the sample variance of $PC_1$"
+            "text": "$\\lambda_1$ is the sample variance of $PC_1$, quantifying the maximum variance captured along the leading principal axis"
           },
           {
             "id": "c",
-            "text": "$\\lambda_1$ is the sample size divided by degrees of freedom"
+            "text": "$\\lambda_1$ is the sample size divided by degrees of freedom: $n / (n - 1)$, correcting for finite sample estimation bias, which would distort the estimation of standard errors across empirical models"
           },
           {
             "id": "d",
-            "text": "$\\lambda_1$ is the correlation between $X_1$ and $X_2$"
+            "text": "$\\lambda_1$ is the correlation between $X_1$ and $X_2$, measuring the normalized linear association between raw variables, thereby violating fundamental distributional assumptions in multivariate inference"
           },
           {
             "id": "e",
-            "text": "$\\lambda_1$ is the inverse of the determinant of $S$"
+            "text": "$\\lambda_1$ is the inverse of the determinant of covariance matrix $S$, measuring generalized system precision"
           },
           {
             "id": "f",
-            "text": "$\\lambda_1$ is the standard deviation of the error term"
+            "text": "$\\lambda_1$ is the standard deviation of the error term, measuring unexplained residual noise in the reconstruction"
           }
         ],
         "correct_option": "b",
@@ -1671,30 +1671,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "$\\text{tr}(A - \\lambda I) = 0$"
+            "text": "$\\text{tr}(A - \\lambda I) = 0$, setting the sum of diagonal matrix elements equal to zero across all dimensions"
           },
           {
             "id": "b",
-            "text": "$\\det(A - \\lambda I) = 0$"
+            "text": "$A^{-1} - \\lambda I = 0$, requiring matrix inversion of the raw covariance matrix to isolate spectral components"
           },
           {
             "id": "c",
-            "text": "$A^{-1} - \\lambda I = 0$"
+            "text": "$\\sum_{i=1}^p (A_{ii} - \\lambda) = 1$, constraining the total trace deficit to equal positive unity across variables"
           },
           {
             "id": "d",
-            "text": "$\\sum_{i=1}^p (A_{ii} - \\lambda) = 1$"
+            "text": "$\\det(A - \\lambda I) = 0$, ensuring the linear system has non-trivial, non-zero eigenvector solutions"
           },
           {
             "id": "e",
-            "text": "$\\lambda = A w$"
+            "text": "$\\lambda = A w$, equating scalar eigenvalues directly to the matrix-vector multiplication product without roots"
           },
           {
             "id": "f",
-            "text": "$\\det(A) + \\det(\\lambda I) = 0$"
+            "text": "$\\det(A) + \\det(\\lambda I) = 0$, applying additive determinant properties to solve for matrix characteristic values"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "d",
         "explanation": "For non-trivial eigenvectors to exist in $(A - \\lambda I)w = 0$, the matrix $(A - \\lambda I)$ must be non-invertible, which requires its determinant to equal zero: $\\det(A - \\lambda I) = 0$.",
         "section_reference": "Section 3: The Characteristic Equation",
         "section_anchor": "3-the-characteristic-equation"
@@ -1708,30 +1708,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Always 1.0"
+            "text": "Always 1.0, because correlation standardization normalizes the total cumulative variance of all components to unity"
           },
           {
             "id": "b",
-            "text": "Always equal to $p$, because each standardized variable has variance 1.0"
+            "text": "Equal to $n - 1$, because total system variance in Correlation PCA is governed by sample degrees of freedom"
           },
           {
             "id": "c",
-            "text": "Equal to $n - 1$"
+            "text": "Equal to the determinant of $R$, measuring the generalized correlation volume spanned by standardized variables"
           },
           {
             "id": "d",
-            "text": "Equal to the determinant of $R$"
+            "text": "Equal to the sum of raw sample variances, preserving physical measurement units in the trace of the correlation matrix"
           },
           {
             "id": "e",
-            "text": "Equal to the sum of raw sample variances"
+            "text": "Always equal to $p$, because each standardized variable has variance 1.0 and $\\text{tr}(R) = p$"
           },
           {
             "id": "f",
-            "text": "Always 100.0"
+            "text": "Always 100.0, because eigenvalues are automatically scaled to represent percentages of explained variation"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "e",
         "explanation": "In correlation PCA, all diagonal entries of $R$ are 1.0. Because the sum of eigenvalues equals the trace of the matrix, $\\sum_{i=1}^p \\lambda_i = \\text{tr}(R) = p \\times 1.0 = p$.",
         "section_reference": "Section 5.2: When to Use Correlation PCA",
         "section_anchor": "when-to-use-correlation-pca"
@@ -1745,30 +1745,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Because Covariance PCA cannot handle sample sizes greater than 100"
+            "text": "Because Correlation PCA standardizes variables, preventing items with arbitrary numerical scales from dominating components"
           },
           {
             "id": "b",
-            "text": "Because Correlation PCA standardizes variables, preventing variables with arbitrarily large variances from dominating the analysis"
+            "text": "Because Covariance PCA cannot handle sample sizes greater than $n = 100$ without encountering numerical singularity errors"
           },
           {
             "id": "c",
-            "text": "Because Correlation PCA produces correlated components"
+            "text": "Because Correlation PCA produces correlated components that capture oblique non-linear interactions across survey questions, which is mathematically inadmissible under classical multivariate matrix theory"
           },
           {
             "id": "d",
-            "text": "Because Covariance PCA always produces negative eigenvalues"
+            "text": "Because Covariance PCA always produces negative eigenvalues that invalidate variance decomposition in Likert survey data"
           },
           {
             "id": "e",
-            "text": "Because Correlation PCA does not require computing eigenvectors"
+            "text": "Because Correlation PCA eliminates the need to compute eigenvectors, reducing computational overhead in statistical software, introducing severe estimation bias into secondary structural equation equations"
           },
           {
             "id": "f",
-            "text": "Because Likert scales cannot be centered"
+            "text": "Because Likert survey scales cannot be centered to zero mean, prohibiting the derivation of sample covariance matrices"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "a",
         "explanation": "If variables are measured on different scales, the variable with the largest unit scale (e.g. income in thousands) will have a huge variance and dominate the leading eigenvectors in Covariance PCA. Correlation PCA standardizes all inputs to unit variance.",
         "section_reference": "Section 5.2: When to Use Correlation PCA",
         "section_anchor": "when-to-use-correlation-pca"
@@ -1782,30 +1782,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Variance increases by 1,000; Covariance PCA is unaffected, but Correlation PCA changes completely"
+            "text": "Variance increases by 1,000; Covariance PCA is unaffected because scale changes leave eigenvector directions unchanged"
           },
           {
             "id": "b",
-            "text": "Variance increases by $1,000^2 = 1,000,000$; Covariance PCA is drastically altered and dominated by this variable, whereas Correlation PCA remains completely unchanged"
+            "text": "Variance remains completely unchanged because measurement units are arbitrary and cancel out during spectral decomposition, confounding common shared variance with sample-specific measurement error"
           },
           {
             "id": "c",
-            "text": "Variance is unchanged because measurement units are arbitrary"
+            "text": "Variance increases by $1,000^2 = 1,000,000$; Covariance PCA is heavily distorted, whereas Correlation PCA is completely invariant"
           },
           {
             "id": "d",
-            "text": "Both Covariance PCA and Correlation PCA scale their eigenvalues by exactly 1,000"
+            "text": "Both Covariance PCA and Correlation PCA scale their eigenvalues by 1,000, leaving explained variance percentages identical"
           },
           {
             "id": "e",
-            "text": "The correlation between this variable and all other variables becomes zero"
+            "text": "The correlation between this variable and all other variables drops to zero, destroying bivariate associations in the model, which is mathematically inadmissible under classical multivariate matrix theory"
           },
           {
             "id": "f",
-            "text": "The trace of the correlation matrix increases by 1,000"
+            "text": "The trace of the correlation matrix increases by 1,000, expanding the sum of standardized eigenvalues across the system"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "c",
         "explanation": "Multiplying a variable by constant $c$ multiplies its variance by $c^2 = 1,000,000$. Covariance PCA decomposes $S$, which changes radically. But Correlation PCA standardizes inputs ($z = (cx - c\\bar{x})/(cs) = (x - \\bar{x})/s$), making it completely scale-invariant.",
         "section_reference": "Section 5.1: Scale Sensitivity of Covariance PCA",
         "section_anchor": "scale-sensitivity-of-covariance-pca"
@@ -1819,30 +1819,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "To ensure the components have positive means"
+            "text": "To ensure that all principal component scores have positive sample means and conform to normal distribution bounds, which would distort the estimation of standard errors across empirical models"
           },
           {
             "id": "b",
-            "text": "To fix the scale of the weights; without it, multiplying every weight by a constant $c$ would multiply the objective function by $c^2$, yielding no finite maximum"
+            "text": "To guarantee that all extracted eigenvalues are constrained to equal 1.0, standardizing variance across dimensions"
           },
           {
             "id": "c",
-            "text": "To guarantee that the eigenvalues are all equal to 1.0"
+            "text": "To ensure that the covariance matrix $S$ remains non-singular and invertible during iterative numerical optimization, confounding common shared variance with sample-specific measurement error"
           },
           {
             "id": "d",
-            "text": "To ensure that the covariance matrix $S$ is non-singular"
+            "text": "To eliminate negative correlation coefficients between variables, preserving positive manifold geometry in data"
           },
           {
             "id": "e",
-            "text": "To eliminate negative correlations between variables"
+            "text": "To convert continuous metric variables into standardized nonmetric categories, enabling non-parametric projections"
           },
           {
             "id": "f",
-            "text": "To convert metric variables into nonmetric categories"
+            "text": "To fix the scale of the weights; without it, multiplying weights by any constant $c > 1$ would inflate variance to infinity"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "f",
         "explanation": "Variance of a linear combination is homogeneous of degree 2: $\\text{Var}((c w_1)' x) = c^2 (w_1' S w_1)$. Without fixing the length of $w_1$ to unit norm ($w_1' w_1 = 1$), one could achieve an infinite variance simply by making weights arbitrarily large.",
         "section_reference": "Section 2: Derivation via Lagrange Multipliers",
         "section_anchor": "2-derivation-via-lagrange-multipliers"
@@ -1856,27 +1856,27 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "$60.0\\%$"
+            "text": "$60.0\\%$, calculated by taking the ratio of the first eigenvalue to total trace: $6.0 / 10.0 = 0.600$"
           },
           {
             "id": "b",
-            "text": "$85.0\\%$"
+            "text": "$85.0\\%$, calculated as the cumulative percentage explained by the first two components: $(6.0 + 2.5) / 10.0 = 0.850$"
           },
           {
             "id": "c",
-            "text": "$75.0\\%$"
+            "text": "$75.0\\%$, calculated as the ratio of the first two eigenvalues to the sample degrees of freedom in the system, thereby violating fundamental distributional assumptions in multivariate inference"
           },
           {
             "id": "d",
-            "text": "$90.0\\%$"
+            "text": "$90.0\\%$, calculated by weighting the leading eigenvalues against the determinant of the covariance matrix"
           },
           {
             "id": "e",
-            "text": "$25.0\\%$"
+            "text": "$25.0\\%$, representing the individual variance percentage contributed by the second principal component alone"
           },
           {
             "id": "f",
-            "text": "$15.0\\%$"
+            "text": "$15.0\\%$, representing the residual variance discarded when omitting the third component: $1.5 / 10.0 = 0.150$, which would distort the estimation of standard errors across empirical models"
           }
         ],
         "correct_option": "b",
@@ -1893,30 +1893,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "When variables are measured on nominal and ordinal scales"
+            "text": "When variables are measured on nominal and ordinal scales, because covariance matrices preserve nonmetric rank properties"
           },
           {
             "id": "b",
-            "text": "When all variables are measured in identical, comparable physical units and differences in their variances reflect genuine substantive importance"
+            "text": "When the researcher wants all variables to have an equal influence regardless of their natural empirical dispersion"
           },
           {
             "id": "c",
-            "text": "When the researcher wants all variables to have an equal influence on the components"
+            "text": "When the sample size $n$ is smaller than 20 observations, because correlation matrices require large asymptotic samples"
           },
           {
             "id": "d",
-            "text": "When the sample size $n$ is smaller than 20"
+            "text": "When all variables are measured in identical physical units, and differences in actual variances carry vital domain information"
           },
           {
             "id": "e",
-            "text": "When all pairwise correlations are zero"
+            "text": "When all pairwise correlations are zero, because Covariance PCA extracts orthogonal components without matrix roots"
           },
           {
             "id": "f",
-            "text": "When the goal is to perform factor rotation"
+            "text": "When the primary research objective is to perform oblique factor rotation to discover correlated latent constructs"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "d",
         "explanation": "Covariance PCA is appropriate only when variables share the same unit of measurement (e.g. financial dollar figures, morphometric millimeters) and variance magnitude carries true domain significance that should not be normalized away.",
         "section_reference": "Section 5: Covariance PCA vs. Correlation PCA",
         "section_anchor": "5-covariance-pca-vs-correlation-pca"
@@ -1930,30 +1930,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "$\\lambda_2 = 16.455$"
+            "text": "$\\lambda_2 = 16.455$, corresponding to the off-diagonal sample covariance between the two variables in matrix $S$"
           },
           {
             "id": "b",
-            "text": "$\\lambda_2 = 5.606$"
+            "text": "$\\lambda_2 = 38.576$, representing the leading eigenvalue $\\lambda_1$ rather than the second orthogonal root"
           },
           {
             "id": "c",
-            "text": "$\\lambda_2 = 38.576$"
+            "text": "$\\lambda_2 = 2.000$, representing the trace of a standardized correlation matrix rather than the covariance eigenvalue"
           },
           {
             "id": "d",
-            "text": "$\\lambda_2 = 2.000$"
+            "text": "$\\lambda_2 = 21.091$, corresponding to the unrotated sample variance of the second original variable $X_2$"
           },
           {
             "id": "e",
-            "text": "$\\lambda_2 = 21.091$"
+            "text": "$\\lambda_2 = 5.606$, calculated as the smaller characteristic root of the quadratic characteristic polynomial"
           },
           {
             "id": "f",
-            "text": "$\\lambda_2 = 0.746$"
+            "text": "$\\lambda_2 = 0.746$, representing the ratio of the smaller eigenvalue to the larger eigenvalue in the system"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "e",
         "explanation": "Using the quadratic formula for $\\lambda^2 - b\\lambda + c = 0$: $\\lambda = \\frac{44.181818 \\pm \\sqrt{44.181818^2 - 4(216.256198)}}{2} = \\frac{44.181818 \\pm \\sqrt{1952.033 - 865.025}}{2} = \\frac{44.181818 \\pm \\sqrt{1087.008}}{2} = \\frac{44.181818 \\pm 32.9698}{2}$. This gives $\\lambda_1 = 38.5758$ and $\\lambda_2 = 5.6060$.",
         "section_reference": "Section 3: The Characteristic Equation",
         "section_anchor": "3-the-characteristic-equation"
@@ -1967,30 +1967,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "$\\lambda_1 = 1.00$ and $\\lambda_2 = 1.00$"
+            "text": "$\\lambda_1 = 1 + r = 1.60$ and $\\lambda_2 = 1 - r = 0.40$, summing to $p = 2$ and preserving total standardized variance"
           },
           {
             "id": "b",
-            "text": "$\\lambda_1 = 1.60$ and $\\lambda_2 = 0.40$"
+            "text": "$\\lambda_1 = 1.00$ and $\\lambda_2 = 1.00$, because standardized variables always have unit eigenvalues under zero correlation"
           },
           {
             "id": "c",
-            "text": "$\\lambda_1 = 1.20$ and $\\lambda_2 = 0.80$"
+            "text": "$\\lambda_1 = 1.20$ and $\\lambda_2 = 0.80$, splitting the correlation coefficient symmetrically across both components"
           },
           {
             "id": "d",
-            "text": "$\\lambda_1 = 0.60$ and $\\lambda_2 = 0.40$"
+            "text": "$\\lambda_1 = 0.60$ and $\\lambda_2 = 0.40$, equating the leading eigenvalue directly to the Pearson correlation coefficient"
           },
           {
             "id": "e",
-            "text": "$\\lambda_1 = 2.00$ and $\\lambda_2 = 0.00$"
+            "text": "$\\lambda_1 = 2.00$ and $\\lambda_2 = 0.00$, because any positive correlation collapses bivariate data into a single component"
           },
           {
             "id": "f",
-            "text": "$\\lambda_1 = 1.36$ and $\\lambda_2 = 0.64$"
+            "text": "$\\lambda_1 = 1.36$ and $\\lambda_2 = 0.64$, taking the square of the correlation coefficient: $r^2 = 0.36$ as the root offset"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "a",
         "explanation": "For a $2 \\times 2$ correlation matrix $\\begin{bmatrix} 1 & r \\\\ r & 1 \\end{bmatrix}$, the characteristic equation is $(1 - \\lambda)^2 - r^2 = 0 \\implies 1 - \\lambda = \\pm r \\implies \\lambda = 1 \\pm r$. For $r = 0.60$, $\\lambda_1 = 1 + 0.60 = 1.60$ and $\\lambda_2 = 1 - 0.60 = 0.40$. Their sum is $1.60 + 0.40 = 2.0 = p$.",
         "section_reference": "Section 5.2: When to Use Correlation PCA",
         "section_anchor": "when-to-use-correlation-pca"
@@ -2004,30 +2004,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "$w_2 = (0.728238, 0.685324)^T$"
+            "text": "$w_2 = (0.728238, 0.685324)^T$, matching the leading eigenvector weights exactly to preserve directional orientation"
           },
           {
             "id": "b",
-            "text": "$w_2 = (-0.685324, 0.728238)^T$ or $(0.685324, -0.728238)^T$"
+            "text": "$w_2 = (1.000000, 0.000000)^T$, aligning the second component axis strictly with the horizontal coordinate abscissa"
           },
           {
             "id": "c",
-            "text": "$w_2 = (1.000000, 0.000000)^T$"
+            "text": "$w_2 = (0.500000, 0.500000)^T$, bisecting the quadrant at 45 degrees to split residual variation equally across variables, confounding common shared variance with sample-specific measurement error"
           },
           {
             "id": "d",
-            "text": "$w_2 = (0.500000, 0.500000)^T$"
+            "text": "$w_2 = (-0.728238, -0.685324)^T$, reflecting the leading eigenvector through the origin without establishing orthogonality, which is mathematically inadmissible under classical multivariate matrix theory"
           },
           {
             "id": "e",
-            "text": "$w_2 = (-0.728238, -0.685324)^T$"
+            "text": "$w_2 = (0.000000, 1.000000)^T$, aligning the second component axis strictly with the vertical coordinate ordinate"
           },
           {
             "id": "f",
-            "text": "$w_2 = (0.000000, 1.000000)^T$"
+            "text": "$w_2 = (-0.685324, 0.728238)^T$ or $(0.685324, -0.728238)^T$, satisfying the zero dot product orthogonality condition: $w_1 \\cdot w_2 = 0$"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "f",
         "explanation": "In 2D, a vector orthogonal to $(a, b)$ is $(-b, a)$ or $(b, -a)$. Here, $(0.728238)(-0.685324) + (0.685324)(0.728238) = 0$, and $(-0.685324)^2 + 0.728238^2 = 1.0$. Both signs are valid eigenvectors corresponding to the two orientations of the principal axis.",
         "section_reference": "Section 1: Matrix Representation of PCA",
         "section_anchor": "1-matrix-representation-of-pca"
@@ -2041,30 +2041,30 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Because eigenvalues are always equal to the diagonal elements of $S$"
+            "text": "Because eigenvalues are always equal to diagonal elements of $S$, eliminating the need to evaluate characteristic roots, confounding common shared variance with sample-specific measurement error"
           },
           {
             "id": "b",
-            "text": "Because $(S - \\lambda I)$ is deliberately singular (determinant = 0), so its inverse does not exist; eigenvectors are found in its non-trivial null space"
+            "text": "Because matrix inversion is only mathematically possible for diagonal matrices that have zero off-diagonal covariances"
           },
           {
             "id": "c",
-            "text": "Because matrix inversion is only possible for diagonal matrices"
+            "text": "Because $(S - \\lambda I)$ is deliberately singular ($\\det = 0$); an invertible matrix would yield only the trivial zero vector $w = 0$"
           },
           {
             "id": "d",
-            "text": "Because PCA only uses the trace, never the determinant"
+            "text": "Because PCA algorithms only utilize matrix trace operations and never evaluate determinants or characteristic roots"
           },
           {
             "id": "e",
-            "text": "Because eigenvectors are calculated using numerical differentiation"
+            "text": "Because eigenvectors are derived using numerical finite difference approximations rather than analytical matrix algebra, which would distort the estimation of standard errors across empirical models"
           },
           {
             "id": "f",
-            "text": "Because $S$ is always an identity matrix"
+            "text": "Because sample covariance matrix $S$ is always constrained to be an identity matrix in multivariate dimension reduction"
           }
         ],
-        "correct_option": "b",
+        "correct_option": "c",
         "explanation": "By choosing $\\lambda$ such that $\\det(S - \\lambda I) = 0$, the matrix $(S - \\lambda I)$ is non-invertible (singular). Eigenvectors are the non-zero solutions spanning the null space of $(S - \\lambda I)$. As slide 32 notes: \"No matrix inversion is required.\"",
         "section_reference": "Section 3: The Characteristic Equation",
         "section_anchor": "3-the-characteristic-equation"

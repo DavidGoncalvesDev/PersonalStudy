@@ -753,8 +753,8 @@ export const App: React.FC = () => {
                     onPassQuiz={handlePassQuiz}
                     onProceedToFlashcards={handleProceedToFlashcards}
                     onGoToText={handleGoToTextFromQuiz}
-                    onOpenScratchpad={() => {
-                      setScratchpadQuestion(questions[0] || null);
+                    onOpenScratchpad={(q) => {
+                      setScratchpadQuestion(q || questions[0] || null);
                       setIsScratchpadOpen(true);
                     }}
                   />
