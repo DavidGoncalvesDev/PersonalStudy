@@ -129,6 +129,10 @@ Each learning unit contains 3 distinct progressive phases:
 - Fast-recall cards with question on front, answer/insight on back.
 - Self-assessment: **Yes (Green)** vs **No (Red)**.
 - **100% Mastery Rule**: All cards must be answered "Yes" to complete the deck.
+- **Non-Resetting Mastery Persistence**:
+  - Maintained in the DOM with `display: activePhase === 'flashcards' ? 'block' : 'none'`, so navigating back to Phase 1 (Text Guide) or Phase 2 (Quiz) **never resets** the flashcard queue or active card position.
+  - Persisted in `localStorage` under `david_study_fc_${username}_${segmentId}` so even reloads and profile switches preserve mastered card progress for that segment.
+  - "Review Again" explicitly restarts and resets the queue for fresh practice.
 
 ---
 

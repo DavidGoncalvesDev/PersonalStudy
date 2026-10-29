@@ -745,17 +745,19 @@ export const App: React.FC = () => {
                   />
                 </div>
 
-                {activePhase === 'flashcards' && (
+                <div style={{ display: activePhase === 'flashcards' ? 'block' : 'none' }}>
                   <FlashcardsPhase
                     key={`flashcards-${currentSegment.id}`}
                     flashcards={flashcards}
+                    segmentId={currentSegment.id}
+                    currentUser={currentUser}
                     segmentTitle={currentSegment.title}
                     isAlreadyCompleted={!!currentSegmentProgress?.flashcards_passed}
                     onCompleteSegment={handleCompleteSegment}
                     onGoToNextSegment={handleGoToNextSegment}
                     hasNextSegment={hasNextSegment}
                   />
-                )}
+                </div>
               </>
             )}
           </>

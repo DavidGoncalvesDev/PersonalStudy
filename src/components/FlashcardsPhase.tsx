@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Flashcard } from '../types';
 import confetti from 'canvas-confetti';
 import { Check, X, RotateCw, Trophy, ArrowRight, CheckCircle2 } from 'lucide-react';
@@ -7,6 +7,8 @@ import { playCorrectSound, playWrongSound, playSuccessChime, playClickSound } fr
 
 interface FlashcardsPhaseProps {
   flashcards: Flashcard[];
+  segmentId: string;
+  currentUser?: string | null;
   segmentTitle: string;
   isAlreadyCompleted: boolean;
   onCompleteSegment: () => void;
@@ -16,22 +18,107 @@ interface FlashcardsPhaseProps {
 
 export const FlashcardsPhase: React.FC<FlashcardsPhaseProps> = ({
   flashcards,
+  segmentId,
+  currentUser,
   segmentTitle,
   isAlreadyCompleted,
   onCompleteSegment,
   onGoToNextSegment,
   hasNextSegment
 }) => {
-  // Queue of remaining cards to master
-  const [queue, setQueue] = useState<Flashcard[]>([...flashcards]);
-  // Mastered set of card IDs
-  const [masteredIds, setMasteredIds] = useState<Set<string>>(new Set());
-  // Is card flipped to show back?
+  const uKey = (currentUser || 'guest').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '') || 'guest';
+  const storageKey = `david_study_fc_${uKey}_${segmentId}`;
+
+  // Helper to load mastered cards and queue from storage or defaults
+  const loadInitialState = () => {
+    if (flashcards.length === 0) {
+      return {
+        mastered: new Set<string>(),
+        queue: [] as Flashcard[],
+        completed: false
+      };
+    }
+
+    if (isAlreadyCompleted) {
+      // If completed in DB, check if the student specifically initiated a "Review Again" session locally
+      try {
+        const stored = localStorage.getItem(storageKey);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed && parsed.reviewing) {
+            const validMastered = new Set(
+              (parsed.masteredIds || []).filter((id: string) => flashcards.some(f => f.id === id))
+            );
+            const remaining = flashcards.filter(f => !validMastered.has(f.id));
+            if (remaining.length > 0) {
+              return {
+                mastered: validMastered,
+                queue: remaining,
+                completed: false
+              };
+            }
+          }
+        }
+      } catch {
+        // fallback to completed
+      }
+      return {
+        mastered: new Set(flashcards.map(f => f.id)),
+        queue: [] as Flashcard[],
+        completed: true
+      };
+    }
+
+    // Not yet completed: check if partially practiced on this device
+    try {
+      const stored = localStorage.getItem(storageKey);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        const idsArray: string[] = Array.isArray(parsed) ? parsed : (parsed?.masteredIds || []);
+        const validMastered = new Set(idsArray.filter(id => flashcards.some(f => f.id === id)));
+        const remaining = flashcards.filter(f => !validMastered.has(f.id));
+
+        if (validMastered.size > 0 && remaining.length > 0) {
+          return {
+            mastered: validMastered,
+            queue: remaining,
+            completed: false
+          };
+        } else if (validMastered.size === flashcards.length && flashcards.length > 0) {
+          return {
+            mastered: validMastered,
+            queue: [],
+            completed: true
+          };
+        }
+      }
+    } catch {
+      // ignore
+    }
+
+    return {
+      mastered: new Set<string>(),
+      queue: [...flashcards],
+      completed: false
+    };
+  };
+
+  const initial = loadInitialState();
+  const [queue, setQueue] = useState<Flashcard[]>(initial.queue);
+  const [masteredIds, setMasteredIds] = useState<Set<string>>(initial.mastered);
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
-  // Current index in active queue
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  // All cards mastered in current session?
-  const [sessionCompleted, setSessionCompleted] = useState<boolean>(isAlreadyCompleted);
+  const [sessionCompleted, setSessionCompleted] = useState<boolean>(initial.completed);
+
+  // Sync state if segmentId or user or flashcards list changes
+  useEffect(() => {
+    const nextInit = loadInitialState();
+    setQueue(nextInit.queue);
+    setMasteredIds(nextInit.mastered);
+    setSessionCompleted(nextInit.completed);
+    setCurrentIndex(0);
+    setIsFlipped(false);
+  }, [segmentId, uKey, flashcards.length, isAlreadyCompleted]);
 
   const currentCard = queue[currentIndex];
   const totalCards = flashcards.length;
@@ -52,10 +139,20 @@ export const FlashcardsPhase: React.FC<FlashcardsPhaseProps> = ({
       updatedMastered.add(currentCard.id);
       setMasteredIds(updatedMastered);
 
-      // Remove from queue
+      // Remove from active queue
       const nextQueue = queue.filter((_, idx) => idx !== currentIndex);
       setQueue(nextQueue);
       setIsFlipped(false);
+
+      // Persist mastered cards to device storage so navigating away NEVER forgets progress
+      try {
+        localStorage.setItem(storageKey, JSON.stringify({
+          reviewing: true,
+          masteredIds: Array.from(updatedMastered)
+        }));
+      } catch {
+        // ignore
+      }
 
       if (nextQueue.length === 0) {
         // All mastered!
@@ -86,6 +183,15 @@ export const FlashcardsPhase: React.FC<FlashcardsPhaseProps> = ({
     setIsFlipped(false);
     setCurrentIndex(0);
     setSessionCompleted(false);
+
+    try {
+      localStorage.setItem(storageKey, JSON.stringify({
+        reviewing: true,
+        masteredIds: []
+      }));
+    } catch {
+      // ignore
+    }
   };
 
   return (
@@ -93,7 +199,7 @@ export const FlashcardsPhase: React.FC<FlashcardsPhaseProps> = ({
       backgroundColor: '#ffffff',
       borderRadius: '12px',
       border: '1px solid #e7e2d7',
-      padding: '1.75rem',
+      padding: 'clamp(1rem, 3vw, 1.75rem)',
       boxShadow: '0 1px 3px rgba(120, 53, 15, 0.03)'
     }}>
       {/* Header Info */}
@@ -135,11 +241,11 @@ export const FlashcardsPhase: React.FC<FlashcardsPhaseProps> = ({
           display: 'flex',
           alignItems: 'center',
           gap: '0.4rem',
-          padding: '0.4rem 0.85rem',
+          padding: '0.35rem 0.8rem',
           backgroundColor: '#faf8f5',
           border: '1px solid #e7e2d7',
           borderRadius: '8px',
-          fontSize: '0.825rem',
+          fontSize: '0.8rem',
           fontWeight: 700,
           color: '#57534e'
         }}>
