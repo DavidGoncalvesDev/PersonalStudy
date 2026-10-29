@@ -190,7 +190,7 @@ export const App: React.FC = () => {
   const handleProceedToQuiz = async () => {
     await updateProgress({ text_completed: true });
     setActivePhase('quiz');
-    window.scrollTo({ top: 380, behavior: 'smooth' });
+    window.scrollTo({ top: 100, behavior: 'smooth' });
   };
 
   const handlePassQuiz = async (score: number) => {
@@ -204,7 +204,7 @@ export const App: React.FC = () => {
 
   const handleProceedToFlashcards = () => {
     setActivePhase('flashcards');
-    window.scrollTo({ top: 380, behavior: 'smooth' });
+    window.scrollTo({ top: 100, behavior: 'smooth' });
   };
 
   const handleCompleteSegment = async () => {
@@ -266,7 +266,7 @@ export const App: React.FC = () => {
   const hasNextSegment = currentSegmentIdx !== -1 && currentSegmentIdx + 1 < segments.length;
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#f8fafc' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#fdfbf7' }}>
       {/* Top Header */}
       <Header
         disciplines={disciplines}
@@ -275,76 +275,28 @@ export const App: React.FC = () => {
         onCreateDiscipline={handleCreateDiscipline}
         onDeleteDiscipline={handleDeleteDiscipline}
         completionPercentage={completionPercentage}
+        completedCount={completedSegmentsCount}
+        totalSegments={segments.length}
       />
 
       {/* Main Content Area */}
-      <main style={{ flex: 1, maxWidth: '1200px', width: '100%', margin: '0 auto', padding: '1.75rem 1.5rem 4rem' }}>
+      <main style={{ flex: 1, maxWidth: '960px', width: '100%', margin: '0 auto', padding: '1.25rem 1rem 3rem' }}>
         {loading && disciplines.length === 0 ? (
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '350px', gap: '1rem' }}>
-            <Loader2 size={36} color="#4f46e5" className="animate-spin" />
-            <p style={{ color: '#64748b', fontWeight: 600 }}>Connecting to Supabase and loading study guides...</p>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '300px', gap: '0.75rem' }}>
+            <Loader2 size={32} color="#78350f" className="animate-spin" />
+            <p style={{ color: '#78716c', fontWeight: 600, fontSize: '0.9rem' }}>Loading study guide...</p>
           </div>
         ) : !currentDiscipline ? (
-          <div style={{ textAlign: 'center', padding: '4rem 1rem' }}>
-            <BookOpen size={48} color="#94a3b8" style={{ margin: '0 auto 1rem' }} />
-            <h2 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#1e293b' }}>No Disciplines Found</h2>
-            <p style={{ color: '#64748b', maxWidth: '400px', margin: '0.5rem auto 1.5rem' }}>
-              Create your first study discipline or upload slides to begin.
+          <div style={{ textAlign: 'center', padding: '3.5rem 1rem' }}>
+            <BookOpen size={44} color="#a8a29e" style={{ margin: '0 auto 0.75rem' }} />
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#451a03' }}>No Disciplines Found</h2>
+            <p style={{ color: '#78716c', maxWidth: '380px', margin: '0.5rem auto 1.25rem', fontSize: '0.875rem' }}>
+              Create your study discipline or load content to begin.
             </p>
           </div>
         ) : (
           <>
-            {/* Discipline Overview & Global Progress Bar */}
-            <div style={{
-              backgroundColor: '#ffffff',
-              border: '1px solid #e2e8f0',
-              borderRadius: '12px',
-              padding: '1.5rem',
-              marginBottom: '1.5rem',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.02)'
-            }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '1rem' }}>
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }}>
-                      {currentDiscipline.name}
-                    </h1>
-                    {currentDiscipline.code && (
-                      <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#4f46e5', backgroundColor: '#eef2ff', padding: '0.15rem 0.5rem', borderRadius: '6px' }}>
-                        {currentDiscipline.code}
-                      </span>
-                    )}
-                  </div>
-                  {currentDiscipline.description && (
-                    <p style={{ fontSize: '0.85rem', color: '#64748b', marginTop: '0.25rem' }}>
-                      {currentDiscipline.description}
-                    </p>
-                  )}
-                </div>
-
-                <div style={{ textAlign: 'right' }}>
-                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#64748b' }}>
-                    Overall Course Progress
-                  </span>
-                  <div style={{ fontSize: '1.5rem', fontWeight: 800, color: completionPercentage === 100 ? '#10b981' : '#4f46e5' }}>
-                    {completionPercentage}%
-                  </div>
-                </div>
-              </div>
-
-              {/* Progress Bar Container */}
-              <div style={{ width: '100%', height: '10px', backgroundColor: '#e2e8f0', borderRadius: '9999px', overflow: 'hidden' }}>
-                <div style={{
-                  width: `${completionPercentage}%`,
-                  height: '100%',
-                  backgroundColor: completionPercentage === 100 ? '#10b981' : '#4f46e5',
-                  borderRadius: '9999px',
-                  transition: 'width 0.4s ease'
-                }} />
-              </div>
-            </div>
-
-            {/* Segment Selector / Levels Navigation */}
+            {/* Level / Segment Selector */}
             <SegmentSelector
               segments={segments}
               currentSegment={currentSegment}
@@ -356,16 +308,16 @@ export const App: React.FC = () => {
 
             {/* Current Segment Workflow Phase Stepper */}
             {currentSegment && (
-              <div style={{ marginBottom: '1.5rem' }}>
+              <div style={{ marginBottom: '1.25rem' }}>
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
                   backgroundColor: '#ffffff',
-                  border: '1px solid #e2e8f0',
+                  border: '1px solid #e7e2d7',
                   borderRadius: '10px',
-                  padding: '0.4rem',
-                  gap: '0.5rem',
-                  boxShadow: '0 1px 2px rgba(0,0,0,0.02)'
+                  padding: '0.35rem',
+                  gap: '0.4rem',
+                  boxShadow: '0 1px 3px rgba(120, 53, 15, 0.02)'
                 }}>
                   {/* Phase 1 Tab */}
                   <button
@@ -375,24 +327,24 @@ export const App: React.FC = () => {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      gap: '0.5rem',
-                      padding: '0.65rem 1rem',
+                      gap: '0.4rem',
+                      padding: '0.55rem 0.75rem',
                       borderRadius: '8px',
                       border: 'none',
-                      backgroundColor: activePhase === 'text' ? '#eef2ff' : 'transparent',
-                      color: activePhase === 'text' ? '#4f46e5' : '#475569',
-                      fontWeight: activePhase === 'text' ? 700 : 600,
-                      fontSize: '0.875rem',
+                      backgroundColor: activePhase === 'text' ? '#fef3c7' : 'transparent',
+                      color: activePhase === 'text' ? '#78350f' : '#78716c',
+                      fontWeight: activePhase === 'text' ? 800 : 600,
+                      fontSize: '0.825rem',
                       cursor: 'pointer',
-                      transition: 'all 0.15s ease'
+                      transition: 'all 0.12s ease'
                     }}
                   >
-                    <BookOpen size={16} />
-                    <span>1. Text Summary</span>
-                    {currentSegmentProgress?.text_completed && <CheckCircle2 size={15} color="#10b981" />}
+                    <BookOpen size={15} />
+                    <span>1. Text Guide</span>
+                    {currentSegmentProgress?.text_completed && <CheckCircle2 size={14} color="#15803d" />}
                   </button>
 
-                  <ChevronRight size={16} color="#cbd5e1" />
+                  <ChevronRight size={14} color="#d6cebf" />
 
                   {/* Phase 2 Tab */}
                   <button
@@ -400,7 +352,7 @@ export const App: React.FC = () => {
                       if (currentSegmentProgress?.text_completed || unlockAll) {
                         setActivePhase('quiz');
                       } else {
-                        alert('Please read and mark the Text Summary as understood first.');
+                        alert('Please read and mark the Text Guide complete first.');
                       }
                     }}
                     style={{
@@ -408,24 +360,28 @@ export const App: React.FC = () => {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      gap: '0.5rem',
-                      padding: '0.65rem 1rem',
+                      gap: '0.4rem',
+                      padding: '0.55rem 0.75rem',
                       borderRadius: '8px',
                       border: 'none',
-                      backgroundColor: activePhase === 'quiz' ? '#eef2ff' : 'transparent',
-                      color: activePhase === 'quiz' ? '#4f46e5' : (currentSegmentProgress?.text_completed || unlockAll) ? '#475569' : '#94a3b8',
-                      fontWeight: activePhase === 'quiz' ? 700 : 600,
-                      fontSize: '0.875rem',
+                      backgroundColor: activePhase === 'quiz' ? '#fef3c7' : 'transparent',
+                      color: activePhase === 'quiz'
+                        ? '#78350f'
+                        : (currentSegmentProgress?.text_completed || unlockAll)
+                        ? '#78716c'
+                        : '#c7c2b6',
+                      fontWeight: activePhase === 'quiz' ? 800 : 600,
+                      fontSize: '0.825rem',
                       cursor: (currentSegmentProgress?.text_completed || unlockAll) ? 'pointer' : 'not-allowed',
-                      transition: 'all 0.15s ease'
+                      transition: 'all 0.12s ease'
                     }}
                   >
-                    <HelpCircle size={16} />
-                    <span>2. Level Quiz (12 Qs)</span>
-                    {currentSegmentProgress?.quiz_passed && <CheckCircle2 size={15} color="#10b981" />}
+                    <HelpCircle size={15} />
+                    <span>2. Quiz (12 Qs)</span>
+                    {currentSegmentProgress?.quiz_passed && <CheckCircle2 size={14} color="#15803d" />}
                   </button>
 
-                  <ChevronRight size={16} color="#cbd5e1" />
+                  <ChevronRight size={14} color="#d6cebf" />
 
                   {/* Phase 3 Tab */}
                   <button
@@ -433,7 +389,7 @@ export const App: React.FC = () => {
                       if (currentSegmentProgress?.quiz_passed || unlockAll) {
                         setActivePhase('flashcards');
                       } else {
-                        alert('Mastery Required: You must pass the 12-question quiz (12/12) to unlock Flashcards.');
+                        alert('Mastery rule: Score 12/12 on the Quiz to unlock Flashcards.');
                       }
                     }}
                     style={{
@@ -441,21 +397,25 @@ export const App: React.FC = () => {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      gap: '0.5rem',
-                      padding: '0.65rem 1rem',
+                      gap: '0.4rem',
+                      padding: '0.55rem 0.75rem',
                       borderRadius: '8px',
                       border: 'none',
-                      backgroundColor: activePhase === 'flashcards' ? '#eef2ff' : 'transparent',
-                      color: activePhase === 'flashcards' ? '#4f46e5' : (currentSegmentProgress?.quiz_passed || unlockAll) ? '#475569' : '#94a3b8',
-                      fontWeight: activePhase === 'flashcards' ? 700 : 600,
-                      fontSize: '0.875rem',
+                      backgroundColor: activePhase === 'flashcards' ? '#fef3c7' : 'transparent',
+                      color: activePhase === 'flashcards'
+                        ? '#78350f'
+                        : (currentSegmentProgress?.quiz_passed || unlockAll)
+                        ? '#78716c'
+                        : '#c7c2b6',
+                      fontWeight: activePhase === 'flashcards' ? 800 : 600,
+                      fontSize: '0.825rem',
                       cursor: (currentSegmentProgress?.quiz_passed || unlockAll) ? 'pointer' : 'not-allowed',
-                      transition: 'all 0.15s ease'
+                      transition: 'all 0.12s ease'
                     }}
                   >
-                    <Layers size={16} />
+                    <Layers size={15} />
                     <span>3. Flashcards</span>
-                    {currentSegmentProgress?.flashcards_passed && <CheckCircle2 size={15} color="#10b981" />}
+                    {currentSegmentProgress?.flashcards_passed && <CheckCircle2 size={14} color="#15803d" />}
                   </button>
                 </div>
               </div>

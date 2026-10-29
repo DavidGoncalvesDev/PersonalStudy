@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Question } from '../types';
 import confetti from 'canvas-confetti';
-import { CheckCircle2, XCircle, AlertTriangle, ArrowRight, RotateCcw, Award } from 'lucide-react';
+import { CheckCircle2, XCircle, ArrowRight, RotateCcw, Award } from 'lucide-react';
+import { renderInlineMath } from './MathRenderer';
 
 interface QuizPhaseProps {
   questions: Question[];
@@ -18,15 +19,12 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
   onPassQuiz,
   onProceedToFlashcards
 }) => {
-  // State for user answers: map of questionId -> selectedOptionId
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
-  // Submitted state
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-  // Current view score
   const [score, setScore] = useState<number>(0);
 
   const handleOptionSelect = (qId: string, optionId: string) => {
-    if (isSubmitted) return; // Prevent changing after submission
+    if (isSubmitted) return;
     setSelectedAnswers(prev => ({
       ...prev,
       [qId]: optionId
@@ -57,11 +55,10 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
   };
 
   const handleRetakeWholeTest = () => {
-    // Strict mastery rule: Reset ENTIRE test
     setSelectedAnswers({});
     setIsSubmitted(false);
     setScore(0);
-    window.scrollTo({ top: 300, behavior: 'smooth' });
+    window.scrollTo({ top: 120, behavior: 'smooth' });
   };
 
   const isPassed = isSubmitted && score === 12;
@@ -70,9 +67,9 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
     <div style={{
       backgroundColor: '#ffffff',
       borderRadius: '12px',
-      border: '1px solid #e2e8f0',
-      padding: '2rem',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+      border: '1px solid #e7e2d7',
+      padding: '1.75rem 1.5rem',
+      boxShadow: '0 1px 3px rgba(120, 53, 15, 0.02)'
     }}>
       {/* Header Info */}
       <div style={{
@@ -80,213 +77,191 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
         alignItems: 'center',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
-        gap: '1rem',
-        paddingBottom: '1.25rem',
+        gap: '0.75rem',
+        paddingBottom: '1rem',
         marginBottom: '1.5rem',
-        borderBottom: '1px solid #f1f5f9'
+        borderBottom: '1px solid #f2eee6'
       }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#4f46e5', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-              Phase 2 of 3: Comprehensive Mastery Quiz
-            </span>
-            {isAlreadyPassed && (
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#059669', backgroundColor: '#dcfce7', padding: '0.1rem 0.5rem', borderRadius: '9999px' }}>
-                Passed (12/12)
-              </span>
-            )}
-          </div>
-          <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#0f172a' }}>
-            {segmentTitle} - 12 Questions
+          <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#b45309', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            Level Quiz (12 Questions • 100% Required)
+          </span>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#451a03', marginTop: '0.15rem' }}>
+            {segmentTitle}
           </h2>
-          <p style={{ fontSize: '0.825rem', color: '#64748b' }}>
-            Requirements: Exactly 12 substantive questions (4 Easy, 4 Intermediate, 4 Hard). <strong>100% (12/12) is required to unlock Flashcards.</strong> If you miss any question, you must retake the entire test.
-          </p>
         </div>
 
-        {/* Answer counter */}
         <div style={{
-          padding: '0.5rem 1rem',
-          backgroundColor: '#f8fafc',
-          border: '1px solid #e2e8f0',
-          borderRadius: '8px',
-          fontSize: '0.85rem',
+          padding: '0.35rem 0.75rem',
+          backgroundColor: '#fffbeb',
+          border: '1px solid #e7e2d7',
+          borderRadius: '6px',
+          fontSize: '0.8rem',
           fontWeight: 700,
-          color: '#334155'
+          color: '#78350f'
         }}>
-          Answered: {Object.keys(selectedAnswers).length} / {questions.length}
+          {Object.keys(selectedAnswers).length} / {questions.length} answered
         </div>
       </div>
 
-      {/* Submission Result Banner */}
+      {/* Result Card if Submitted */}
       {isSubmitted && (
         <div style={{
           padding: '1.25rem',
           borderRadius: '10px',
-          marginBottom: '2rem',
-          backgroundColor: isPassed ? '#ecfdf5' : '#fef2f2',
-          border: isPassed ? '2px solid #10b981' : '2px solid #ef4444',
+          marginBottom: '1.75rem',
+          backgroundColor: isPassed ? '#f0fdf4' : '#fef2f2',
+          border: isPassed ? '1.5px solid #16a34a' : '1.5px solid #dc2626',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
           gap: '1rem'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             {isPassed ? (
-              <Award size={36} color="#059669" />
+              <Award size={30} color="#15803d" />
             ) : (
-              <AlertTriangle size={36} color="#dc2626" />
+              <XCircle size={30} color="#dc2626" />
             )}
             <div>
-              <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: isPassed ? '#065f46' : '#991b1b' }}>
+              <div style={{ fontSize: '1.05rem', fontWeight: 800, color: isPassed ? '#166534' : '#991b1b' }}>
+                {isPassed ? 'Perfect 12 / 12! Level Mastered' : `Score: ${score} / 12 (12/12 required)`}
+              </div>
+              <p style={{ fontSize: '0.825rem', color: isPassed ? '#15803d' : '#b91c1c' }}>
                 {isPassed
-                  ? 'Perfect Mastery! 12 / 12 Correct'
-                  : `Mastery Incomplete: Scored ${score} / 12`}
-              </h3>
-              <p style={{ fontSize: '0.85rem', color: isPassed ? '#047857' : '#b91c1c' }}>
-                {isPassed
-                  ? 'Congratulations! You have demonstrated 100% mastery of this level and unlocked Phase 3: Flashcards.'
-                  : 'System Rule: You must achieve 12/12 to pass. You cannot move forward until all 12 are answered correctly. Review the explanations below, then restart the full test.'}
+                  ? 'All 12 questions correct! You may now proceed to Flashcards.'
+                  : 'Mastery rule: You must score 12/12 to pass. Redo the whole quiz below.'}
               </p>
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '0.75rem' }}>
-            {!isPassed && (
+          <div>
+            {!isPassed ? (
               <button
                 onClick={handleRetakeWholeTest}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.5rem',
-                  padding: '0.65rem 1.25rem',
-                  backgroundColor: '#ef4444',
+                  gap: '0.4rem',
+                  padding: '0.55rem 1rem',
+                  backgroundColor: '#dc2626',
                   color: '#ffffff',
                   border: 'none',
-                  borderRadius: '8px',
+                  borderRadius: '6px',
                   fontWeight: 700,
-                  fontSize: '0.9rem',
+                  fontSize: '0.85rem',
                   cursor: 'pointer'
                 }}
               >
-                <RotateCcw size={16} />
-                <span>Restart Whole Test</span>
+                <RotateCcw size={14} />
+                <span>Restart Quiz</span>
               </button>
-            )}
-
-            {isPassed && (
+            ) : (
               <button
                 onClick={onProceedToFlashcards}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.5rem',
-                  padding: '0.65rem 1.4rem',
-                  backgroundColor: '#10b981',
+                  gap: '0.4rem',
+                  padding: '0.55rem 1.1rem',
+                  backgroundColor: '#15803d',
                   color: '#ffffff',
                   border: 'none',
-                  borderRadius: '8px',
+                  borderRadius: '6px',
                   fontWeight: 700,
-                  fontSize: '0.9rem',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 10px rgba(16, 185, 129, 0.25)'
+                  fontSize: '0.85rem',
+                  cursor: 'pointer'
                 }}
               >
-                <span>Proceed to Flashcards</span>
-                <ArrowRight size={16} />
+                <span>Go to Flashcards</span>
+                <ArrowRight size={15} />
               </button>
             )}
           </div>
         </div>
       )}
 
-      {/* 12 Questions List */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+      {/* 12 Question Cards */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
         {questions.map((q, qIdx) => {
           const selected = selectedAnswers[q.id];
           const isCorrect = isSubmitted && selected === q.correct_option;
-          const isWrong = isSubmitted && selected && selected !== q.correct_option;
 
-          // Difficulty badge style
           const diffBadge = {
-            easy: { text: 'Elemental (Basics)', bg: '#f0fdf4', color: '#166534', border: '#bbf7d0' },
-            intermediate: { text: 'Intermediate (Concepts)', bg: '#eff6ff', color: '#1e40af', border: '#bfdbfe' },
-            hard: { text: 'Hard (Calculation & Application)', bg: '#fef2f2', color: '#991b1b', border: '#fecaca' }
+            easy: { text: 'Basics', color: '#166534', bg: '#f0fdf4' },
+            intermediate: { text: 'Concepts', color: '#92400e', bg: '#fef3c7' },
+            hard: { text: 'Calculations', color: '#991b1b', bg: '#fef2f2' }
           }[q.difficulty];
 
           return (
             <div
               key={q.id}
               style={{
-                padding: '1.5rem',
-                borderRadius: '10px',
+                padding: '1.25rem',
+                borderRadius: '8px',
                 border: isSubmitted
                   ? isCorrect
-                    ? '1.5px solid #10b981'
-                    : '1.5px solid #ef4444'
-                  : '1px solid #e2e8f0',
+                    ? '1.5px solid #16a34a'
+                    : '1.5px solid #dc2626'
+                  : '1px solid #e7e2d7',
                 backgroundColor: isSubmitted
                   ? isCorrect
-                    ? '#f0fdf4'
-                    : '#fff5f5'
-                  : '#ffffff',
-                boxShadow: '0 1px 2px rgba(0,0,0,0.02)'
+                    ? '#fcfdfd'
+                    : '#fffdfd'
+                  : '#ffffff'
               }}
             >
-              {/* Question Header */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#4f46e5' }}>
-                  Question {qIdx + 1} of 12
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.65rem' }}>
+                <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#78350f' }}>
+                  Q{qIdx + 1} of 12
                 </span>
                 <span style={{
-                  fontSize: '0.72rem',
+                  fontSize: '0.7rem',
                   fontWeight: 700,
-                  padding: '0.2rem 0.55rem',
-                  borderRadius: '9999px',
+                  padding: '0.15rem 0.45rem',
+                  borderRadius: '4px',
                   backgroundColor: diffBadge.bg,
-                  color: diffBadge.color,
-                  border: `1px solid ${diffBadge.border}`
+                  color: diffBadge.color
                 }}>
                   {diffBadge.text}
                 </span>
               </div>
 
-              {/* Question Text */}
-              <h4 style={{
-                fontSize: '1rem',
+              <h3 style={{
+                fontSize: '0.95rem',
                 fontWeight: 700,
-                color: '#0f172a',
+                color: '#292524',
                 lineHeight: 1.5,
-                marginBottom: '1.25rem'
+                marginBottom: '1rem'
               }}>
-                {q.question}
-              </h4>
+                {renderInlineMath(q.question)}
+              </h3>
 
-              {/* 6 Choices */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+              {/* 6 Options */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 {q.options.map((opt) => {
                   const isOptSelected = selected === opt.id;
                   const isOptCorrect = isSubmitted && opt.id === q.correct_option;
                   const isOptWrongSelected = isSubmitted && isOptSelected && !isOptCorrect;
 
-                  let optBg = '#f8fafc';
-                  let optBorder = '#e2e8f0';
-                  let optText = '#334155';
+                  let optBg = '#fdfbf7';
+                  let optBorder = '#e7e2d7';
+                  let optColor = '#44403c';
 
                   if (isOptSelected && !isSubmitted) {
-                    optBg = '#eef2ff';
-                    optBorder = '#6366f1';
-                    optText = '#312e81';
+                    optBg = '#fffbeb';
+                    optBorder = '#b45309';
+                    optColor = '#451a03';
                   } else if (isSubmitted) {
                     if (isOptCorrect) {
                       optBg = '#dcfce7';
-                      optBorder = '#10b981';
-                      optText = '#065f46';
+                      optBorder = '#16a34a';
+                      optColor = '#14532d';
                     } else if (isOptWrongSelected) {
                       optBg = '#fee2e2';
-                      optBorder = '#ef4444';
-                      optText = '#991b1b';
+                      optBorder = '#dc2626';
+                      optColor = '#7f1d1d';
                     }
                   }
 
@@ -297,64 +272,65 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
                       style={{
                         display: 'flex',
                         alignItems: 'flex-start',
-                        gap: '0.75rem',
-                        padding: '0.8rem 1rem',
-                        borderRadius: '8px',
+                        gap: '0.65rem',
+                        padding: '0.65rem 0.85rem',
+                        borderRadius: '6px',
                         border: `1.5px solid ${optBorder}`,
                         backgroundColor: optBg,
-                        color: optText,
+                        color: optColor,
                         cursor: isSubmitted ? 'default' : 'pointer',
-                        transition: 'all 0.15s ease'
+                        fontSize: '0.875rem',
+                        lineHeight: 1.45
                       }}
                     >
                       <div style={{
-                        width: '24px',
-                        height: '24px',
-                        borderRadius: '6px',
-                        border: isOptSelected || isOptCorrect ? 'none' : '1.5px solid #cbd5e1',
+                        width: '20px',
+                        height: '20px',
+                        borderRadius: '4px',
+                        border: isOptSelected || isOptCorrect ? 'none' : '1px solid #d6cebf',
                         backgroundColor: isOptCorrect
-                          ? '#10b981'
+                          ? '#16a34a'
                           : isOptWrongSelected
-                          ? '#ef4444'
+                          ? '#dc2626'
                           : isOptSelected
-                          ? '#4f46e5'
+                          ? '#78350f'
                           : '#ffffff',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        color: isOptSelected || isOptCorrect || isOptWrongSelected ? '#ffffff' : '#64748b',
+                        color: isOptSelected || isOptCorrect || isOptWrongSelected ? '#ffffff' : '#78716c',
                         fontWeight: 700,
-                        fontSize: '0.75rem',
+                        fontSize: '0.7rem',
                         flexShrink: 0,
                         marginTop: '0.1rem'
                       }}>
                         {opt.id.toUpperCase()}
                       </div>
-                      <span style={{ fontSize: '0.9rem', lineHeight: 1.45, fontWeight: isOptSelected ? 600 : 400 }}>
-                        {opt.text}
+                      <span style={{ fontWeight: isOptSelected ? 600 : 400 }}>
+                        {renderInlineMath(opt.text)}
                       </span>
                     </div>
                   );
                 })}
               </div>
 
-              {/* Explanation (Shown when submitted) */}
+              {/* Explanation after submit */}
               {isSubmitted && (
                 <div style={{
-                  marginTop: '1rem',
-                  padding: '0.85rem 1rem',
-                  borderRadius: '8px',
+                  marginTop: '0.85rem',
+                  padding: '0.75rem 0.9rem',
+                  borderRadius: '6px',
                   backgroundColor: '#ffffff',
-                  border: isCorrect ? '1px solid #86efac' : '1px solid #fca5a5',
-                  fontSize: '0.85rem',
-                  color: '#334155',
+                  border: isCorrect ? '1px solid #bbf7d0' : '1px solid #fecaca',
+                  fontSize: '0.825rem',
+                  color: '#44403c',
                   lineHeight: 1.5
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 700, marginBottom: '0.35rem', color: isCorrect ? '#059669' : '#dc2626' }}>
-                    {isCorrect ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
-                    <span>{isCorrect ? 'Correct Explanation:' : 'Review Concept & Correct Answer:'}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontWeight: 700, marginBottom: '0.25rem', color: isCorrect ? '#15803d' : '#dc2626' }}>
+                    {isCorrect ? <CheckCircle2 size={14} /> : <XCircle size={14} />}
+                    <span>{isCorrect ? 'Explanation:' : 'Concept Review:'}</span>
                   </div>
-                  <p>{q.explanation}</p>
+                  <div>{renderInlineMath(q.explanation)}</div>
                 </div>
               )}
             </div>
@@ -362,91 +338,89 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
         })}
       </div>
 
-      {/* Bottom Submit Bar */}
+      {/* Bottom Bar */}
       <div style={{
-        marginTop: '2.5rem',
-        paddingTop: '1.5rem',
-        borderTop: '1px solid #e2e8f0',
+        marginTop: '2rem',
+        paddingTop: '1rem',
+        borderTop: '1px solid #e7e2d7',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
-        gap: '1rem'
+        gap: '0.75rem'
       }}>
         {!isSubmitted ? (
           <>
-            <span style={{ fontSize: '0.85rem', color: allAnswered ? '#059669' : '#64748b', fontWeight: 600 }}>
+            <span style={{ fontSize: '0.8rem', color: allAnswered ? '#15803d' : '#78716c', fontWeight: 600 }}>
               {allAnswered
-                ? 'All 12 questions answered! Ready to verify mastery.'
-                : `Please answer all 12 questions (${12 - Object.keys(selectedAnswers).length} remaining).`}
+                ? 'All 12 answered.'
+                : `${12 - Object.keys(selectedAnswers).length} remaining.`}
             </span>
             <button
               onClick={handleSubmit}
               disabled={!allAnswered}
               style={{
-                padding: '0.75rem 1.8rem',
-                backgroundColor: allAnswered ? '#4f46e5' : '#cbd5e1',
+                padding: '0.65rem 1.5rem',
+                backgroundColor: allAnswered ? '#78350f' : '#d6cebf',
                 color: '#ffffff',
                 border: 'none',
                 borderRadius: '8px',
-                fontSize: '0.95rem',
+                fontSize: '0.9rem',
                 fontWeight: 700,
-                cursor: allAnswered ? 'pointer' : 'not-allowed',
-                boxShadow: allAnswered ? '0 4px 10px rgba(79, 70, 229, 0.25)' : 'none'
+                cursor: allAnswered ? 'pointer' : 'not-allowed'
               }}
             >
-              Submit Quiz & Verify 12/12
+              Submit & Verify 12/12
             </button>
           </>
         ) : !isPassed ? (
           <>
             <span style={{ fontSize: '0.85rem', color: '#dc2626', fontWeight: 700 }}>
-              Score: {score} / 12. Retake required to advance.
+              {score} / 12 correct. Retake required.
             </span>
             <button
               onClick={handleRetakeWholeTest}
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.5rem',
-                padding: '0.75rem 1.6rem',
-                backgroundColor: '#ef4444',
+                gap: '0.4rem',
+                padding: '0.65rem 1.4rem',
+                backgroundColor: '#dc2626',
                 color: '#ffffff',
                 border: 'none',
                 borderRadius: '8px',
-                fontSize: '0.95rem',
+                fontSize: '0.9rem',
                 fontWeight: 700,
                 cursor: 'pointer'
               }}
             >
-              <RotateCcw size={16} />
-              <span>Retake Entire Quiz (12 Questions)</span>
+              <RotateCcw size={15} />
+              <span>Redo Whole Quiz</span>
             </button>
           </>
         ) : (
           <>
-            <span style={{ fontSize: '0.85rem', color: '#059669', fontWeight: 700 }}>
-              ✓ Perfect Score (12/12)! Level Quiz Passed.
+            <span style={{ fontSize: '0.85rem', color: '#15803d', fontWeight: 700 }}>
+              ✓ Mastered! 12/12
             </span>
             <button
               onClick={onProceedToFlashcards}
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.5rem',
-                padding: '0.75rem 1.8rem',
-                backgroundColor: '#10b981',
+                gap: '0.4rem',
+                padding: '0.65rem 1.5rem',
+                backgroundColor: '#15803d',
                 color: '#ffffff',
                 border: 'none',
                 borderRadius: '8px',
-                fontSize: '0.95rem',
+                fontSize: '0.9rem',
                 fontWeight: 700,
-                cursor: 'pointer',
-                boxShadow: '0 4px 10px rgba(16, 185, 129, 0.25)'
+                cursor: 'pointer'
               }}
             >
               <span>Continue to Flashcards</span>
-              <ArrowRight size={18} />
+              <ArrowRight size={16} />
             </button>
           </>
         )}

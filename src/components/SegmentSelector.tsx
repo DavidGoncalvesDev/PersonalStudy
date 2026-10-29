@@ -1,6 +1,6 @@
 import React from 'react';
 import { Segment, SegmentProgress } from '../types';
-import { CheckCircle, Lock, Unlock, ArrowRight } from 'lucide-react';
+import { Check, Lock, Unlock } from 'lucide-react';
 
 interface SegmentSelectorProps {
   segments: Segment[];
@@ -19,189 +19,117 @@ export const SegmentSelector: React.FC<SegmentSelectorProps> = ({
   unlockAll,
   onToggleUnlockAll
 }) => {
-  // Determine if a segment is accessible
   const isAccessible = (index: number) => {
     if (unlockAll) return true;
     if (index === 0) return true;
-    // Accessible if previous segment is completed
-    const prevSegment = segments[index - 1];
-    return progressMap[prevSegment.id]?.completed;
+    const prev = segments[index - 1];
+    return progressMap[prev.id]?.completed;
   };
 
   return (
-    <div style={{
-      backgroundColor: '#ffffff',
-      border: '1px solid #e2e8f0',
-      borderRadius: '12px',
-      padding: '1.25rem',
-      marginBottom: '1.5rem',
-      boxShadow: '0 1px 3px rgba(0,0,0,0.03)'
-    }}>
+    <div style={{ marginBottom: '1.25rem' }}>
+      {/* Top Bar with Level Dropdown / Pills & Unlock Switch */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
-        gap: '0.75rem',
-        marginBottom: '1rem',
-        paddingBottom: '0.75rem',
-        borderBottom: '1px solid #f1f5f9'
+        gap: '0.5rem',
+        marginBottom: '0.65rem'
       }}>
-        <div>
-          <h2 style={{ fontSize: '1rem', fontWeight: 700, color: '#0f172a' }}>
-            Study Levels & Curriculum
-          </h2>
-          <p style={{ fontSize: '0.8rem', color: '#64748b' }}>
-            Sequential mastery: Complete Text → Pass 12/12 Quiz → Master Flashcards to advance.
-          </p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#78350f', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            Levels ({segments.length})
+          </span>
+          {currentSegment && (
+            <span style={{ fontSize: '0.8rem', color: '#78716c', fontWeight: 500 }}>
+              • Level {currentSegment.order_index}: {currentSegment.title}
+            </span>
+          )}
         </div>
 
-        {/* Unlock All Segments Toggle Button */}
         <button
           onClick={onToggleUnlockAll}
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '0.45rem',
-            padding: '0.45rem 0.85rem',
-            borderRadius: '8px',
-            fontSize: '0.8rem',
-            fontWeight: 600,
+            gap: '0.35rem',
+            padding: '0.3rem 0.6rem',
+            borderRadius: '6px',
+            fontSize: '0.72rem',
+            fontWeight: 700,
             cursor: 'pointer',
-            border: unlockAll ? '1px solid #818cf8' : '1px solid #cbd5e1',
-            backgroundColor: unlockAll ? '#eef2ff' : '#f8fafc',
-            color: unlockAll ? '#4f46e5' : '#475569',
-            transition: 'all 0.15s ease'
+            border: unlockAll ? '1px solid #d97706' : '1px solid #e7e2d7',
+            backgroundColor: unlockAll ? '#fef3c7' : '#ffffff',
+            color: unlockAll ? '#78350f' : '#78716c'
           }}
-          title={unlockAll ? "Lock mode active (sequential progression)" : "Unlock all levels for free review"}
+          title={unlockAll ? "Lock mode (sequential progression)" : "Unlock all levels"}
         >
-          {unlockAll ? <Unlock size={15} color="#4f46e5" /> : <Lock size={15} color="#64748b" />}
-          <span>{unlockAll ? 'All Levels Unlocked' : 'Unlock All Levels'}</span>
+          {unlockAll ? <Unlock size={12} color="#78350f" /> : <Lock size={12} color="#78716c" />}
+          <span>{unlockAll ? 'All Unlocked' : 'Unlock All'}</span>
         </button>
       </div>
 
-      {/* Segment Cards / Level Pills */}
+      {/* Horizontal Scrollable Pills */}
       <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-        gap: '0.85rem'
+        display: 'flex',
+        gap: '0.4rem',
+        overflowX: 'auto',
+        paddingBottom: '0.35rem',
+        scrollbarWidth: 'none'
       }}>
         {segments.map((seg, idx) => {
           const accessible = isAccessible(idx);
           const isSelected = currentSegment?.id === seg.id;
-          const progress = progressMap[seg.id];
-          const isDone = progress?.completed;
+          const isDone = progressMap[seg.id]?.completed;
 
           return (
-            <div
+            <button
               key={seg.id}
               onClick={() => {
                 if (accessible) onSelectSegment(seg);
               }}
+              disabled={!accessible}
               style={{
-                padding: '0.9rem 1rem',
-                borderRadius: '10px',
-                border: isSelected
-                  ? '2px solid #4f46e5'
-                  : isDone
-                  ? '1px solid #a7f3d0'
-                  : accessible
-                  ? '1px solid #e2e8f0'
-                  : '1px dashed #cbd5e1',
-                backgroundColor: isSelected
-                  ? '#f5f3ff'
-                  : isDone
-                  ? '#ecfdf5'
-                  : accessible
-                  ? '#ffffff'
-                  : '#f8fafc',
-                cursor: accessible ? 'pointer' : 'not-allowed',
-                opacity: accessible ? 1 : 0.6,
-                transition: 'all 0.15s ease',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                position: 'relative'
-              }}
-            >
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
-                  <span style={{
-                    fontSize: '0.72rem',
-                    fontWeight: 700,
-                    textTransform: 'uppercase',
-                    color: isSelected ? '#4f46e5' : isDone ? '#059669' : '#64748b',
-                    letterSpacing: '0.04em'
-                  }}>
-                    Level {seg.order_index}
-                  </span>
-
-                  {isDone ? (
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#059669', fontSize: '0.75rem', fontWeight: 700 }}>
-                      <CheckCircle size={15} />
-                      Mastered
-                    </span>
-                  ) : !accessible ? (
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#94a3b8', fontSize: '0.75rem' }}>
-                      <Lock size={14} />
-                      Locked
-                    </span>
-                  ) : (
-                    <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#4f46e5' }}>
-                      In Progress
-                    </span>
-                  )}
-                </div>
-
-                <h3 style={{
-                  fontSize: '0.925rem',
-                  fontWeight: 700,
-                  color: isSelected ? '#312e81' : '#0f172a',
-                  lineHeight: 1.35,
-                  marginBottom: '0.25rem'
-                }}>
-                  {seg.title}
-                </h3>
-
-                {seg.subtitle && (
-                  <p style={{
-                    fontSize: '0.78rem',
-                    color: '#64748b',
-                    lineHeight: 1.4,
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden'
-                  }}>
-                    {seg.subtitle}
-                  </p>
-                )}
-              </div>
-
-              {/* Phase progress mini-indicator */}
-              <div style={{
+                flexShrink: 0,
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.5rem',
-                marginTop: '0.75rem',
-                paddingTop: '0.5rem',
-                borderTop: '1px solid rgba(0,0,0,0.04)',
-                fontSize: '0.72rem',
-                color: '#64748b'
-              }}>
-                <span style={{ color: progress?.text_completed ? '#059669' : '#94a3b8', fontWeight: 600 }}>
-                  1. Text {progress?.text_completed ? '✓' : '○'}
-                </span>
-                <span>•</span>
-                <span style={{ color: progress?.quiz_passed ? '#059669' : '#94a3b8', fontWeight: 600 }}>
-                  2. Quiz (12/12) {progress?.quiz_passed ? '✓' : '○'}
-                </span>
-                <span>•</span>
-                <span style={{ color: progress?.flashcards_passed ? '#059669' : '#94a3b8', fontWeight: 600 }}>
-                  3. Cards {progress?.flashcards_passed ? '✓' : '○'}
-                </span>
-              </div>
-            </div>
+                gap: '0.35rem',
+                padding: '0.4rem 0.75rem',
+                borderRadius: '8px',
+                border: isSelected
+                  ? '1.5px solid #78350f'
+                  : isDone
+                  ? '1px solid #bbf7d0'
+                  : '1px solid #e7e2d7',
+                backgroundColor: isSelected
+                  ? '#78350f'
+                  : isDone
+                  ? '#f0fdf4'
+                  : accessible
+                  ? '#ffffff'
+                  : '#f7f4ee',
+                color: isSelected
+                  ? '#ffffff'
+                  : isDone
+                  ? '#15803d'
+                  : accessible
+                  ? '#44403c'
+                  : '#a8a29e',
+                fontWeight: isSelected ? 700 : 600,
+                fontSize: '0.8rem',
+                cursor: accessible ? 'pointer' : 'not-allowed',
+                opacity: accessible ? 1 : 0.6,
+                transition: 'all 0.12s ease'
+              }}
+            >
+              <span>L{seg.order_index}</span>
+              {isDone ? (
+                <Check size={12} strokeWidth={3} />
+              ) : !accessible ? (
+                <Lock size={11} />
+              ) : null}
+            </button>
           );
         })}
       </div>
