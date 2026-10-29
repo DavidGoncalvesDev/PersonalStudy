@@ -6,6 +6,8 @@ interface MathRendererProps {
   content: string;
   highlightAnchor?: string | null;
   activeQuestionNumber?: number | null;
+  activeReferenceSource?: 'quiz' | 'flashcards' | null;
+  activeItemNumber?: number | null;
 }
 
 /**
@@ -117,8 +119,23 @@ export const renderInlineMath = (text: string): React.ReactNode => {
 const createSlug = (str: string) =>
   str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
-export const MathRenderer: React.FC<MathRendererProps> = ({ content, highlightAnchor, activeQuestionNumber }) => {
+export const MathRenderer: React.FC<MathRendererProps> = ({
+  content,
+  highlightAnchor,
+  activeQuestionNumber,
+  activeReferenceSource = 'quiz',
+  activeItemNumber
+}) => {
   if (!content) return null;
+
+  const itemNum = activeItemNumber ?? activeQuestionNumber;
+  const badgeLabel = activeReferenceSource === 'flashcards'
+    ? `📍 Active Concept Reference ${itemNum ? `(Flashcard ${itemNum})` : ''}`
+    : `📍 Active Question Reference ${itemNum ? `(Question ${itemNum})` : ''}`;
+
+  const cleanHighlight = highlightAnchor
+    ? highlightAnchor.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+    : '';
 
   // Split by block math $$...$$
   const blockParts = content.split(/\$\$([\s\S]*?)\$\$/g);
@@ -268,8 +285,10 @@ export const MathRenderer: React.FC<MathRendererProps> = ({ content, highlightAn
         } else if (trimmed.startsWith('## ')) {
           const headingText = trimmed.replace(/^##\s+/, '');
           const slug = createSlug(headingText);
-          const isHighlighted = highlightAnchor && (
-            slug.includes(highlightAnchor.toLowerCase()) || highlightAnchor.toLowerCase().includes(slug)
+          const isHighlighted = !!cleanHighlight && (
+            slug === cleanHighlight ||
+            slug.includes(cleanHighlight) ||
+            cleanHighlight.includes(slug)
           );
 
           if (isHighlighted) {
@@ -302,7 +321,7 @@ export const MathRenderer: React.FC<MathRendererProps> = ({ content, highlightAn
                   textTransform: 'uppercase',
                   letterSpacing: '0.04em'
                 }}>
-                  <span>📍 Active Question Reference {activeQuestionNumber ? `(Question ${activeQuestionNumber})` : ''}</span>
+                  <span>{badgeLabel}</span>
                 </div>
                 <h2 style={{
                   margin: 0,
@@ -337,8 +356,10 @@ export const MathRenderer: React.FC<MathRendererProps> = ({ content, highlightAn
         } else if (trimmed.startsWith('### ')) {
           const headingText = trimmed.replace(/^###\s+/, '');
           const slug = createSlug(headingText);
-          const isHighlighted = highlightAnchor && (
-            slug.includes(highlightAnchor.toLowerCase()) || highlightAnchor.toLowerCase().includes(slug)
+          const isHighlighted = !!cleanHighlight && (
+            slug === cleanHighlight ||
+            slug.includes(cleanHighlight) ||
+            cleanHighlight.includes(slug)
           );
 
           if (isHighlighted) {
@@ -371,7 +392,7 @@ export const MathRenderer: React.FC<MathRendererProps> = ({ content, highlightAn
                   textTransform: 'uppercase',
                   letterSpacing: '0.04em'
                 }}>
-                  <span>📍 Active Question Reference {activeQuestionNumber ? `(Question ${activeQuestionNumber})` : ''}</span>
+                  <span>{badgeLabel}</span>
                 </div>
                 <h3 style={{
                   margin: 0,

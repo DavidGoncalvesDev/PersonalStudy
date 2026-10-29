@@ -102,17 +102,21 @@ Each learning unit contains 3 distinct progressive phases:
 ### Phase 1: Comprehensive Text Guide
 - Exhaustive foundational prose with worked examples and formula walkthroughs.
 - Auto-generates clean URL/anchor slugs on all `##` and `###` headers.
-- **Active Question Anchoring & Highlighting**:
-  - When jumped to from a live quiz question, the target section is highlighted with an amber callout border and a `"📍 Active Question Reference (Question X)"` badge.
+- **Universal Reference Anchoring & Highlighting (All Levels 1–8, Quizzes & Flashcards)**:
+  - Every single question (all 96 across L1–L8) and every single flashcard (all 64 across L1–L8) has dedicated `section_reference` and `section_anchor` populated in Supabase.
+  - When jumped to from a live quiz question or flashcard, the target section is highlighted with an amber callout border (`border: 2.5px solid #d97706`, `#fffbeb`) and a dynamic badge:
+    `"📍 Active Question Reference (Question X)"` or `"📍 Active Concept Reference (Flashcard X)"`.
   - Automatically smooth-scrolls the highlighted section into view (`scrollMarginTop: 110px`).
-  - Displays a sticky top banner: `[← Return to Question X]`, allowing instant return to the in-progress quiz.
+  - Displays a sticky top banner with bidirectional return:
+    `[← Return to Question X]` (if from Quiz) or `[← Return to Flashcards]` (if from Flashcards).
+  - All quiz progress (question index, selections, inclinations) and flashcard progress (mastered cards, queue) are maintained with zero resets.
 - Clicking **"Mark Text as Understood & Take Quiz"** (or `"Return to Level Quiz (12 Qs)"`) navigates to Phase 2.
 
 ### Phase 2: Level Quiz (1 Question at a Time • Immediate Reset on Error)
 - **Question Format**: Exactly **12 substantive questions** (4 elemental, 4 conceptual, 4 advanced) with **6 choices each (A–F)**.
-- **Strict Content Alignment**:
-  - Every single question must be directly grounded in the concepts, definitions, and formulas taught in that specific Learning Unit's text guide.
-  - Each question stores `section_reference` (e.g. `Section 3: Classification of Methods`) and `section_anchor` (e.g. `#section-3-classification-of-multivariate-methods`).
+- **Strict Content Alignment Across All Levels**:
+  - Every single question across all 8 levels is directly grounded in the concepts, definitions, and formulas taught in that specific Learning Unit's text guide.
+  - Each question stores `section_reference` (e.g. `Section 3: Classification of Methods`) and `section_anchor` (e.g. `classification-of-multivariate-methods`).
 - **Non-Resetting Quiz Navigation**:
   - When the user clicks `"📖 Reference Text Guide"` during a quiz, the quiz state **is preserved and does NOT reset** (retains question index $i$ of 12, chosen options, and inclination tags).
 - **Strict Reset on Failure**:
@@ -127,6 +131,9 @@ Each learning unit contains 3 distinct progressive phases:
 
 ### Phase 3: Flashcards
 - Fast-recall cards with question on front, answer/insight on back.
+- **Universal Reference Text Guide Link**:
+  - Every flashcard across all 8 levels features a `"📖 Reference Text Guide"` button on the active card deck.
+  - Clicking jumps directly to the corresponding concept heading in Phase 1 text guide without losing queue or mastered card progress.
 - Self-assessment: **Yes (Green)** vs **No (Red)**.
 - **100% Mastery Rule**: All cards must be answered "Yes" to complete the deck.
 - **Non-Resetting Mastery Persistence**:

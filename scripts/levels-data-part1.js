@@ -1,4 +1,4 @@
-// Part 1: Levels 1 to 4 of Data Analysis curriculum
+// levelsPart1 of Data Analysis curriculum
 
 export const levelsPart1 = [
   {
@@ -463,7 +463,9 @@ export const levelsPart1 = [
         "order_index": 1,
         "category": "Scales",
         "front": "What are the two types of **Nonmetric Scales**, and what are their defining properties?",
-        "back": "1. **Nominal Scale**: Numbers are purely labels for distinct categories. No quantitative meaning; mode and frequency counts only.\n2. **Ordinal Scale**: Numbers denote rank order or relative preference, but intervals between ranks are NOT equal. Median, mode, and Spearman rank correlation only."
+        "back": "1. **Nominal Scale**: Numbers are purely labels for distinct categories. No quantitative meaning; mode and frequency counts only.\n2. **Ordinal Scale**: Numbers denote rank order or relative preference, but intervals between ranks are NOT equal. Median, mode, and Spearman rank correlation only.",
+        "section_reference": "Section 2.1: Nominal Scale",
+        "section_anchor": "nominal-scale"
       },
       {
         "id": "fc_l1_2",
@@ -471,7 +473,9 @@ export const levelsPart1 = [
         "order_index": 2,
         "category": "Scales",
         "front": "What is the critical distinction between an **Interval Scale** and a **Ratio Scale**?",
-        "back": "An **Interval Scale** has equal intervals between units but an **arbitrary zero point** (e.g. Celsius temperature); ratios are invalid.\nA **Ratio Scale** has equal intervals AND an **absolute, natural zero base** (e.g. age, revenue); ratios like \"twice as much\" are valid."
+        "back": "An **Interval Scale** has equal intervals between units but an **arbitrary zero point** (e.g. Celsius temperature); ratios are invalid.\nA **Ratio Scale** has equal intervals AND an **absolute, natural zero base** (e.g. age, revenue); ratios like \"twice as much\" are valid.",
+        "section_reference": "Section 2.3: Interval & Ratio Scales",
+        "section_anchor": "interval-scale"
       },
       {
         "id": "fc_l1_3",
@@ -479,7 +483,9 @@ export const levelsPart1 = [
         "order_index": 3,
         "category": "Formulas",
         "front": "What is the permissible mathematical transformation for an **Interval Scale** vs a **Ratio Scale**?",
-        "back": "- **Interval Scale**: Linear transformation $Y_t = a + b Y_0$ ($b > 0$).\n- **Ratio Scale**: Similarity transformation $Y_t = b Y_0$ ($b > 0$). Adding a constant $a \\neq 0$ is forbidden because it destroys the natural zero."
+        "back": "- **Interval Scale**: Linear transformation $Y_t = a + b Y_0$ ($b > 0$).\n- **Ratio Scale**: Similarity transformation $Y_t = b Y_0$ ($b > 0$). Adding a constant $a \\neq 0$ is forbidden because it destroys the natural zero.",
+        "section_reference": "Section 2.3: Interval Scale",
+        "section_anchor": "interval-scale"
       },
       {
         "id": "fc_l1_4",
@@ -487,7 +493,9 @@ export const levelsPart1 = [
         "order_index": 4,
         "category": "Coding",
         "front": "What is the rule for representing a nominal variable with $k$ categories using dummy variables?",
-        "back": "Exactly **$k - 1$ binary dummy variables** are required.\nIncluding all $k$ dummies alongside an intercept creates perfect multicollinearity (the dummy variable trap)."
+        "back": "Exactly **$k - 1$ binary dummy variables** are required.\nIncluding all $k$ dummies alongside an intercept creates perfect multicollinearity (the dummy variable trap).",
+        "section_reference": "Section 2.1: Nominal Scale",
+        "section_anchor": "nominal-scale"
       },
       {
         "id": "fc_l1_5",
@@ -495,7 +503,9 @@ export const levelsPart1 = [
         "order_index": 5,
         "category": "Taxonomy",
         "front": "What characterizes **Dependence Methods** in multivariate data analysis?",
-        "back": "Variables are partitioned into **independent variables (predictors)** and **dependent variables (criterion)** to explain or predict relationships (e.g., Multiple Regression, Discriminant Analysis, MANOVA)."
+        "back": "Variables are partitioned into **independent variables (predictors)** and **dependent variables (criterion)** to explain or predict relationships (e.g., Multiple Regression, Discriminant Analysis, MANOVA).",
+        "section_reference": "Section 3.1: Dependence Methods",
+        "section_anchor": "dependence-methods"
       },
       {
         "id": "fc_l1_6",
@@ -503,7 +513,9 @@ export const levelsPart1 = [
         "order_index": 6,
         "category": "Taxonomy",
         "front": "What characterizes **Interdependence Methods** in multivariate data analysis?",
-        "back": "Variables cannot be partitioned into predictors and criterion. The objective is to discover underlying structure or groupings across all variables simultaneously (e.g., PCA, Factor Analysis, Cluster Analysis, MDS)."
+        "back": "Variables cannot be partitioned into predictors and criterion. The objective is to discover underlying structure or groupings across all variables simultaneously (e.g., PCA, Factor Analysis, Cluster Analysis, MDS).",
+        "section_reference": "Section 3.2: Interdependence Methods",
+        "section_anchor": "interdependence-methods"
       },
       {
         "id": "fc_l1_7",
@@ -511,7 +523,9 @@ export const levelsPart1 = [
         "order_index": 7,
         "category": "Methods",
         "front": "When should an analyst choose **Discriminant Analysis** over **Multiple Regression**?",
-        "back": "When the dependent variable is **nonmetric (categorical)** (e.g., default vs non-default) and the independent variables are metric. Multiple Regression requires a **metric continuous** dependent variable."
+        "back": "When the dependent variable is **nonmetric (categorical)** (e.g., default vs non-default) and the independent variables are metric. Multiple Regression requires a **metric continuous** dependent variable.",
+        "section_reference": "Section 3.1: Dependence Methods",
+        "section_anchor": "dependence-methods"
       },
       {
         "id": "fc_l1_8",
@@ -519,7 +533,9 @@ export const levelsPart1 = [
         "order_index": 8,
         "category": "Methods",
         "front": "What is **Correspondence Analysis (CA)**?",
-        "back": "An interdependence dimension-reduction technique designed for **categorical (nonmetric) data**, analyzing contingency tables and cross-tabulations. It is considered the categorical counterpart to PCA."
+        "back": "An interdependence dimension-reduction technique designed for **categorical (nonmetric) data**, analyzing contingency tables and cross-tabulations. It is considered the categorical counterpart to PCA.",
+        "section_reference": "Section 3.2: Interdependence Methods",
+        "section_anchor": "interdependence-methods"
       }
     ]
   },
@@ -566,7 +582,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Sample variance is defined as the sum of squared deviations from the mean (SS) divided by degrees of freedom ($df = n - 1$), representing the average squared deviation per degree of freedom."
+        "explanation": "Sample variance is defined as the sum of squared deviations from the mean (SS) divided by degrees of freedom ($df = n - 1$), representing the average squared deviation per degree of freedom.",
+        "section_reference": "Section 2: Variance, Covariance & Correlation",
+        "section_anchor": "2-variance-covariance-correlation"
       },
       {
         "id": "q_l2_2",
@@ -601,7 +619,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "c",
-        "explanation": "In observation space, the scalar dot product between two mean-corrected vectors divided by the product of their norms equals the cosine of the angle between them, which identically matches the formula for the Pearson correlation coefficient: $\\cos(\\alpha) = r_{jk}$."
+        "explanation": "In observation space, the scalar dot product between two mean-corrected vectors divided by the product of their norms equals the cosine of the angle between them, which identically matches the formula for the Pearson correlation coefficient: $\\cos(\\alpha) = r_{jk}$.",
+        "section_reference": "Section 3.2: Observation Space",
+        "section_anchor": "observation-space-n-dimensional-representation"
       },
       {
         "id": "q_l2_3",
@@ -636,7 +656,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Standardization subtracts the mean (making the new mean 0.0) and divides by the standard deviation (making the new variance $s^2 / s^2 = 1.0$)."
+        "explanation": "Standardization subtracts the mean (making the new mean 0.0) and divides by the standard deviation (making the new variance $s^2 / s^2 = 1.0$).",
+        "section_reference": "Section 1: Data Matrices & Basic Operations",
+        "section_anchor": "1-data-matrices-basic-multivariate-operations"
       },
       {
         "id": "q_l2_4",
@@ -671,7 +693,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "d",
-        "explanation": "A metric space does not require distances to be bounded by 1.0. The three required axioms are distinguishability ($D_{ik} = 0 \\iff i=k$), symmetry ($D_{ik} = D_{ki}$), and the triangle inequality ($D_{il} \\le D_{ik} + D_{kl}$)."
+        "explanation": "A metric space does not require distances to be bounded by 1.0. The three required axioms are distinguishability ($D_{ik} = 0 \\iff i=k$), symmetry ($D_{ik} = D_{ki}$), and the triangle inequality ($D_{il} \\le D_{ik} + D_{kl}$).",
+        "section_reference": "Section 4: Distance Metrics",
+        "section_anchor": "4-distance-metrics-in-multivariate-space"
       },
       {
         "id": "q_l2_5",
@@ -706,7 +730,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Euclidean distance sums raw squared differences $(x_{ij} - x_{kj})^2$. A difference of 5,000 Euros in income yields $25,000,000$, completely overwhelming a difference of 2 people in household size ($2^2 = 4$). Statistical or Mahalanobis distance solves this by standardizing by dispersion."
+        "explanation": "Euclidean distance sums raw squared differences $(x_{ij} - x_{kj})^2$. A difference of 5,000 Euros in income yields $25,000,000$, completely overwhelming a difference of 2 people in household size ($2^2 = 4$). Statistical or Mahalanobis distance solves this by standardizing by dispersion.",
+        "section_reference": "Section 4.1: Euclidean Distance",
+        "section_anchor": "euclidean-distance"
       },
       {
         "id": "q_l2_6",
@@ -741,7 +767,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "c",
-        "explanation": "In matrix form, $MD^2 = (x_i - x_k)^T S^{-1} (x_i - x_k)$. When variables are uncorrelated and have unit variance, $S = I$, so $S^{-1} = I$, reducing the formula to $(x_i - x_k)^T (x_i - x_k) = \\sum (x_{ij} - x_{kj})^2$, which is squared Euclidean distance."
+        "explanation": "In matrix form, $MD^2 = (x_i - x_k)^T S^{-1} (x_i - x_k)$. When variables are uncorrelated and have unit variance, $S = I$, so $S^{-1} = I$, reducing the formula to $(x_i - x_k)^T (x_i - x_k) = \\sum (x_{ij} - x_{kj})^2$, which is squared Euclidean distance.",
+        "section_reference": "Section 4.3: Mahalanobis Distance",
+        "section_anchor": "mahalanobis-distance-covariance-adjusted"
       },
       {
         "id": "q_l2_7",
@@ -776,7 +804,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "For any two-way table, $df = (r - 1)(c - 1) = (2 - 1)(2 - 1) = 1$. With fixed margins, specifying just one cell frequency allows all other three cells to be deduced by subtracting from the marginal totals."
+        "explanation": "For any two-way table, $df = (r - 1)(c - 1) = (2 - 1)(2 - 1) = 1$. With fixed margins, specifying just one cell frequency allows all other three cells to be deduced by subtracting from the marginal totals.",
+        "section_reference": "Section 2: Variance, Covariance & Correlation",
+        "section_anchor": "2-variance-covariance-correlation"
       },
       {
         "id": "q_l2_8",
@@ -811,7 +841,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "c",
-        "explanation": "Because $\\cos(\\alpha) = r_{jk}$, when $\\alpha = 90^\\circ$, $\\cos(90^\\circ) = 0$. Thus, the correlation $r = 0$ and the sample covariance $S_{jk} = 0$. Orthogonal vectors in observation space represent linearly uncorrelated variables."
+        "explanation": "Because $\\cos(\\alpha) = r_{jk}$, when $\\alpha = 90^\\circ$, $\\cos(90^\\circ) = 0$. Thus, the correlation $r = 0$ and the sample covariance $S_{jk} = 0$. Orthogonal vectors in observation space represent linearly uncorrelated variables.",
+        "section_reference": "Section 3.2: Observation Space",
+        "section_anchor": "observation-space-n-dimensional-representation"
       },
       {
         "id": "q_l2_9",
@@ -846,7 +878,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "a",
-        "explanation": "Euclidean distance is $|2 - (-2)| = 4$ for both. Squared statistical distance is $SD^2 = ((x_2 - x_1)/s)^2$. For A, $s = \\sqrt{4} = 2 \\implies SD^2 = (4/2)^2 = 4$. For B, $s = \\sqrt{1} = 1 \\implies SD^2 = (4/1)^2 = 16$. In probability terms, $P(-2 < X < 2)$ is much higher when $\\sigma^2 = 1$ than when $\\sigma^2 = 4$, making the points statistically closer when variance is large."
+        "explanation": "Euclidean distance is $|2 - (-2)| = 4$ for both. Squared statistical distance is $SD^2 = ((x_2 - x_1)/s)^2$. For A, $s = \\sqrt{4} = 2 \\implies SD^2 = (4/2)^2 = 4$. For B, $s = \\sqrt{1} = 1 \\implies SD^2 = (4/1)^2 = 16$. In probability terms, $P(-2 < X < 2)$ is much higher when $\\sigma^2 = 1$ than when $\\sigma^2 = 4$, making the points statistically closer when variance is large.",
+        "section_reference": "Section 4.2: Statistical Distance",
+        "section_anchor": "statistical-distance-variance-standardized"
       },
       {
         "id": "q_l2_10",
@@ -881,7 +915,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Using the bivariate Mahalanobis formula: $MD^2 = \\frac{1}{1 - r^2} \\left[ \\frac{(\\Delta x_1)^2}{s_1^2} + \\frac{(\\Delta x_2)^2}{s_2^2} - \\frac{2r(\\Delta x_1)(\\Delta x_2)}{s_1 s_2} \\right]$. Here, $\\Delta x_1 / s_1 = 5/5 = 1$, $\\Delta x_2 / s_2 = 4/4 = 1$. The bracketed term is $1^2 + 1^2 - 2(0.80)(1)(1) = 2 - 1.60 = 0.40$. The pre-factor is $1 / (1 - 0.8^2) = 1 / (1 - 0.64) = 1 / 0.36 \\approx 2.778$. Thus, $MD^2 = 0.40 / 0.36 = 4/3.6 \\approx 1.11$."
+        "explanation": "Using the bivariate Mahalanobis formula: $MD^2 = \\frac{1}{1 - r^2} \\left[ \\frac{(\\Delta x_1)^2}{s_1^2} + \\frac{(\\Delta x_2)^2}{s_2^2} - \\frac{2r(\\Delta x_1)(\\Delta x_2)}{s_1 s_2} \\right]$. Here, $\\Delta x_1 / s_1 = 5/5 = 1$, $\\Delta x_2 / s_2 = 4/4 = 1$. The bracketed term is $1^2 + 1^2 - 2(0.80)(1)(1) = 2 - 1.60 = 0.40$. The pre-factor is $1 / (1 - 0.8^2) = 1 / (1 - 0.64) = 1 / 0.36 \\approx 2.778$. Thus, $MD^2 = 0.40 / 0.36 = 4/3.6 \\approx 1.11$.",
+        "section_reference": "Section 4.3: Mahalanobis Distance",
+        "section_anchor": "mahalanobis-distance-covariance-adjusted"
       },
       {
         "id": "q_l2_11",
@@ -916,7 +952,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "In observation space, $\\cos(\\alpha) = \\frac{x_1 \\cdot x_2}{\\|x_1\\| \\|x_2\\|} = \\frac{136.375}{\\sqrt{262.917 \\times 131.667}} = \\frac{136.375}{\\sqrt{34617.48}} = \\frac{136.375}{186.058} \\approx 0.733$. This matches slide 65 of Chapter 1."
+        "explanation": "In observation space, $\\cos(\\alpha) = \\frac{x_1 \\cdot x_2}{\\|x_1\\| \\|x_2\\|} = \\frac{136.375}{\\sqrt{262.917 \\times 131.667}} = \\frac{136.375}{\\sqrt{34617.48}} = \\frac{136.375}{186.058} \\approx 0.733$. This matches slide 65 of Chapter 1.",
+        "section_reference": "Section 3.2: Observation Space",
+        "section_anchor": "observation-space-n-dimensional-representation"
       },
       {
         "id": "q_l2_12",
@@ -951,7 +989,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "a",
-        "explanation": "Subtracting means shifts the origin to $(0,0)$ without altering distances: $(x_{ij} - x_{kj}) = (x^*_{ij} - x^*_{kj})$. However, dividing each dimension by its own standard deviation $s_j$ differentially compresses dimensions with large spread and expands dimensions with small spread, altering relative distances and angles between observations."
+        "explanation": "Subtracting means shifts the origin to $(0,0)$ without altering distances: $(x_{ij} - x_{kj}) = (x^*_{ij} - x^*_{kj})$. However, dividing each dimension by its own standard deviation $s_j$ differentially compresses dimensions with large spread and expands dimensions with small spread, altering relative distances and angles between observations.",
+        "section_reference": "Section 3.1: Variable Space",
+        "section_anchor": "variable-space-p-dimensional-representation"
       }
     ],
     "flashcards": [
@@ -961,7 +1001,9 @@ export const levelsPart1 = [
         "order_index": 1,
         "category": "Definitions",
         "front": "What is **Centered (Mean-Corrected) Data**, and what is its geometric effect?",
-        "back": "$x^*_{ij} = x_{ij} - \\bar{x}_j$\nGeometrically, it translates the origin to the **centroid** $(\\bar{x}_1, \\dots, \\bar{x}_p)$. Relative distances between points, variances, and covariances are completely unchanged."
+        "back": "$x^*_{ij} = x_{ij} - \\bar{x}_j$\nGeometrically, it translates the origin to the **centroid** $(\\bar{x}_1, \\dots, \\bar{x}_p)$. Relative distances between points, variances, and covariances are completely unchanged.",
+        "section_reference": "Section 1: Data Matrices & Basic Operations",
+        "section_anchor": "1-data-matrices-basic-multivariate-operations"
       },
       {
         "id": "fc_l2_2",
@@ -969,7 +1011,9 @@ export const levelsPart1 = [
         "order_index": 2,
         "category": "Definitions",
         "front": "What is the conceptual definition of **Degrees of Freedom ($df$)**?",
-        "back": "The number of **independent pieces of information** in a dataset free to vary when computing a statistic.\nFor sample variance, $df = n - 1$ because fixing the mean determines the $n$-th observation."
+        "back": "The number of **independent pieces of information** in a dataset free to vary when computing a statistic.\nFor sample variance, $df = n - 1$ because fixing the mean determines the $n$-th observation.",
+        "section_reference": "Section 2: Variance, Covariance & Correlation",
+        "section_anchor": "2-variance-covariance-correlation"
       },
       {
         "id": "fc_l2_3",
@@ -977,7 +1021,9 @@ export const levelsPart1 = [
         "order_index": 3,
         "category": "Formulas",
         "front": "How are **Variance** and **Covariance** related to Sum of Squares ($SS$) and Sum of Cross Products ($SCP$)?",
-        "back": "- Variance: $s_j^2 = \\frac{SS_j}{n - 1} = \\frac{\\sum (x_{ij} - \\bar{x}_j)^2}{df}$\n- Covariance: $S_{jk} = \\frac{SCP_{jk}}{n - 1} = \\frac{\\sum (x_{ij} - \\bar{x}_j)(x_{ik} - \\bar{x}_k)}{df}$"
+        "back": "- Variance: $s_j^2 = \\frac{SS_j}{n - 1} = \\frac{\\sum (x_{ij} - \\bar{x}_j)^2}{df}$\n- Covariance: $S_{jk} = \\frac{SCP_{jk}}{n - 1} = \\frac{\\sum (x_{ij} - \\bar{x}_j)(x_{ik} - \\bar{x}_k)}{df}$",
+        "section_reference": "Section 2: Variance, Covariance & Correlation",
+        "section_anchor": "2-variance-covariance-correlation"
       },
       {
         "id": "fc_l2_4",
@@ -985,7 +1031,9 @@ export const levelsPart1 = [
         "order_index": 4,
         "category": "Geometry",
         "front": "In **Observation Space**, what does the angle between two mean-corrected variable vectors represent?",
-        "back": "The cosine of the angle $\\alpha$ between the two vectors is exactly the **Pearson correlation coefficient**:\n$$\\cos(\\alpha) = \\frac{x_j \\cdot x_k}{\\|x_j\\| \\|x_k\\|} = r_{jk}$$\n$\\alpha = 90^\\circ \\implies r = 0$ (uncorrelated)."
+        "back": "The cosine of the angle $\\alpha$ between the two vectors is exactly the **Pearson correlation coefficient**:\n$$\\cos(\\alpha) = \\frac{x_j \\cdot x_k}{\\|x_j\\| \\|x_k\\|} = r_{jk}$$\n$\\alpha = 90^\\circ \\implies r = 0$ (uncorrelated).",
+        "section_reference": "Section 3.2: Observation Space",
+        "section_anchor": "observation-space-n-dimensional-representation"
       },
       {
         "id": "fc_l2_5",
@@ -993,7 +1041,9 @@ export const levelsPart1 = [
         "order_index": 5,
         "category": "Metrics",
         "front": "What are the three essential axioms of a **Metric Distance**?",
-        "back": "1. **Distinguishability**: $D_{ik} \\ge 0$ and $D_{ik} = 0 \\iff i = k$\n2. **Symmetry**: $D_{ik} = D_{ki}$\n3. **Triangle Inequality**: $D_{il} \\le D_{ik} + D_{kl}$"
+        "back": "1. **Distinguishability**: $D_{ik} \\ge 0$ and $D_{ik} = 0 \\iff i = k$\n2. **Symmetry**: $D_{ik} = D_{ki}$\n3. **Triangle Inequality**: $D_{il} \\le D_{ik} + D_{kl}$",
+        "section_reference": "Section 4: Distance Metrics",
+        "section_anchor": "4-distance-metrics-in-multivariate-space"
       },
       {
         "id": "fc_l2_6",
@@ -1001,7 +1051,9 @@ export const levelsPart1 = [
         "order_index": 6,
         "category": "Metrics",
         "front": "What is **Statistical Distance**, and how does it improve upon Euclidean Distance?",
-        "back": "Statistical distance adjusts Euclidean distance by dividing differences by each variable's standard deviation:\n$$SD_{ik}^2 = \\sum_{j=1}^p \\left(\\frac{x_{ij} - x_{kj}}{s_j}\\right)^2$$\nIt prevents high-variance variables from dominating."
+        "back": "Statistical distance adjusts Euclidean distance by dividing differences by each variable's standard deviation:\n$$SD_{ik}^2 = \\sum_{j=1}^p \\left(\\frac{x_{ij} - x_{kj}}{s_j}\\right)^2$$\nIt prevents high-variance variables from dominating.",
+        "section_reference": "Section 4.2: Statistical Distance",
+        "section_anchor": "statistical-distance-variance-standardized"
       },
       {
         "id": "fc_l2_7",
@@ -1009,7 +1061,9 @@ export const levelsPart1 = [
         "order_index": 7,
         "category": "Metrics",
         "front": "What is **Mahalanobis Distance ($MD$)** and what does it account for?",
-        "back": "Mahalanobis distance accounts for **both differing variances and inter-variable covariances**:\n$MD_{ik}^2 = (x_i - x_k)^T S^{-1} (x_i - x_k)$\nIt measures distance relative to the data's ellipsoid distribution."
+        "back": "Mahalanobis distance accounts for **both differing variances and inter-variable covariances**:\n$MD_{ik}^2 = (x_i - x_k)^T S^{-1} (x_i - x_k)$\nIt measures distance relative to the data's ellipsoid distribution.",
+        "section_reference": "Section 4.3: Mahalanobis Distance",
+        "section_anchor": "mahalanobis-distance-covariance-adjusted"
       },
       {
         "id": "fc_l2_8",
@@ -1017,7 +1071,9 @@ export const levelsPart1 = [
         "order_index": 8,
         "category": "Metrics",
         "front": "When does Mahalanobis distance reduce to Statistical distance and Euclidean distance?",
-        "back": "- Reduces to **Statistical distance** when variables are uncorrelated ($r = 0$, $S$ is diagonal).\n- Reduces to **Euclidean distance** when variables are uncorrelated and standardized ($S = I$)."
+        "back": "- Reduces to **Statistical distance** when variables are uncorrelated ($r = 0$, $S$ is diagonal).\n- Reduces to **Euclidean distance** when variables are uncorrelated and standardized ($S = I$).",
+        "section_reference": "Section 4.3: Mahalanobis Distance",
+        "section_anchor": "mahalanobis-distance-covariance-adjusted"
       }
     ]
   },
@@ -1064,7 +1120,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Geometrically, $PC_1$ is chosen to point along the direction of maximum dispersion in the data cloud, thereby maximizing the variance of the projected scores."
+        "explanation": "Geometrically, $PC_1$ is chosen to point along the direction of maximum dispersion in the data cloud, thereby maximizing the variance of the projected scores.",
+        "section_reference": "Section 4: Rotating Coordinate Axis & Projecting",
+        "section_anchor": "4-rotating-the-coordinate-axis-projecting-observations"
       },
       {
         "id": "q_l3_2",
@@ -1099,7 +1157,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "To prevent artificial scaling of variance (since multiplying weights by 10 would multiply variance by 100), the weight vector must have unit Euclidean length: $\\sum w_j^2 = 1$. In 2D, $\\cos^2\\theta + \\sin^2\\theta = 1$."
+        "explanation": "To prevent artificial scaling of variance (since multiplying weights by 10 would multiply variance by 100), the weight vector must have unit Euclidean length: $\\sum w_j^2 = 1$. In 2D, $\\cos^2\\theta + \\sin^2\\theta = 1$.",
+        "section_reference": "Section 4: Rotating Coordinate Axis & Projecting",
+        "section_anchor": "4-rotating-the-coordinate-axis-projecting-observations"
       },
       {
         "id": "q_l3_3",
@@ -1134,7 +1194,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "c",
-        "explanation": "PCA performs an orthogonal rotation of the coordinate system, which preserves the total variance of the dataset. Therefore, $\\text{Var}(PC_1) + \\text{Var}(PC_2) = \\text{Var}(X_1) + \\text{Var}(X_2) = 44.182$."
+        "explanation": "PCA performs an orthogonal rotation of the coordinate system, which preserves the total variance of the dataset. Therefore, $\\text{Var}(PC_1) + \\text{Var}(PC_2) = \\text{Var}(X_1) + \\text{Var}(X_2) = 44.182$.",
+        "section_reference": "Section 7: Conservation of Total Variance",
+        "section_anchor": "7-conservation-of-total-variance"
       },
       {
         "id": "q_l3_4",
@@ -1169,7 +1231,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "a",
-        "explanation": "By mathematical construction, all principal components are chosen to be mutually orthogonal, which ensures that the sample covariance (and correlation) between any pair of distinct component scores is identically zero."
+        "explanation": "By mathematical construction, all principal components are chosen to be mutually orthogonal, which ensures that the sample covariance (and correlation) between any pair of distinct component scores is identically zero.",
+        "section_reference": "Section 6: PC1 and Its Orthogonal Complement",
+        "section_anchor": "6-the-first-principal-component-and-its-orthogonal-complement"
       },
       {
         "id": "q_l3_5",
@@ -1204,7 +1268,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "c",
-        "explanation": "Computing all $p$ principal axes is merely a change of coordinates (a rigid rotation of axes) with zero loss of dimensionality. Dimensionality reduction occurs only when $k < p$ components are retained and the remaining directions of variation are discarded."
+        "explanation": "Computing all $p$ principal axes is merely a change of coordinates (a rigid rotation of axes) with zero loss of dimensionality. Dimensionality reduction occurs only when $k < p$ components are retained and the remaining directions of variation are discarded.",
+        "section_reference": "Section 1: Motivation & Dimensionality Challenge",
+        "section_anchor": "1-motivation-the-dimensionality-challenge"
       },
       {
         "id": "q_l3_6",
@@ -1239,7 +1305,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "The score is the linear projection of the centered observation onto the component weights: $t_{A1} = 0.728238(8) + 0.685324(5) = 5.8259 + 3.4266 = 9.2525 \\approx 9.253$."
+        "explanation": "The score is the linear projection of the centered observation onto the component weights: $t_{A1} = 0.728238(8) + 0.685324(5) = 5.8259 + 3.4266 = 9.2525 \\approx 9.253$.",
+        "section_reference": "Section 4: Rotating Coordinate Axis & Projecting",
+        "section_anchor": "4-rotating-the-coordinate-axis-projecting-observations"
       },
       {
         "id": "q_l3_7",
@@ -1274,7 +1342,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "A principal component is a line in space. Whether we define the positive direction pointing up-right or down-left does not change the line or the variance along it ($(-t)^2 = t^2$). Distances between points $(t_i - t_k)^2 = (-t_i - (-t_k))^2$ remain identical."
+        "explanation": "A principal component is a line in space. Whether we define the positive direction pointing up-right or down-left does not change the line or the variance along it ($(-t)^2 = t^2$). Distances between points $(t_i - t_k)^2 = (-t_i - (-t_k))^2$ remain identical.",
+        "section_reference": "Section 6: PC1 and Its Orthogonal Complement",
+        "section_anchor": "6-the-first-principal-component-and-its-orthogonal-complement"
       },
       {
         "id": "q_l3_8",
@@ -1309,7 +1379,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "c",
-        "explanation": "Centering $n$ observations imposes 1 linear restriction (the sum of deviations is zero), giving the centered data matrix a maximum rank of $n - 1$. Since the data dimension is $p$, the rank of $X_c$ (and covariance matrix $S$) cannot exceed $\\min(p, n - 1)$."
+        "explanation": "Centering $n$ observations imposes 1 linear restriction (the sum of deviations is zero), giving the centered data matrix a maximum rank of $n - 1$. Since the data dimension is $p$, the rank of $X_c$ (and covariance matrix $S$) cannot exceed $\\min(p, n - 1)$.",
+        "section_reference": "Section 7: Conservation of Total Variance",
+        "section_anchor": "7-conservation-of-total-variance"
       },
       {
         "id": "q_l3_9",
@@ -1344,7 +1416,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "The axis at $\\theta + 90^\\circ$ is the orthogonal complement ($PC_2$). Because total variance ($44.182$) is conserved across orthogonal directions, the variance at $43.26^\\circ + 90^\\circ$ must be exactly $44.182 - 38.576 = 5.606$."
+        "explanation": "The axis at $\\theta + 90^\\circ$ is the orthogonal complement ($PC_2$). Because total variance ($44.182$) is conserved across orthogonal directions, the variance at $43.26^\\circ + 90^\\circ$ must be exactly $44.182 - 38.576 = 5.606$.",
+        "section_reference": "Section 5: Variance as a Function of Rotation Angle",
+        "section_anchor": "5-variance-as-a-function-of-rotation-angle"
       },
       {
         "id": "q_l3_10",
@@ -1379,7 +1453,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "The reconstruction error for each observation is its squared coordinate on the discarded axis ($PC_2$). The sum of squared scores on $PC_2$ is the Sum of Squares of $PC_2$, which equals $(n - 1) \\times \\text{Var}(PC_2) = 11 \\times 5.606005 = 61.666$. This matches slide 17 and 24 of Chapter 2."
+        "explanation": "The reconstruction error for each observation is its squared coordinate on the discarded axis ($PC_2$). The sum of squared scores on $PC_2$ is the Sum of Squares of $PC_2$, which equals $(n - 1) \\times \\text{Var}(PC_2) = 11 \\times 5.606005 = 61.666$. This matches slide 17 and 24 of Chapter 2.",
+        "section_reference": "Section 7: Conservation of Total Variance",
+        "section_anchor": "7-conservation-of-total-variance"
       },
       {
         "id": "q_l3_11",
@@ -1414,7 +1490,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "When reducing from 2D to 1D, points are projected onto the $PC_1$ line. Points that have similar projections onto $PC_1$ may differ substantially along the discarded perpendicular axis ($PC_2$). Customer D has $t_{D2} = -2.784$ while E has $t_{E2} = +2.271$, a difference of over 5 units lost upon reduction."
+        "explanation": "When reducing from 2D to 1D, points are projected onto the $PC_1$ line. Points that have similar projections onto $PC_1$ may differ substantially along the discarded perpendicular axis ($PC_2$). Customer D has $t_{D2} = -2.784$ while E has $t_{E2} = +2.271$, a difference of over 5 units lost upon reduction.",
+        "section_reference": "Section 6: PC1 and Its Orthogonal Complement",
+        "section_anchor": "6-the-first-principal-component-and-its-orthogonal-complement"
       },
       {
         "id": "q_l3_12",
@@ -1449,7 +1527,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "a",
-        "explanation": "As derived in Appendix slides 65-68 of Chapter 2: projecting onto rotated basis vector $e^*_1$ yields $a^*_1 = a_1 \\cos\\theta + a_2 \\sin\\theta$, and onto orthogonal vector $e^*_2$ yields $a^*_2 = -a_1 \\sin\\theta + a_2 \\cos\\theta$. In matrix form, this is the standard rotation transformation matrix."
+        "explanation": "As derived in Appendix slides 65-68 of Chapter 2: projecting onto rotated basis vector $e^*_1$ yields $a^*_1 = a_1 \\cos\\theta + a_2 \\sin\\theta$, and onto orthogonal vector $e^*_2$ yields $a^*_2 = -a_1 \\sin\\theta + a_2 \\cos\\theta$. In matrix form, this is the standard rotation transformation matrix.",
+        "section_reference": "Section 3: Centering the Data Cloud",
+        "section_anchor": "3-centering-the-data-cloud"
       }
     ],
     "flashcards": [
@@ -1459,7 +1539,9 @@ export const levelsPart1 = [
         "order_index": 1,
         "category": "Foundations",
         "front": "What is the primary objective of **Principal Components Analysis (PCA)**?",
-        "back": "To construct **uncorrelated linear combinations** of $p$ original variables that maximize retained variance, allowing a small number of components $k < p$ to summarize the data cloud."
+        "back": "To construct **uncorrelated linear combinations** of $p$ original variables that maximize retained variance, allowing a small number of components $k < p$ to summarize the data cloud.",
+        "section_reference": "Section 1: Motivation & Dimensionality Challenge",
+        "section_anchor": "1-motivation-the-dimensionality-challenge"
       },
       {
         "id": "fc_l3_2",
@@ -1467,7 +1549,9 @@ export const levelsPart1 = [
         "order_index": 2,
         "category": "Projections",
         "front": "What is the formula for projecting a 2D centered observation $(x_1, x_2)$ onto a candidate axis at angle $\\theta$?",
-        "back": "$$x^*_1 = \\cos(\\theta) x_1 + \\sin(\\theta) x_2$$\nwhere coefficients satisfy the unit-length constraint $\\cos^2(\\theta) + \\sin^2(\\theta) = 1$."
+        "back": "$$x^*_1 = \\cos(\\theta) x_1 + \\sin(\\theta) x_2$$\nwhere coefficients satisfy the unit-length constraint $\\cos^2(\\theta) + \\sin^2(\\theta) = 1$.",
+        "section_reference": "Section 4: Rotating Coordinate Axis & Projecting",
+        "section_anchor": "4-rotating-the-coordinate-axis-projecting-observations"
       },
       {
         "id": "fc_l3_3",
@@ -1475,7 +1559,9 @@ export const levelsPart1 = [
         "order_index": 3,
         "category": "Optimization",
         "front": "In the 12-customer Income vs CLV example, at what angle $\\theta$ does projected variance reach its maximum?",
-        "back": "At **$\\theta = 43.26^\\circ$**, where variance reaches **$38.576$**, explaining **$87.31\\%$** of total variance."
+        "back": "At **$\\theta = 43.26^\\circ$**, where variance reaches **$38.576$**, explaining **$87.31\\%$** of total variance.",
+        "section_reference": "Section 5: Variance as a Function of Rotation Angle",
+        "section_anchor": "5-variance-as-a-function-of-rotation-angle"
       },
       {
         "id": "fc_l3_4",
@@ -1483,7 +1569,9 @@ export const levelsPart1 = [
         "order_index": 4,
         "category": "Properties",
         "front": "How is the second principal component ($PC_2$) defined geometrically relative to $PC_1$?",
-        "back": "It is perpendicular (**orthogonal**, at angle $\\theta + 90^\\circ$) to $PC_1$, capturing the maximum remaining variance ($12.69\\%$ in the 2D example)."
+        "back": "It is perpendicular (**orthogonal**, at angle $\\theta + 90^\\circ$) to $PC_1$, capturing the maximum remaining variance ($12.69\\%$ in the 2D example).",
+        "section_reference": "Section 6: PC1 and Its Orthogonal Complement",
+        "section_anchor": "6-the-first-principal-component-and-its-orthogonal-complement"
       },
       {
         "id": "fc_l3_5",
@@ -1491,7 +1579,9 @@ export const levelsPart1 = [
         "order_index": 5,
         "category": "Conservation",
         "front": "What is the **Total Variance Preservation** property of PCA?",
-        "back": "The sum of the variances of all $p$ principal components identically equals the sum of the variances of the original variables:\n$$\\sum_{i=1}^p \\text{Var}(PC_i) = \\sum_{j=1}^p s_j^2$$"
+        "back": "The sum of the variances of all $p$ principal components identically equals the sum of the variances of the original variables:\n$$\\sum_{i=1}^p \\text{Var}(PC_i) = \\sum_{j=1}^p s_j^2$$",
+        "section_reference": "Section 7: Conservation of Total Variance",
+        "section_anchor": "7-conservation-of-total-variance"
       },
       {
         "id": "fc_l3_6",
@@ -1499,7 +1589,9 @@ export const levelsPart1 = [
         "order_index": 6,
         "category": "Distinction",
         "front": "What is the difference between keeping all $p$ principal components vs keeping $k < p$ components?",
-        "back": "- Keeping all $p$ axes is merely a **rigid coordinate rotation** (zero loss of information or dimensionality).\n- Keeping $k < p$ axes achieves **dimensionality reduction**, exchanging discarded variance for lower complexity."
+        "back": "- Keeping all $p$ axes is merely a **rigid coordinate rotation** (zero loss of information or dimensionality).\n- Keeping $k < p$ axes achieves **dimensionality reduction**, exchanging discarded variance for lower complexity.",
+        "section_reference": "Section 7: Conservation of Total Variance",
+        "section_anchor": "7-conservation-of-total-variance"
       },
       {
         "id": "fc_l3_7",
@@ -1507,7 +1599,9 @@ export const levelsPart1 = [
         "order_index": 7,
         "category": "Errors",
         "front": "What is the total squared reconstruction error when discarding the remaining components?",
-        "back": "For centered data, the total squared reconstruction error across all $n$ observations is **$(n - 1) \\times$ the sum of discarded eigenvalues**:\n$$\\text{Total Error} = (n - 1) \\sum_{i=k+1}^p \\lambda_i$$"
+        "back": "For centered data, the total squared reconstruction error across all $n$ observations is **$(n - 1) \\times$ the sum of discarded eigenvalues**:\n$$\\text{Total Error} = (n - 1) \\sum_{i=k+1}^p \\lambda_i$$",
+        "section_reference": "Section 7: Conservation of Total Variance",
+        "section_anchor": "7-conservation-of-total-variance"
       },
       {
         "id": "fc_l3_8",
@@ -1515,7 +1609,9 @@ export const levelsPart1 = [
         "order_index": 8,
         "category": "Indeterminacy",
         "front": "Why are a principal component and its negative mathematically equivalent?",
-        "back": "Multiplying weights by $-1$ flips the axis direction, but the axis remains the exact same line in space. Variances, Euclidean distances, and reconstruction errors are completely unchanged."
+        "back": "Multiplying weights by $-1$ flips the axis direction, but the axis remains the exact same line in space. Variances, Euclidean distances, and reconstruction errors are completely unchanged.",
+        "section_reference": "Section 6: PC1 and Its Orthogonal Complement",
+        "section_anchor": "6-the-first-principal-component-and-its-orthogonal-complement"
       }
     ]
   },
@@ -1562,7 +1658,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "In the analytical derivation of PCA via Lagrange multipliers, the projected variance $w_1' S w_1$ simplifies directly to the Lagrange multiplier $\\lambda_1$, proving that the eigenvalue is the variance of that component."
+        "explanation": "In the analytical derivation of PCA via Lagrange multipliers, the projected variance $w_1' S w_1$ simplifies directly to the Lagrange multiplier $\\lambda_1$, proving that the eigenvalue is the variance of that component.",
+        "section_reference": "Section 4: Fundamental Properties of Eigenvalues",
+        "section_anchor": "4-fundamental-properties-of-eigenvalues"
       },
       {
         "id": "q_l4_2",
@@ -1597,7 +1695,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "For non-trivial eigenvectors to exist in $(A - \\lambda I)w = 0$, the matrix $(A - \\lambda I)$ must be non-invertible, which requires its determinant to equal zero: $\\det(A - \\lambda I) = 0$."
+        "explanation": "For non-trivial eigenvectors to exist in $(A - \\lambda I)w = 0$, the matrix $(A - \\lambda I)$ must be non-invertible, which requires its determinant to equal zero: $\\det(A - \\lambda I) = 0$.",
+        "section_reference": "Section 3: The Characteristic Equation",
+        "section_anchor": "3-the-characteristic-equation"
       },
       {
         "id": "q_l4_3",
@@ -1632,7 +1732,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "In correlation PCA, all diagonal entries of $R$ are 1.0. Because the sum of eigenvalues equals the trace of the matrix, $\\sum_{i=1}^p \\lambda_i = \\text{tr}(R) = p \\times 1.0 = p$."
+        "explanation": "In correlation PCA, all diagonal entries of $R$ are 1.0. Because the sum of eigenvalues equals the trace of the matrix, $\\sum_{i=1}^p \\lambda_i = \\text{tr}(R) = p \\times 1.0 = p$.",
+        "section_reference": "Section 5.2: When to Use Correlation PCA",
+        "section_anchor": "when-to-use-correlation-pca"
       },
       {
         "id": "q_l4_4",
@@ -1667,7 +1769,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "If variables are measured on different scales, the variable with the largest unit scale (e.g. income in thousands) will have a huge variance and dominate the leading eigenvectors in Covariance PCA. Correlation PCA standardizes all inputs to unit variance."
+        "explanation": "If variables are measured on different scales, the variable with the largest unit scale (e.g. income in thousands) will have a huge variance and dominate the leading eigenvectors in Covariance PCA. Correlation PCA standardizes all inputs to unit variance.",
+        "section_reference": "Section 5.2: When to Use Correlation PCA",
+        "section_anchor": "when-to-use-correlation-pca"
       },
       {
         "id": "q_l4_5",
@@ -1702,7 +1806,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Multiplying a variable by constant $c$ multiplies its variance by $c^2 = 1,000,000$. Covariance PCA decomposes $S$, which changes radically. But Correlation PCA standardizes inputs ($z = (cx - c\\bar{x})/(cs) = (x - \\bar{x})/s$), making it completely scale-invariant."
+        "explanation": "Multiplying a variable by constant $c$ multiplies its variance by $c^2 = 1,000,000$. Covariance PCA decomposes $S$, which changes radically. But Correlation PCA standardizes inputs ($z = (cx - c\\bar{x})/(cs) = (x - \\bar{x})/s$), making it completely scale-invariant.",
+        "section_reference": "Section 5.1: Scale Sensitivity of Covariance PCA",
+        "section_anchor": "scale-sensitivity-of-covariance-pca"
       },
       {
         "id": "q_l4_6",
@@ -1737,7 +1843,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Variance of a linear combination is homogeneous of degree 2: $\\text{Var}((c w_1)' x) = c^2 (w_1' S w_1)$. Without fixing the length of $w_1$ to unit norm ($w_1' w_1 = 1$), one could achieve an infinite variance simply by making weights arbitrarily large."
+        "explanation": "Variance of a linear combination is homogeneous of degree 2: $\\text{Var}((c w_1)' x) = c^2 (w_1' S w_1)$. Without fixing the length of $w_1$ to unit norm ($w_1' w_1 = 1$), one could achieve an infinite variance simply by making weights arbitrarily large.",
+        "section_reference": "Section 2: Derivation via Lagrange Multipliers",
+        "section_anchor": "2-derivation-via-lagrange-multipliers"
       },
       {
         "id": "q_l4_7",
@@ -1772,7 +1880,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Total variance is $\\sum \\lambda_i = 6.0 + 2.5 + 1.5 = 10.0$. The variance explained by $PC_1 + PC_2$ is $6.0 + 2.5 = 8.5$. The proportion is $8.5 / 10.0 = 85.0\\%$."
+        "explanation": "Total variance is $\\sum \\lambda_i = 6.0 + 2.5 + 1.5 = 10.0$. The variance explained by $PC_1 + PC_2$ is $6.0 + 2.5 = 8.5$. The proportion is $8.5 / 10.0 = 85.0\\%$.",
+        "section_reference": "Section 4: Fundamental Properties of Eigenvalues",
+        "section_anchor": "4-fundamental-properties-of-eigenvalues"
       },
       {
         "id": "q_l4_8",
@@ -1807,7 +1917,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Covariance PCA is appropriate only when variables share the same unit of measurement (e.g. financial dollar figures, morphometric millimeters) and variance magnitude carries true domain significance that should not be normalized away."
+        "explanation": "Covariance PCA is appropriate only when variables share the same unit of measurement (e.g. financial dollar figures, morphometric millimeters) and variance magnitude carries true domain significance that should not be normalized away.",
+        "section_reference": "Section 5: Covariance PCA vs. Correlation PCA",
+        "section_anchor": "5-covariance-pca-vs-correlation-pca"
       },
       {
         "id": "q_l4_9",
@@ -1842,7 +1954,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Using the quadratic formula for $\\lambda^2 - b\\lambda + c = 0$: $\\lambda = \\frac{44.181818 \\pm \\sqrt{44.181818^2 - 4(216.256198)}}{2} = \\frac{44.181818 \\pm \\sqrt{1952.033 - 865.025}}{2} = \\frac{44.181818 \\pm \\sqrt{1087.008}}{2} = \\frac{44.181818 \\pm 32.9698}{2}$. This gives $\\lambda_1 = 38.5758$ and $\\lambda_2 = 5.6060$."
+        "explanation": "Using the quadratic formula for $\\lambda^2 - b\\lambda + c = 0$: $\\lambda = \\frac{44.181818 \\pm \\sqrt{44.181818^2 - 4(216.256198)}}{2} = \\frac{44.181818 \\pm \\sqrt{1952.033 - 865.025}}{2} = \\frac{44.181818 \\pm \\sqrt{1087.008}}{2} = \\frac{44.181818 \\pm 32.9698}{2}$. This gives $\\lambda_1 = 38.5758$ and $\\lambda_2 = 5.6060$.",
+        "section_reference": "Section 3: The Characteristic Equation",
+        "section_anchor": "3-the-characteristic-equation"
       },
       {
         "id": "q_l4_10",
@@ -1877,7 +1991,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "For a $2 \\times 2$ correlation matrix $\\begin{bmatrix} 1 & r \\\\ r & 1 \\end{bmatrix}$, the characteristic equation is $(1 - \\lambda)^2 - r^2 = 0 \\implies 1 - \\lambda = \\pm r \\implies \\lambda = 1 \\pm r$. For $r = 0.60$, $\\lambda_1 = 1 + 0.60 = 1.60$ and $\\lambda_2 = 1 - 0.60 = 0.40$. Their sum is $1.60 + 0.40 = 2.0 = p$."
+        "explanation": "For a $2 \\times 2$ correlation matrix $\\begin{bmatrix} 1 & r \\\\ r & 1 \\end{bmatrix}$, the characteristic equation is $(1 - \\lambda)^2 - r^2 = 0 \\implies 1 - \\lambda = \\pm r \\implies \\lambda = 1 \\pm r$. For $r = 0.60$, $\\lambda_1 = 1 + 0.60 = 1.60$ and $\\lambda_2 = 1 - 0.60 = 0.40$. Their sum is $1.60 + 0.40 = 2.0 = p$.",
+        "section_reference": "Section 5.2: When to Use Correlation PCA",
+        "section_anchor": "when-to-use-correlation-pca"
       },
       {
         "id": "q_l4_11",
@@ -1912,7 +2028,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "In 2D, a vector orthogonal to $(a, b)$ is $(-b, a)$ or $(b, -a)$. Here, $(0.728238)(-0.685324) + (0.685324)(0.728238) = 0$, and $(-0.685324)^2 + 0.728238^2 = 1.0$. Both signs are valid eigenvectors corresponding to the two orientations of the principal axis."
+        "explanation": "In 2D, a vector orthogonal to $(a, b)$ is $(-b, a)$ or $(b, -a)$. Here, $(0.728238)(-0.685324) + (0.685324)(0.728238) = 0$, and $(-0.685324)^2 + 0.728238^2 = 1.0$. Both signs are valid eigenvectors corresponding to the two orientations of the principal axis.",
+        "section_reference": "Section 1: Matrix Representation of PCA",
+        "section_anchor": "1-matrix-representation-of-pca"
       },
       {
         "id": "q_l4_12",
@@ -1947,7 +2065,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "By choosing $\\lambda$ such that $\\det(S - \\lambda I) = 0$, the matrix $(S - \\lambda I)$ is non-invertible (singular). Eigenvectors are the non-zero solutions spanning the null space of $(S - \\lambda I)$. As slide 32 notes: \"No matrix inversion is required.\""
+        "explanation": "By choosing $\\lambda$ such that $\\det(S - \\lambda I) = 0$, the matrix $(S - \\lambda I)$ is non-invertible (singular). Eigenvectors are the non-zero solutions spanning the null space of $(S - \\lambda I)$. As slide 32 notes: \"No matrix inversion is required.\"",
+        "section_reference": "Section 3: The Characteristic Equation",
+        "section_anchor": "3-the-characteristic-equation"
       }
     ],
     "flashcards": [
@@ -1957,7 +2077,9 @@ export const levelsPart1 = [
         "order_index": 1,
         "category": "Formulas",
         "front": "What is the matrix formulation of the PCA component scores?",
-        "back": "$$T_k = X_c W_k$$\nwhere $X_c$ is the $n \\times p$ centered data matrix and $W_k$ is the $p \\times k$ matrix of eigenvectors."
+        "back": "$$T_k = X_c W_k$$\nwhere $X_c$ is the $n \\times p$ centered data matrix and $W_k$ is the $p \\times k$ matrix of eigenvectors.",
+        "section_reference": "Section 1: Matrix Representation of PCA",
+        "section_anchor": "1-matrix-representation-of-pca"
       },
       {
         "id": "fc_l4_2",
@@ -1965,7 +2087,9 @@ export const levelsPart1 = [
         "order_index": 2,
         "category": "Lagrange",
         "front": "What optimization problem is solved to find the first principal component weights $w_1$?",
-        "back": "$$\\max_{w_1} w_1' S w_1 \\quad \\text{subject to } w_1' w_1 = 1$$\nSolved via Lagrangian $\\mathcal{L} = w_1' S w_1 - \\lambda_1 (w_1' w_1 - 1)$, yielding $(S - \\lambda_1 I)w_1 = 0$."
+        "back": "$$\\max_{w_1} w_1' S w_1 \\quad \\text{subject to } w_1' w_1 = 1$$\nSolved via Lagrangian $\\mathcal{L} = w_1' S w_1 - \\lambda_1 (w_1' w_1 - 1)$, yielding $(S - \\lambda_1 I)w_1 = 0$.",
+        "section_reference": "Section 2: Derivation via Lagrange Multipliers",
+        "section_anchor": "2-derivation-via-lagrange-multipliers"
       },
       {
         "id": "fc_l4_3",
@@ -1973,7 +2097,9 @@ export const levelsPart1 = [
         "order_index": 3,
         "category": "Eigenvalues",
         "front": "What is the characteristic equation used to solve for eigenvalues in PCA?",
-        "back": "$$\\det(S - \\lambda I) = 0$$\nSetting the determinant to zero guarantees a non-trivial (non-zero) eigenvector solution."
+        "back": "$$\\det(S - \\lambda I) = 0$$\nSetting the determinant to zero guarantees a non-trivial (non-zero) eigenvector solution.",
+        "section_reference": "Section 3: The Characteristic Equation",
+        "section_anchor": "3-the-characteristic-equation"
       },
       {
         "id": "fc_l4_4",
@@ -1981,7 +2107,9 @@ export const levelsPart1 = [
         "order_index": 4,
         "category": "Trace",
         "front": "What is the relationship between the eigenvalues and the trace of covariance matrix $S$?",
-        "back": "$$\\sum_{i=1}^p \\lambda_i = \\text{tr}(S) = \\sum_{j=1}^p s_j^2$$\nThe sum of eigenvalues equals the sum of original sample variances (total variance)."
+        "back": "$$\\sum_{i=1}^p \\lambda_i = \\text{tr}(S) = \\sum_{j=1}^p s_j^2$$\nThe sum of eigenvalues equals the sum of original sample variances (total variance).",
+        "section_reference": "Section 4: Fundamental Properties of Eigenvalues",
+        "section_anchor": "4-fundamental-properties-of-eigenvalues"
       },
       {
         "id": "fc_l4_5",
@@ -1989,7 +2117,9 @@ export const levelsPart1 = [
         "order_index": 5,
         "category": "Trace",
         "front": "What is the sum of eigenvalues in **Correlation PCA** ($R$)?",
-        "back": "$$\\sum_{i=1}^p \\lambda_i = \\text{tr}(R) = p$$\nBecause all $p$ standardized input variables have variance $1.0$, total variance is always $p$."
+        "back": "$$\\sum_{i=1}^p \\lambda_i = \\text{tr}(R) = p$$\nBecause all $p$ standardized input variables have variance $1.0$, total variance is always $p$.",
+        "section_reference": "Section 5.2: When to Use Correlation PCA",
+        "section_anchor": "when-to-use-correlation-pca"
       },
       {
         "id": "fc_l4_6",
@@ -1997,7 +2127,9 @@ export const levelsPart1 = [
         "order_index": 6,
         "category": "Sensitivity",
         "front": "Why is Covariance PCA highly sensitive to measurement units?",
-        "back": "Multiplying a variable by $k$ multiplies its variance by $k^2$.\nA variable measured in smaller units (e.g. grams vs kg) will artificially dominate the leading eigenvectors."
+        "back": "Multiplying a variable by $k$ multiplies its variance by $k^2$.\nA variable measured in smaller units (e.g. grams vs kg) will artificially dominate the leading eigenvectors.",
+        "section_reference": "Section 5.1: Scale Sensitivity of Covariance PCA",
+        "section_anchor": "scale-sensitivity-of-covariance-pca"
       },
       {
         "id": "fc_l4_7",
@@ -2005,7 +2137,9 @@ export const levelsPart1 = [
         "order_index": 7,
         "category": "Decision",
         "front": "When should an analyst use **Correlation PCA** vs **Covariance PCA**?",
-        "back": "- Use **Correlation PCA**: When variables have different measurement units or arbitrary scales (standard practice).\n- Use **Covariance PCA**: ONLY when all variables share identical physical units and raw variances reflect true substantive importance."
+        "back": "- Use **Correlation PCA**: When variables have different measurement units or arbitrary scales (standard practice).\n- Use **Covariance PCA**: ONLY when all variables share identical physical units and raw variances reflect true substantive importance.",
+        "section_reference": "Section 5.2: When to Use Correlation PCA",
+        "section_anchor": "when-to-use-correlation-pca"
       },
       {
         "id": "fc_l4_8",
@@ -2013,7 +2147,9 @@ export const levelsPart1 = [
         "order_index": 8,
         "category": "Eigenvalues",
         "front": "For two standardized variables with correlation $r$, what are the eigenvalues of Correlation PCA?",
-        "back": "$$\\lambda_1 = 1 + r, \\quad \\lambda_2 = 1 - r$$\nTheir sum is $(1 + r) + (1 - r) = 2 = p$. If $r = 0.60$, $\\lambda_1 = 1.60$ and $\\lambda_2 = 0.40$."
+        "back": "$$\\lambda_1 = 1 + r, \\quad \\lambda_2 = 1 - r$$\nTheir sum is $(1 + r) + (1 - r) = 2 = p$. If $r = 0.60$, $\\lambda_1 = 1.60$ and $\\lambda_2 = 0.40$.",
+        "section_reference": "Section 5.2: When to Use Correlation PCA",
+        "section_anchor": "when-to-use-correlation-pca"
       }
     ]
   }

@@ -9,6 +9,9 @@ interface TextSummaryPhaseProps {
   onProceedToQuiz: () => void;
   highlightAnchor?: string | null;
   activeQuestionNumber?: number | null;
+  activeReferenceSource?: 'quiz' | 'flashcards' | null;
+  activeItemNumber?: number | null;
+  onReturn?: () => void;
   onReturnToQuiz?: () => void;
 }
 
@@ -18,13 +21,20 @@ export const TextSummaryPhase: React.FC<TextSummaryPhaseProps> = ({
   onProceedToQuiz,
   highlightAnchor,
   activeQuestionNumber,
+  activeReferenceSource,
+  activeItemNumber,
+  onReturn,
   onReturnToQuiz
 }) => {
-  // Smoothly scroll to the referenced section when requested from a quiz question
+  const effectiveSource = activeReferenceSource || (activeQuestionNumber ? 'quiz' : null);
+  const effectiveItemNumber = activeItemNumber ?? activeQuestionNumber;
+  const handleReturn = onReturn || onReturnToQuiz;
+
+  // Smoothly scroll to the referenced section when requested from a quiz or flashcard
   useEffect(() => {
     if (!highlightAnchor) return;
     const timer = setTimeout(() => {
-      const slug = highlightAnchor.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      const slug = highlightAnchor.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
       const target = document.getElementById(slug) ||
                      document.querySelector(`[id*="${slug}"]`) ||
                      document.getElementById(highlightAnchor);
@@ -43,8 +53,8 @@ export const TextSummaryPhase: React.FC<TextSummaryPhaseProps> = ({
       padding: 'clamp(1rem, 3vw, 2rem) clamp(0.75rem, 2.5vw, 1.75rem)',
       boxShadow: '0 1px 3px rgba(120, 53, 15, 0.02)'
     }}>
-      {/* Sticky Active Quiz Context Banner: Appears when inspecting a concept from a live question */}
-      {activeQuestionNumber && (
+      {/* Sticky Active Context Banner: Appears when inspecting a concept from a live question or flashcard */}
+      {effectiveSource && (
         <div style={{
           position: 'sticky',
           top: 'clamp(58px, 12vw, 88px)',
@@ -65,17 +75,21 @@ export const TextSummaryPhase: React.FC<TextSummaryPhaseProps> = ({
             <Bookmark size={18} color="#b45309" />
             <div>
               <span style={{ fontSize: '0.88rem', fontWeight: 800, color: '#92400e', display: 'block' }}>
-                Reviewing Concept for Question {activeQuestionNumber} of 12
+                {effectiveSource === 'flashcards'
+                  ? `Reviewing Concept for Flashcard ${effectiveItemNumber || ''}`
+                  : `Reviewing Concept for Question ${effectiveItemNumber || ''} of 12`}
               </span>
               <span style={{ fontSize: '0.78rem', color: '#b45309' }}>
-                The relevant section is highlighted below in amber. Your quiz is still in progress.
+                {effectiveSource === 'flashcards'
+                  ? 'The relevant section is highlighted below in amber. Your flashcard deck is still in progress.'
+                  : 'The relevant section is highlighted below in amber. Your quiz is still in progress.'}
               </span>
             </div>
           </div>
 
-          {onReturnToQuiz && (
+          {handleReturn && (
             <button
-              onClick={onReturnToQuiz}
+              onClick={handleReturn}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -93,7 +107,11 @@ export const TextSummaryPhase: React.FC<TextSummaryPhaseProps> = ({
               }}
             >
               <ArrowLeft size={14} />
-              <span>Return to Question {activeQuestionNumber}</span>
+              <span>
+                {effectiveSource === 'flashcards'
+                  ? `Return to Flashcards`
+                  : `Return to Question ${effectiveItemNumber || ''}`}
+              </span>
             </button>
           )}
         </div>
@@ -133,6 +151,8 @@ export const TextSummaryPhase: React.FC<TextSummaryPhaseProps> = ({
           content={segment.summary_markdown}
           highlightAnchor={highlightAnchor}
           activeQuestionNumber={activeQuestionNumber}
+          activeReferenceSource={effectiveSource}
+          activeItemNumber={effectiveItemNumber}
         />
       </div>
 

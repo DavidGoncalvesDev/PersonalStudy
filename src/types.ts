@@ -42,6 +42,8 @@ export interface Flashcard {
   front: string;
   back: string;
   category?: string;
+  section_reference?: string;
+  section_anchor?: string;
 }
 
 export interface SegmentProgress {

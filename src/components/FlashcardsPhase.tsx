@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Flashcard } from '../types';
 import confetti from 'canvas-confetti';
-import { Check, X, RotateCw, Trophy, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Check, X, RotateCw, Trophy, ArrowRight, CheckCircle2, BookOpen } from 'lucide-react';
 import { MathRenderer } from './MathRenderer';
 import { playCorrectSound, playWrongSound, playSuccessChime, playClickSound } from '../utils/soundEffects';
 
@@ -14,6 +14,7 @@ interface FlashcardsPhaseProps {
   onCompleteSegment: () => void;
   onGoToNextSegment: () => void;
   hasNextSegment: boolean;
+  onGoToText?: (anchor?: string, cardNum?: number) => void;
 }
 
 export const FlashcardsPhase: React.FC<FlashcardsPhaseProps> = ({
@@ -24,7 +25,8 @@ export const FlashcardsPhase: React.FC<FlashcardsPhaseProps> = ({
   isAlreadyCompleted,
   onCompleteSegment,
   onGoToNextSegment,
-  hasNextSegment
+  hasNextSegment,
+  onGoToText
 }) => {
   const uKey = (currentUser || 'guest').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '') || 'guest';
   const storageKey = `david_study_fc_${uKey}_${segmentId}`;
@@ -335,22 +337,61 @@ export const FlashcardsPhase: React.FC<FlashcardsPhaseProps> = ({
       ) : (
         /* Active Card Deck */
         <div>
-          {/* Card Count & Category */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-            <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#78716c' }}>
-              Card {currentIndex + 1} of {queue.length} in review
-            </span>
-            {currentCard?.category && (
-              <span style={{
-                fontSize: '0.7rem',
-                fontWeight: 700,
-                backgroundColor: '#fef3c7',
-                color: '#92400e',
-                padding: '0.15rem 0.5rem',
-                borderRadius: '6px'
-              }}>
-                {currentCard.category}
+          {/* Card Count, Category & Reference Text Guide */}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '0.75rem',
+            flexWrap: 'wrap',
+            gap: '0.5rem'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#78716c' }}>
+                Card {currentIndex + 1} of {queue.length} in review
               </span>
+              {currentCard?.category && (
+                <span style={{
+                  fontSize: '0.7rem',
+                  fontWeight: 700,
+                  backgroundColor: '#fef3c7',
+                  color: '#92400e',
+                  padding: '0.15rem 0.5rem',
+                  borderRadius: '6px'
+                }}>
+                  {currentCard.category}
+                </span>
+              )}
+            </div>
+
+            {onGoToText && (
+              <button
+                onClick={() => {
+                  playClickSound();
+                  onGoToText(
+                    currentCard?.section_anchor || currentCard?.section_reference,
+                    currentCard?.order_index || (currentIndex + 1)
+                  );
+                }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                  padding: '0.3rem 0.65rem',
+                  borderRadius: '6px',
+                  border: '1px solid #d97706',
+                  backgroundColor: '#fffbeb',
+                  color: '#b45309',
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease'
+                }}
+                title={currentCard?.section_reference ? `Reference: ${currentCard.section_reference}` : 'Review concept in text guide'}
+              >
+                <BookOpen size={13} />
+                <span>Reference Text Guide</span>
+              </button>
             )}
           </div>
 

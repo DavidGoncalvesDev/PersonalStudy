@@ -43,9 +43,10 @@ export const App: React.FC = () => {
   const [isScratchpadOpen, setIsScratchpadOpen] = useState<boolean>(false);
   const [scratchpadQuestion, setScratchpadQuestion] = useState<Question | null>(null);
 
-  // Active Question Reference Navigation (Text Guide highlighting & smooth return to quiz)
+  // Active Question/Flashcard Reference Navigation (Text Guide highlighting & smooth bidirectional return)
   const [highlightedAnchor, setHighlightedAnchor] = useState<string | null>(null);
-  const [activeQuizQuestionNumber, setActiveQuizQuestionNumber] = useState<number | null>(null);
+  const [activeReferenceSource, setActiveReferenceSource] = useState<'quiz' | 'flashcards' | null>(null);
+  const [activeReferenceItemNumber, setActiveReferenceItemNumber] = useState<number | null>(null);
 
   // Per-Device & Per-Person User Login State (Prompt user first, DO NOT auto-login as David!)
   const [currentUser, setCurrentUser] = useState<string | null>(() => {
@@ -351,21 +352,32 @@ export const App: React.FC = () => {
   const handleProceedToQuiz = async () => {
     await updateProgress({ text_completed: true });
     setHighlightedAnchor(null);
-    setActiveQuizQuestionNumber(null);
+    setActiveReferenceSource(null);
+    setActiveReferenceItemNumber(null);
     setActivePhase('quiz');
     window.scrollTo({ top: 80, behavior: 'smooth' });
   };
 
   const handleGoToTextFromQuiz = (anchor?: string, qNum?: number) => {
     setHighlightedAnchor(anchor || null);
-    setActiveQuizQuestionNumber(qNum || null);
+    setActiveReferenceSource('quiz');
+    setActiveReferenceItemNumber(qNum || null);
     setActivePhase('text');
   };
 
-  const handleReturnToQuizFromText = () => {
+  const handleGoToTextFromFlashcards = (anchor?: string, cardNum?: number) => {
+    setHighlightedAnchor(anchor || null);
+    setActiveReferenceSource('flashcards');
+    setActiveReferenceItemNumber(cardNum || null);
+    setActivePhase('text');
+  };
+
+  const handleReturnFromText = () => {
+    const returnTarget = activeReferenceSource || 'quiz';
     setHighlightedAnchor(null);
-    setActiveQuizQuestionNumber(null);
-    setActivePhase('quiz');
+    setActiveReferenceSource(null);
+    setActiveReferenceItemNumber(null);
+    setActivePhase(returnTarget);
   };
 
   const handlePassQuiz = async (score: number) => {
@@ -724,8 +736,11 @@ export const App: React.FC = () => {
                     isCompleted={!!currentSegmentProgress?.text_completed}
                     onProceedToQuiz={handleProceedToQuiz}
                     highlightAnchor={highlightedAnchor}
-                    activeQuestionNumber={activeQuizQuestionNumber}
-                    onReturnToQuiz={handleReturnToQuizFromText}
+                    activeQuestionNumber={activeReferenceItemNumber}
+                    activeReferenceSource={activeReferenceSource}
+                    activeItemNumber={activeReferenceItemNumber}
+                    onReturn={handleReturnFromText}
+                    onReturnToQuiz={handleReturnFromText}
                   />
                 </div>
 
@@ -756,6 +771,7 @@ export const App: React.FC = () => {
                     onCompleteSegment={handleCompleteSegment}
                     onGoToNextSegment={handleGoToNextSegment}
                     hasNextSegment={hasNextSegment}
+                    onGoToText={handleGoToTextFromFlashcards}
                   />
                 </div>
               </>

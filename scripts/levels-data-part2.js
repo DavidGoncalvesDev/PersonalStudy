@@ -1,4 +1,4 @@
-// Part 2: Levels 5 to 8 of Data Analysis curriculum
+// levelsPart2 of Data Analysis curriculum
 
 export const levelsPart2 = [
   {
@@ -44,7 +44,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "In PCA, a factor loading ($l_{ji}$) represents the Pearson correlation coefficient between the original input variable $X_j$ and the principal component $PC_i$."
+        "explanation": "In PCA, a factor loading ($l_{ji}$) represents the Pearson correlation coefficient between the original input variable $X_j$ and the principal component $PC_i$.",
+        "section_reference": "Section 1.4: Factor Loading",
+        "section_anchor": "factor-loading-l-ji"
       },
       {
         "id": "q_l5_2",
@@ -79,7 +81,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "a",
-        "explanation": "The Kaiser criterion retains components whose eigenvalues exceed 1.0. Because each standardized variable has variance 1.0 in Correlation PCA, a component with $\\lambda > 1$ accounts for more variance than an individual original variable."
+        "explanation": "The Kaiser criterion retains components whose eigenvalues exceed 1.0. Because each standardized variable has variance 1.0 in Correlation PCA, a component with $\\lambda > 1$ accounts for more variance than an individual original variable.",
+        "section_reference": "Section 2.1: Kaiser Criterion",
+        "section_anchor": "kaiser-criterion-eigenvalue-greater-than-one-rule"
       },
       {
         "id": "q_l5_3",
@@ -114,7 +118,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Cattell's Scree test inspects the plot of ordered eigenvalues to find the \"elbow,\" retaining all components that precede the point where the line flattens into residual rubble (scree)."
+        "explanation": "Cattell's Scree test inspects the plot of ordered eigenvalues to find the \"elbow,\" retaining all components that precede the point where the line flattens into residual rubble (scree).",
+        "section_reference": "Section 2.2: Cattell Scree Test",
+        "section_anchor": "cattell-scree-test-elbow-rule"
       },
       {
         "id": "q_l5_4",
@@ -149,7 +155,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Variables reflecting healthcare services (physicians, hospital beds) and cultural amenities (public libraries) all correlate strongly ($> 0.93$) with $PC_1$, making \"Health and Culture\" the natural substantive interpretation."
+        "explanation": "Variables reflecting healthcare services (physicians, hospital beds) and cultural amenities (public libraries) all correlate strongly ($> 0.93$) with $PC_1$, making \"Health and Culture\" the natural substantive interpretation.",
+        "section_reference": "Section 3: Portuguese Regional Assessment",
+        "section_anchor": "3-real-world-application-portuguese-regional-assessment"
       },
       {
         "id": "q_l5_5",
@@ -184,7 +192,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "By definition of Pearson correlation: $\\text{Corr}(X_j, PC_i) = \\frac{\\text{Cov}(X_j, w_i' x)}{\\text{Std}(X_j) \\text{Std}(PC_i)} = \\frac{w_{ij} \\text{Var}(PC_i)}{s_j \\sqrt{\\lambda_i}} = w_{ij} \\frac{\\lambda_i}{s_j \\sqrt{\\lambda_i}} = w_{ij} \\frac{\\sqrt{\\lambda_i}}{s_j}$."
+        "explanation": "By definition of Pearson correlation: $\\text{Corr}(X_j, PC_i) = \\frac{\\text{Cov}(X_j, w_i' x)}{\\text{Std}(X_j) \\text{Std}(PC_i)} = \\frac{w_{ij} \\text{Var}(PC_i)}{s_j \\sqrt{\\lambda_i}} = w_{ij} \\frac{\\lambda_i}{s_j \\sqrt{\\lambda_i}} = w_{ij} \\frac{\\sqrt{\\lambda_i}}{s_j}$.",
+        "section_reference": "Section 1.4: Factor Loading",
+        "section_anchor": "factor-loading-l-ji"
       },
       {
         "id": "q_l5_6",
@@ -219,7 +229,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "The Kaiser rule of $\\lambda > 1$ is derived from Correlation PCA, where the average eigenvalue is exactly 1.0 (since trace is $p$). In Covariance PCA, total variance is $\\sum s_j^2$, which depends on the units; an eigenvalue of 10 might be tiny if total variance is 1,000,000."
+        "explanation": "The Kaiser rule of $\\lambda > 1$ is derived from Correlation PCA, where the average eigenvalue is exactly 1.0 (since trace is $p$). In Covariance PCA, total variance is $\\sum s_j^2$, which depends on the units; an eigenvalue of 10 might be tiny if total variance is 1,000,000.",
+        "section_reference": "Section 2.1: Kaiser Criterion",
+        "section_anchor": "kaiser-criterion-eigenvalue-greater-than-one-rule"
       },
       {
         "id": "q_l5_7",
@@ -254,7 +266,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "By default, SAS `PROC PRINCOMP` decomposes the correlation matrix. Adding the `COV` option instructs SAS to analyze the sample covariance matrix."
+        "explanation": "By default, SAS `PROC PRINCOMP` decomposes the correlation matrix. Adding the `COV` option instructs SAS to analyze the sample covariance matrix.",
+        "section_reference": "Section 4: Software Syntax in Practice",
+        "section_anchor": "4-software-syntax-in-practice"
       },
       {
         "id": "q_l5_8",
@@ -289,7 +303,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Dividing by $\\sqrt{\\lambda_i}$ scales each component's variance to 1.0. In distance-based analyses (like clustering), this equalizes the influence of minor components with the major leading component."
+        "explanation": "Dividing by $\\sqrt{\\lambda_i}$ scales each component's variance to 1.0. In distance-based analyses (like clustering), this equalizes the influence of minor components with the major leading component.",
+        "section_reference": "Section 1.3: Component Score",
+        "section_anchor": "component-score-t-hi"
       },
       {
         "id": "q_l5_9",
@@ -324,7 +340,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Total variance is $p = 5.0$. Under Kaiser ($\\lambda > 1$), components 1 and 2 qualify ($\\lambda_1 = 2.85$, $\\lambda_2 = 1.25$), so retain 2 components. For 80% cumulative variance: 1 component explains $2.85/5 = 57\\%$; 2 components explain $(2.85+1.25)/5 = 4.10/5 = 82\\%$. Thus, both criteria actually give 2 components!"
+        "explanation": "Total variance is $p = 5.0$. Under Kaiser ($\\lambda > 1$), components 1 and 2 qualify ($\\lambda_1 = 2.85$, $\\lambda_2 = 1.25$), so retain 2 components. For 80% cumulative variance: 1 component explains $2.85/5 = 57\\%$; 2 components explain $(2.85+1.25)/5 = 4.10/5 = 82\\%$. Thus, both criteria actually give 2 components!",
+        "section_reference": "Section 2.1: Kaiser Criterion",
+        "section_anchor": "kaiser-criterion-eigenvalue-greater-than-one-rule"
       },
       {
         "id": "q_l5_10",
@@ -359,7 +377,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "a",
-        "explanation": "Because scores are centered around 0, positive scores indicate above-average levels and negative scores indicate below-average levels. Lisboa's high positive score on $PC_1$ reflects extensive health/cultural infrastructure, while Alentejo's negative scores indicate below-average infrastructure and density."
+        "explanation": "Because scores are centered around 0, positive scores indicate above-average levels and negative scores indicate below-average levels. Lisboa's high positive score on $PC_1$ reflects extensive health/cultural infrastructure, while Alentejo's negative scores indicate below-average infrastructure and density.",
+        "section_reference": "Section 3: Portuguese Regional Assessment",
+        "section_anchor": "3-real-world-application-portuguese-regional-assessment"
       },
       {
         "id": "q_l5_11",
@@ -394,7 +414,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "PCA is unsupervised—it maximizes variance across the $X$ variables, completely unaware of any outcome $Y$. As slide 42 and 45 note, low variance is not the same as low importance: in fraud detection or safety-critical tasks, the 1% remaining variation may hold the vital anomaly signal."
+        "explanation": "PCA is unsupervised—it maximizes variance across the $X$ variables, completely unaware of any outcome $Y$. As slide 42 and 45 note, low variance is not the same as low importance: in fraud detection or safety-critical tasks, the 1% remaining variation may hold the vital anomaly signal.",
+        "section_reference": "Section 2.3: Cumulative Percentage of Explained Variance",
+        "section_anchor": "cumulative-percentage-of-explained-variance"
       },
       {
         "id": "q_l5_12",
@@ -429,7 +451,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "In scikit-learn, `pca.components_` returns the row eigenvectors $w_i$ (weights). For standardized data ($s_j = 1$), the factor loading is $l_{ji} = w_{ij}\\sqrt{\\lambda_i}$. Multiplying the transposed eigenvector matrix by $\\sqrt{\\lambda_i}$ exactly implements this definition."
+        "explanation": "In scikit-learn, `pca.components_` returns the row eigenvectors $w_i$ (weights). For standardized data ($s_j = 1$), the factor loading is $l_{ji} = w_{ij}\\sqrt{\\lambda_i}$. Multiplying the transposed eigenvector matrix by $\\sqrt{\\lambda_i}$ exactly implements this definition.",
+        "section_reference": "Section 4: Software Syntax in Practice",
+        "section_anchor": "4-software-syntax-in-practice"
       }
     ],
     "flashcards": [
@@ -439,7 +463,9 @@ export const levelsPart2 = [
         "order_index": 1,
         "category": "Definitions",
         "front": "What is the formula for calculating a **Factor Loading ($l_{ji}$)** in PCA?",
-        "back": "$$l_{ji} = \\text{Corr}(X_j, PC_i) = w_{ij} \\frac{\\sqrt{\\lambda_i}}{s_j}$$\nFor standardized inputs ($s_j = 1$), it simplifies to: $$l_{ji} = w_{ij} \\sqrt{\\lambda_i}$$."
+        "back": "$$l_{ji} = \\text{Corr}(X_j, PC_i) = w_{ij} \\frac{\\sqrt{\\lambda_i}}{s_j}$$\nFor standardized inputs ($s_j = 1$), it simplifies to: $$l_{ji} = w_{ij} \\sqrt{\\lambda_i}$$.",
+        "section_reference": "Section 1.4: Factor Loading",
+        "section_anchor": "factor-loading-l-ji"
       },
       {
         "id": "fc_l5_2",
@@ -447,7 +473,9 @@ export const levelsPart2 = [
         "order_index": 2,
         "category": "Distinction",
         "front": "What is the difference between an **Eigenvector Weight ($w_{ij}$)** and a **Loading ($l_{ji}$)**?",
-        "back": "- **Weight ($w_{ij}$)**: Coefficient used to compute component scores ($PC_i = \\sum w_{ij} x_j$), constrained to unit norm $\\sum w_{ij}^2 = 1$.\n- **Loading ($l_{ji}$)**: Pearson correlation between variable $j$ and component $i$, bounded by $[-1, 1]$."
+        "back": "- **Weight ($w_{ij}$)**: Coefficient used to compute component scores ($PC_i = \\sum w_{ij} x_j$), constrained to unit norm $\\sum w_{ij}^2 = 1$.\n- **Loading ($l_{ji}$)**: Pearson correlation between variable $j$ and component $i$, bounded by $[-1, 1]$.",
+        "section_reference": "Section 1: Four Quantities That Must Never Be Confused",
+        "section_anchor": "1-four-quantities-that-must-never-be-confused"
       },
       {
         "id": "fc_l5_3",
@@ -455,7 +483,9 @@ export const levelsPart2 = [
         "order_index": 3,
         "category": "Retention",
         "front": "What is the **Kaiser Criterion** for retaining principal components?",
-        "back": "Retain components with **eigenvalues $\\lambda_i > 1.0$**.\nValid for **Correlation PCA**, ensuring each retained component explains more variance than a single standardized input variable."
+        "back": "Retain components with **eigenvalues $\\lambda_i > 1.0$**.\nValid for **Correlation PCA**, ensuring each retained component explains more variance than a single standardized input variable.",
+        "section_reference": "Section 2.1: Kaiser Criterion",
+        "section_anchor": "kaiser-criterion-eigenvalue-greater-than-one-rule"
       },
       {
         "id": "fc_l5_4",
@@ -463,7 +493,9 @@ export const levelsPart2 = [
         "order_index": 4,
         "category": "Retention",
         "front": "What is the **Scree Plot** test (Cattell), and how is it used?",
-        "back": "A plot of ordered eigenvalues against component number.\nThe analyst retains components appearing **before the elbow** (the point where the curve flattens into residual rubble)."
+        "back": "A plot of ordered eigenvalues against component number.\nThe analyst retains components appearing **before the elbow** (the point where the curve flattens into residual rubble).",
+        "section_reference": "Section 2.2: Cattell Scree Test",
+        "section_anchor": "cattell-scree-test-elbow-rule"
       },
       {
         "id": "fc_l5_5",
@@ -471,7 +503,9 @@ export const levelsPart2 = [
         "order_index": 5,
         "category": "Scores",
         "front": "How are **Standardized Component Scores** calculated, and what is their variance?",
-        "back": "$$t^*_{hi} = \\frac{t_{hi}}{\\sqrt{\\lambda_i}}$$\nStandardized scores have a mean of $0$ and a variance of **$1.0$**."
+        "back": "$$t^*_{hi} = \\frac{t_{hi}}{\\sqrt{\\lambda_i}}$$\nStandardized scores have a mean of $0$ and a variance of **$1.0$**.",
+        "section_reference": "Section 1.3: Component Score",
+        "section_anchor": "component-score-t-hi"
       },
       {
         "id": "fc_l5_6",
@@ -479,7 +513,9 @@ export const levelsPart2 = [
         "order_index": 6,
         "category": "Case Study",
         "front": "In the Portuguese regional study, what did $PC_1$ and $PC_2$ represent?",
-        "back": "- **$PC_1$**: \"Health & Culture\" (high positive loadings on doctors, hospital beds, and libraries).\n- **$PC_2$**: \"Economic Wealth & Density\" (high positive loadings on GDP per capita and population density)."
+        "back": "- **$PC_1$**: \"Health & Culture\" (high positive loadings on doctors, hospital beds, and libraries).\n- **$PC_2$**: \"Economic Wealth & Density\" (high positive loadings on GDP per capita and population density).",
+        "section_reference": "Section 3: Portuguese Regional Assessment",
+        "section_anchor": "3-real-world-application-portuguese-regional-assessment"
       },
       {
         "id": "fc_l5_7",
@@ -487,7 +523,9 @@ export const levelsPart2 = [
         "order_index": 7,
         "category": "Software",
         "front": "In SAS `PROC PRINCOMP`, what does the `COV` option specify?",
-        "back": "It directs SAS to decompose the **sample covariance matrix** rather than the default sample correlation matrix."
+        "back": "It directs SAS to decompose the **sample covariance matrix** rather than the default sample correlation matrix.",
+        "section_reference": "Section 4: Software Syntax in Practice",
+        "section_anchor": "4-software-syntax-in-practice"
       },
       {
         "id": "fc_l5_8",
@@ -495,7 +533,9 @@ export const levelsPart2 = [
         "order_index": 8,
         "category": "Caveats",
         "front": "Why does highest explained variance not always mean highest substantive importance?",
-        "back": "PCA is unsupervised. In predictive or anomaly detection tasks, discarded low-variance components may contain crucial domain signals or safety-critical anomalies."
+        "back": "PCA is unsupervised. In predictive or anomaly detection tasks, discarded low-variance components may contain crucial domain signals or safety-critical anomalies.",
+        "section_reference": "Section 2.3: Cumulative Percentage of Explained Variance",
+        "section_anchor": "cumulative-percentage-of-explained-variance"
       }
     ]
   },
@@ -542,7 +582,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Factor Analysis is designed to discover and measure unobservable (latent) variables—such as intelligence, brand loyalty, or perceived quality—that generate the correlations observed among measurable indicators."
+        "explanation": "Factor Analysis is designed to discover and measure unobservable (latent) variables—such as intelligence, brand loyalty, or perceived quality—that generate the correlations observed among measurable indicators.",
+        "section_reference": "Section 1: Foundations of Factor Analysis",
+        "section_anchor": "1-foundations-of-factor-analysis"
       },
       {
         "id": "q_l6_2",
@@ -577,7 +619,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Communality ($h_j^2$) is the sum of squared factor loadings across all extracted common factors, representing the shared variance explained by the latent factors."
+        "explanation": "Communality ($h_j^2$) is the sum of squared factor loadings across all extracted common factors, representing the shared variance explained by the latent factors.",
+        "section_reference": "Section 3.1: Communality",
+        "section_anchor": "communality-h-j-2"
       },
       {
         "id": "q_l6_3",
@@ -612,7 +656,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "For standardized variables, total variance is 1.0. Therefore, total variance decomposes into communality plus unique variance: $1.0 = h_j^2 + \\psi_j \\implies \\psi_j = 1.0 - 0.64 = 0.36$."
+        "explanation": "For standardized variables, total variance is 1.0. Therefore, total variance decomposes into communality plus unique variance: $1.0 = h_j^2 + \\psi_j \\implies \\psi_j = 1.0 - 0.64 = 0.36$.",
+        "section_reference": "Section 3.2: Uniqueness",
+        "section_anchor": "uniqueness-psi-j"
       },
       {
         "id": "q_l6_4",
@@ -647,7 +693,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "In an orthogonal factor model, the correlation between any two indicators is the product of their pattern loadings: $r_{jk} = \\lambda_j \\lambda_k = 0.80 \\times 0.70 = 0.56$."
+        "explanation": "In an orthogonal factor model, the correlation between any two indicators is the product of their pattern loadings: $r_{jk} = \\lambda_j \\lambda_k = 0.80 \\times 0.70 = 0.56$.",
+        "section_reference": "Section 4: Reproducing the Correlation Matrix",
+        "section_anchor": "4-reproducing-the-correlation-matrix"
       },
       {
         "id": "q_l6_5",
@@ -682,7 +730,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "In orthogonal factor models, common factors have zero correlation with one another. Consequently, the simple correlation between an indicator and a factor (structure loading) equals the direct regression coefficient (pattern loading)."
+        "explanation": "In orthogonal factor models, common factors have zero correlation with one another. Consequently, the simple correlation between an indicator and a factor (structure loading) equals the direct regression coefficient (pattern loading).",
+        "section_reference": "Section 2: The Classical Orthogonal Factor Model",
+        "section_anchor": "2-the-classical-orthogonal-factor-model"
       },
       {
         "id": "q_l6_6",
@@ -717,7 +767,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "A fundamental axiom of factor analysis is that unique factors $\\varepsilon_j$ represent random measurement error and specific variance that share zero covariance with the common latent factors ($E(\\xi_k \\varepsilon_j) = 0$)."
+        "explanation": "A fundamental axiom of factor analysis is that unique factors $\\varepsilon_j$ represent random measurement error and specific variance that share zero covariance with the common latent factors ($E(\\xi_k \\varepsilon_j) = 0$).",
+        "section_reference": "Section 2: The Classical Orthogonal Factor Model",
+        "section_anchor": "2-the-classical-orthogonal-factor-model"
       },
       {
         "id": "q_l6_7",
@@ -752,7 +804,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Communality is the sum of squared loadings across all factors: $h_j^2 = \\lambda_{j1}^2 + \\lambda_{j2}^2 = 0.80^2 + 0.20^2 = 0.64 + 0.04 = 0.68$. This means common factors account for 68% of the variance, leaving 32% unique variance."
+        "explanation": "Communality is the sum of squared loadings across all factors: $h_j^2 = \\lambda_{j1}^2 + \\lambda_{j2}^2 = 0.80^2 + 0.20^2 = 0.64 + 0.04 = 0.68$. This means common factors account for 68% of the variance, leaving 32% unique variance.",
+        "section_reference": "Section 3.1: Communality",
+        "section_anchor": "communality-h-j-2"
       },
       {
         "id": "q_l6_8",
@@ -787,7 +841,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Since $r_{jk} = \\sum_{l=1}^m \\lambda_{jl}\\lambda_{kl}$, if $\\lambda_{jl} = 0$ for all $l$, then $r_{jk} = 0$ for all $k$. In Factor Analysis, correlations exist purely through shared loadings on common factors."
+        "explanation": "Since $r_{jk} = \\sum_{l=1}^m \\lambda_{jl}\\lambda_{kl}$, if $\\lambda_{jl} = 0$ for all $l$, then $r_{jk} = 0$ for all $k$. In Factor Analysis, correlations exist purely through shared loadings on common factors.",
+        "section_reference": "Section 3.2: Uniqueness",
+        "section_anchor": "uniqueness-psi-j"
       },
       {
         "id": "q_l6_9",
@@ -822,7 +878,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "In a two-factor model, $r_{jk} = \\lambda_{j1}\\lambda_{k1} + \\lambda_{j2}\\lambda_{k2}$. For Chemistry ($C$) and History ($H$): $r_{CH} = \\lambda_{CQ}\\lambda_{HQ} + \\lambda_{CV}\\lambda_{HV} = (0.60)(0.15) + (0.30)(0.82) = 0.090 + 0.246 = 0.336$. This matches slide 21 of Chapter 3 exactly."
+        "explanation": "In a two-factor model, $r_{jk} = \\lambda_{j1}\\lambda_{k1} + \\lambda_{j2}\\lambda_{k2}$. For Chemistry ($C$) and History ($H$): $r_{CH} = \\lambda_{CQ}\\lambda_{HQ} + \\lambda_{CV}\\lambda_{HV} = (0.60)(0.15) + (0.30)(0.82) = 0.090 + 0.246 = 0.336$. This matches slide 21 of Chapter 3 exactly.",
+        "section_reference": "Section 3: Total Variance Decomposition",
+        "section_anchor": "3-total-variance-decomposition-communality-vs-uniqueness"
       },
       {
         "id": "q_l6_10",
@@ -857,7 +915,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Summing communalities equals summing factor eigenvalues: $\\sum h_j^2 = \\sum \\lambda_k = 1.61 + 2.25 = 3.86$. Since there are 6 standardized variables (total variance = 6.0), the common factors account for $3.86$ ($64.3\\%$) and total unique error accounts for $6.0 - 3.86 = 2.14$ ($35.7\\%$)."
+        "explanation": "Summing communalities equals summing factor eigenvalues: $\\sum h_j^2 = \\sum \\lambda_k = 1.61 + 2.25 = 3.86$. Since there are 6 standardized variables (total variance = 6.0), the common factors account for $3.86$ ($64.3\\%$) and total unique error accounts for $6.0 - 3.86 = 2.14$ ($35.7\\%$).",
+        "section_reference": "Section 3.1: Communality",
+        "section_anchor": "communality-h-j-2"
       },
       {
         "id": "q_l6_11",
@@ -892,7 +952,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "a",
-        "explanation": "As explained on slide 74 of Chapter 3: In FA, observed indicators are reflections of an unobservable latent trait (e.g. general intelligence causes grades). In PCA, observed indicators form an index or summary composite through a weighted sum ($PC = w'X$)."
+        "explanation": "As explained on slide 74 of Chapter 3: In FA, observed indicators are reflections of an unobservable latent trait (e.g. general intelligence causes grades). In PCA, observed indicators form an index or summary composite through a weighted sum ($PC = w'X$).",
+        "section_reference": "Section 1.1: Formative vs. Reflective Models",
+        "section_anchor": "formative-vs-reflective-models"
       },
       {
         "id": "q_l6_12",
@@ -927,7 +989,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "In a 1-factor model, $r_{12} = \\lambda_1\\lambda_2$, $r_{13} = \\lambda_1\\lambda_3$, $r_{23} = \\lambda_2\\lambda_3$. Multiplying $r_{12}r_{13} / r_{23} = (\\lambda_1\\lambda_2)(\\lambda_1\\lambda_3)/(\\lambda_2\\lambda_3) = \\lambda_1^2$. Here, $(0.60)(0.40)/0.24 = 0.24/0.24 = 1.00 \\implies \\lambda_1 = 1.00$. Then $\\lambda_2 = 0.60$ and $\\lambda_3 = 0.40$. The reproduced $r_{23} = 0.60 \\times 0.40 = 0.24$, matching the observed data perfectly."
+        "explanation": "In a 1-factor model, $r_{12} = \\lambda_1\\lambda_2$, $r_{13} = \\lambda_1\\lambda_3$, $r_{23} = \\lambda_2\\lambda_3$. Multiplying $r_{12}r_{13} / r_{23} = (\\lambda_1\\lambda_2)(\\lambda_1\\lambda_3)/(\\lambda_2\\lambda_3) = \\lambda_1^2$. Here, $(0.60)(0.40)/0.24 = 0.24/0.24 = 1.00 \\implies \\lambda_1 = 1.00$. Then $\\lambda_2 = 0.60$ and $\\lambda_3 = 0.40$. The reproduced $r_{23} = 0.60 \\times 0.40 = 0.24$, matching the observed data perfectly.",
+        "section_reference": "Section 4: Reproducing the Correlation Matrix",
+        "section_anchor": "4-reproducing-the-correlation-matrix"
       }
     ],
     "flashcards": [
@@ -937,7 +1001,9 @@ export const levelsPart2 = [
         "order_index": 1,
         "category": "Foundations",
         "front": "What is a **Latent Variable**, and how does Factor Analysis identify it?",
-        "back": "An **unobservable construct** (e.g. intelligence, trust, brand image) that cannot be directly measured. FA identifies it by modeling the shared correlations among measurable manifest indicators."
+        "back": "An **unobservable construct** (e.g. intelligence, trust, brand image) that cannot be directly measured. FA identifies it by modeling the shared correlations among measurable manifest indicators.",
+        "section_reference": "Section 1: Foundations of Factor Analysis",
+        "section_anchor": "1-foundations-of-factor-analysis"
       },
       {
         "id": "fc_l6_2",
@@ -945,7 +1011,9 @@ export const levelsPart2 = [
         "order_index": 2,
         "category": "History",
         "front": "What was **Spearman's (1904)** foundational hypothesis in developing Factor Analysis?",
-        "back": "Student performance across diverse academic courses is intercorrelated because grades are driven by a single underlying trait: **General Intelligence ($I$)** plus course-specific aptitude."
+        "back": "Student performance across diverse academic courses is intercorrelated because grades are driven by a single underlying trait: **General Intelligence ($I$)** plus course-specific aptitude.",
+        "section_reference": "Section 1: Foundations of Factor Analysis",
+        "section_anchor": "1-foundations-of-factor-analysis"
       },
       {
         "id": "fc_l6_3",
@@ -953,7 +1021,9 @@ export const levelsPart2 = [
         "order_index": 3,
         "category": "Decomposition",
         "front": "How does total variance decompose for a standardized indicator in Factor Analysis?",
-        "back": "$$\\text{Var}(x_j) = 1.0 = h_j^2 + \\psi_j$$\n- $h_j^2$: **Communality** (shared variance with common factors).\n- $\\psi_j$: **Unique variance** (specific factor trait + measurement error)."
+        "back": "$$\\text{Var}(x_j) = 1.0 = h_j^2 + \\psi_j$$\n- $h_j^2$: **Communality** (shared variance with common factors).\n- $\\psi_j$: **Unique variance** (specific factor trait + measurement error).",
+        "section_reference": "Section 3: Total Variance Decomposition",
+        "section_anchor": "3-total-variance-decomposition-communality-vs-uniqueness"
       },
       {
         "id": "fc_l6_4",
@@ -961,7 +1031,9 @@ export const levelsPart2 = [
         "order_index": 4,
         "category": "Definitions",
         "front": "What is **Communality ($h_j^2$)**, and how is it calculated?",
-        "back": "$$h_j^2 = \\sum_{k=1}^m \\lambda_{jk}^2$$\nThe sum of squared factor loadings across all extracted common factors. Higher values indicate more reliable indicators."
+        "back": "$$h_j^2 = \\sum_{k=1}^m \\lambda_{jk}^2$$\nThe sum of squared factor loadings across all extracted common factors. Higher values indicate more reliable indicators.",
+        "section_reference": "Section 3.1: Communality",
+        "section_anchor": "communality-h-j-2"
       },
       {
         "id": "fc_l6_5",
@@ -969,7 +1041,9 @@ export const levelsPart2 = [
         "order_index": 5,
         "category": "Loadings",
         "front": "What is the relationship between **Pattern Loadings** and **Structure Loadings** in orthogonal FA?",
-        "back": "They are **identically equal**!\nPattern loadings are regression coefficients; structure loadings are correlations with factors. When factors are uncorrelated, both values match."
+        "back": "They are **identically equal**!\nPattern loadings are regression coefficients; structure loadings are correlations with factors. When factors are uncorrelated, both values match.",
+        "section_reference": "Section 2: The Classical Orthogonal Factor Model",
+        "section_anchor": "2-the-classical-orthogonal-factor-model"
       },
       {
         "id": "fc_l6_6",
@@ -977,7 +1051,9 @@ export const levelsPart2 = [
         "order_index": 6,
         "category": "Correlations",
         "front": "How is the correlation between two indicators reproduced in an orthogonal factor model?",
-        "back": "$$r_{jk} = \\sum_{l=1}^m \\lambda_{jl}\\lambda_{kl} = \\lambda_{j1}\\lambda_{k1} + \\dots + \\lambda_{jm}\\lambda_{km}$$\nCorrelations exist purely because variables share common latent factors."
+        "back": "$$r_{jk} = \\sum_{l=1}^m \\lambda_{jl}\\lambda_{kl} = \\lambda_{j1}\\lambda_{k1} + \\dots + \\lambda_{jm}\\lambda_{km}$$\nCorrelations exist purely because variables share common latent factors.",
+        "section_reference": "Section 4: Reproducing the Correlation Matrix",
+        "section_anchor": "4-reproducing-the-correlation-matrix"
       },
       {
         "id": "fc_l6_7",
@@ -985,7 +1061,9 @@ export const levelsPart2 = [
         "order_index": 7,
         "category": "Philosophy",
         "front": "What is the difference between **Reflective** indicators (FA) and **Formative** indicators (PCA)?",
-        "back": "- **Reflective (FA)**: The latent factor causes the indicator values ($X = \\Lambda\\xi + \\varepsilon$).\n- **Formative (PCA)**: The indicators combine to form the composite index ($PC = w'X$)."
+        "back": "- **Reflective (FA)**: The latent factor causes the indicator values ($X = \\Lambda\\xi + \\varepsilon$).\n- **Formative (PCA)**: The indicators combine to form the composite index ($PC = w'X$).",
+        "section_reference": "Section 1.1: Formative vs. Reflective Models",
+        "section_anchor": "formative-vs-reflective-models"
       },
       {
         "id": "fc_l6_8",
@@ -993,7 +1071,9 @@ export const levelsPart2 = [
         "order_index": 8,
         "category": "Independence",
         "front": "What happens to the correlation between indicators if the common latent factor is removed?",
-        "back": "The **partial correlation drops to zero**.\nOnce the common cause is held constant, there is no remaining mechanism linking the indicators."
+        "back": "The **partial correlation drops to zero**.\nOnce the common cause is held constant, there is no remaining mechanism linking the indicators.",
+        "section_reference": "Section 2: The Classical Orthogonal Factor Model",
+        "section_anchor": "2-the-classical-orthogonal-factor-model"
       }
     ]
   },
@@ -1040,7 +1120,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Because $\\Lambda^* (\\Lambda^*)^T = (\\Lambda T)(T^T \\Lambda^T) = \\Lambda \\Lambda^T$, any orthogonal rotation matrix $T$ yields identical reproduced correlations and total communalities, meaning infinitely many mathematically equivalent solutions exist."
+        "explanation": "Because $\\Lambda^* (\\Lambda^*)^T = (\\Lambda T)(T^T \\Lambda^T) = \\Lambda \\Lambda^T$, any orthogonal rotation matrix $T$ yields identical reproduced correlations and total communalities, meaning infinitely many mathematically equivalent solutions exist.",
+        "section_reference": "Section 1.1: Factor Rotation Indeterminacy",
+        "section_anchor": "factor-rotation-indeterminacy"
       },
       {
         "id": "q_l7_2",
@@ -1075,7 +1157,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "In PCF, prior estimates of communalities are set to 1.0 (the diagonal of the full correlation matrix), assuming no unique factors exist upfront."
+        "explanation": "In PCF, prior estimates of communalities are set to 1.0 (the diagonal of the full correlation matrix), assuming no unique factors exist upfront.",
+        "section_reference": "Section 2.1: Principal Components Factoring (PCF)",
+        "section_anchor": "principal-components-factoring-pcf"
       },
       {
         "id": "q_l7_3",
@@ -1110,7 +1194,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "RMSR computes the square root of the average squared off-diagonal elements in the residual correlation matrix ($R - \\hat{R}$). A small RMSR indicates that the factor model closely reproduces observed correlations."
+        "explanation": "RMSR computes the square root of the average squared off-diagonal elements in the residual correlation matrix ($R - \\hat{R}$). A small RMSR indicates that the factor model closely reproduces observed correlations.",
+        "section_reference": "Section 3: Evaluating Model Fit: RMSR",
+        "section_anchor": "3-evaluating-model-fit-residual-correlation-rmsr"
       },
       {
         "id": "q_l7_4",
@@ -1145,7 +1231,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Residual correlations reflect unexplained association. A smaller RMSR indicates better fit; values below 0.08 are widely accepted as indicating a good factor structure (in slide 43, RMSR = 0.078 is judged small)."
+        "explanation": "Residual correlations reflect unexplained association. A smaller RMSR indicates better fit; values below 0.08 are widely accepted as indicating a good factor structure (in slide 43, RMSR = 0.078 is judged small).",
+        "section_reference": "Section 3: Evaluating Model Fit: RMSR",
+        "section_anchor": "3-evaluating-model-fit-residual-correlation-rmsr"
       },
       {
         "id": "q_l7_5",
@@ -1180,7 +1268,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "PAF inserts initial communality estimates into the diagonal of $R$, extracts factors, computes revised communalities from the new loadings, and repeats this loop until communalities stabilize (converge)."
+        "explanation": "PAF inserts initial communality estimates into the diagonal of $R$, extracts factors, computes revised communalities from the new loadings, and repeats this loop until communalities stabilize (converge).",
+        "section_reference": "Section 2.2: Principal Axis Factoring (PAF)",
+        "section_anchor": "principal-axis-factoring-paf"
       },
       {
         "id": "q_l7_6",
@@ -1215,7 +1305,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "As slide 48 explicitly states: \"technically speaking, PCF is simply PCA and not really FA.\" By assuming communalities are 1.0 upfront, it assumes all variance is common, only relegating variance from dropped components to \"error\" after the fact."
+        "explanation": "As slide 48 explicitly states: \"technically speaking, PCF is simply PCA and not really FA.\" By assuming communalities are 1.0 upfront, it assumes all variance is common, only relegating variance from dropped components to \"error\" after the fact.",
+        "section_reference": "Section 2.1: Principal Components Factoring (PCF)",
+        "section_anchor": "principal-components-factoring-pcf"
       },
       {
         "id": "q_l7_7",
@@ -1250,7 +1342,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Slide 64 notes: \"a high number of required iterations can mean that data is not appropriate for FA.\" Divergence or slow convergence often indicates unstable communality estimates or a poorly conditioned correlation matrix."
+        "explanation": "Slide 64 notes: \"a high number of required iterations can mean that data is not appropriate for FA.\" Divergence or slow convergence often indicates unstable communality estimates or a poorly conditioned correlation matrix.",
+        "section_reference": "Section 2.2: Principal Axis Factoring (PAF)",
+        "section_anchor": "principal-axis-factoring-paf"
       },
       {
         "id": "q_l7_8",
@@ -1285,7 +1379,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "The residual matrix subtracts reproduced correlations $\\hat{R} = \\Lambda\\Lambda'$ from observed correlations $R$. The off-diagonal entries represent leftover, unexplained correlations between indicators."
+        "explanation": "The residual matrix subtracts reproduced correlations $\\hat{R} = \\Lambda\\Lambda'$ from observed correlations $R$. The off-diagonal entries represent leftover, unexplained correlations between indicators.",
+        "section_reference": "Section 3: Evaluating Model Fit: RMSR",
+        "section_anchor": "3-evaluating-model-fit-residual-correlation-rmsr"
       },
       {
         "id": "q_l7_9",
@@ -1320,7 +1416,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "As proven on slides 28-32 of Chapter 3: under orthogonal rotation, total communality is strictly invariant: $h_M^2(\\text{Model 1}) = 0.64 + 0.04 = 0.68$, and $h_M^2(\\text{Model 2}) = 0.667^2 + (-0.484)^2 = 0.445 + 0.234 = 0.679 \\approx 0.68$. Both solutions explain identical total variance for variable $M$."
+        "explanation": "As proven on slides 28-32 of Chapter 3: under orthogonal rotation, total communality is strictly invariant: $h_M^2(\\text{Model 1}) = 0.64 + 0.04 = 0.68$, and $h_M^2(\\text{Model 2}) = 0.667^2 + (-0.484)^2 = 0.445 + 0.234 = 0.679 \\approx 0.68$. Both solutions explain identical total variance for variable $M$.",
+        "section_reference": "Section 1.1: Factor Rotation Indeterminacy",
+        "section_anchor": "factor-rotation-indeterminacy"
       },
       {
         "id": "q_l7_10",
@@ -1355,7 +1453,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "c",
-        "explanation": "A symmetric $6 \\times 6$ matrix has $6 \\times 6 = 36$ total elements, 6 of which are diagonal entries. The remaining 30 off-diagonal elements form two symmetric triangles of $30 / 2 = 15$ unique pairwise correlations ($6 \\times 5 / 2 = 15$)."
+        "explanation": "A symmetric $6 \\times 6$ matrix has $6 \\times 6 = 36$ total elements, 6 of which are diagonal entries. The remaining 30 off-diagonal elements form two symmetric triangles of $30 / 2 = 15$ unique pairwise correlations ($6 \\times 5 / 2 = 15$).",
+        "section_reference": "Section 3: Evaluating Model Fit: RMSR",
+        "section_anchor": "3-evaluating-model-fit-residual-correlation-rmsr"
       },
       {
         "id": "q_l7_11",
@@ -1390,7 +1490,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "The full correlation matrix has 1.0 on the diagonal (total variance). The \"reduced correlation matrix\" replaces the 1.0s with the estimated communalities $h_j^2$ (shared variance), so extraction decomposes only common variance."
+        "explanation": "The full correlation matrix has 1.0 on the diagonal (total variance). The \"reduced correlation matrix\" replaces the 1.0s with the estimated communalities $h_j^2$ (shared variance), so extraction decomposes only common variance.",
+        "section_reference": "Section 2.2: Principal Axis Factoring (PAF)",
+        "section_anchor": "principal-axis-factoring-paf"
       },
       {
         "id": "q_l7_12",
@@ -1425,7 +1527,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "While both models are mathematically identical in explaining data, Model 1 achieves simple structure (Math/Physics/Chemistry load heavily on Q and near zero on V; English/History/French load heavily on V and near zero on Q). This makes Model 1 readily interpretable as Quantitative vs Verbal intelligence."
+        "explanation": "While both models are mathematically identical in explaining data, Model 1 achieves simple structure (Math/Physics/Chemistry load heavily on Q and near zero on V; English/History/French load heavily on V and near zero on Q). This makes Model 1 readily interpretable as Quantitative vs Verbal intelligence.",
+        "section_reference": "Section 1.1: Factor Rotation Indeterminacy",
+        "section_anchor": "factor-rotation-indeterminacy"
       }
     ],
     "flashcards": [
@@ -1435,7 +1539,9 @@ export const levelsPart2 = [
         "order_index": 1,
         "category": "Indeterminacy",
         "front": "What is the **Factor Rotation Indeterminacy** in Factor Analysis?",
-        "back": "For any orthogonal rotation matrix $T$, $\\Lambda^* = \\Lambda T$ reproduces the exact same correlation matrix $\\hat{R} = \\Lambda\\Lambda'$ and identical communalities. Infinitely many mathematically equivalent solutions exist."
+        "back": "For any orthogonal rotation matrix $T$, $\\Lambda^* = \\Lambda T$ reproduces the exact same correlation matrix $\\hat{R} = \\Lambda\\Lambda'$ and identical communalities. Infinitely many mathematically equivalent solutions exist.",
+        "section_reference": "Section 1.1: Factor Rotation Indeterminacy",
+        "section_anchor": "factor-rotation-indeterminacy"
       },
       {
         "id": "fc_l7_2",
@@ -1443,7 +1549,9 @@ export const levelsPart2 = [
         "order_index": 2,
         "category": "Indeterminacy",
         "front": "What is the **Communality Estimation Circularity** problem?",
-        "back": "To estimate factor loadings, prior communalities are needed; but to calculate communalities, factor loadings are needed. Solved via iterative algorithms like PAF."
+        "back": "To estimate factor loadings, prior communalities are needed; but to calculate communalities, factor loadings are needed. Solved via iterative algorithms like PAF.",
+        "section_reference": "Section 1.2: Communality Circularity",
+        "section_anchor": "communality-circularity"
       },
       {
         "id": "fc_l7_3",
@@ -1451,7 +1559,9 @@ export const levelsPart2 = [
         "order_index": 3,
         "category": "Extraction",
         "front": "What is **Principal Components Factoring (PCF)**?",
-        "back": "Initial communalities are set to $1.0$ (standard PCA on correlation matrix $R$). The $m$ retained components are relabeled as factors. It is essentially PCA disguised as Factor Analysis."
+        "back": "Initial communalities are set to $1.0$ (standard PCA on correlation matrix $R$). The $m$ retained components are relabeled as factors. It is essentially PCA disguised as Factor Analysis.",
+        "section_reference": "Section 2.1: Principal Components Factoring (PCF)",
+        "section_anchor": "principal-components-factoring-pcf"
       },
       {
         "id": "fc_l7_4",
@@ -1459,7 +1569,9 @@ export const levelsPart2 = [
         "order_index": 4,
         "category": "Extraction",
         "front": "How does **Principal Axis Factoring (PAF)** work?",
-        "back": "An iterative procedure that replaces the diagonal of $R$ with estimated communalities ($R_r$), extracts factors, re-estimates communalities, and repeats until convergence ($\\Delta < 0.001$)."
+        "back": "An iterative procedure that replaces the diagonal of $R$ with estimated communalities ($R_r$), extracts factors, re-estimates communalities, and repeats until convergence ($\\Delta < 0.001$).",
+        "section_reference": "Section 2.2: Principal Axis Factoring (PAF)",
+        "section_anchor": "principal-axis-factoring-paf"
       },
       {
         "id": "fc_l7_5",
@@ -1467,7 +1579,9 @@ export const levelsPart2 = [
         "order_index": 5,
         "category": "Diagnostics",
         "front": "What is the **Residual Correlation Matrix ($R_{\\text{res}}$)**?",
-        "back": "$$R_{\\text{res}} = R - \\hat{R}$$\nThe difference between observed correlations $R$ and model-reproduced correlations $\\hat{R} = \\Lambda\\Lambda'$. Off-diagonal elements should be near zero."
+        "back": "$$R_{\\text{res}} = R - \\hat{R}$$\nThe difference between observed correlations $R$ and model-reproduced correlations $\\hat{R} = \\Lambda\\Lambda'$. Off-diagonal elements should be near zero.",
+        "section_reference": "Section 3: Evaluating Model Fit: Residual Correlation",
+        "section_anchor": "3-evaluating-model-fit-residual-correlation-rmsr"
       },
       {
         "id": "fc_l7_6",
@@ -1475,7 +1589,9 @@ export const levelsPart2 = [
         "order_index": 6,
         "category": "Diagnostics",
         "front": "What is the **Root Mean Square Residual (RMSR)** formula and benchmark?",
-        "back": "$$\\text{RMSR} = \\sqrt{\\frac{\\sum \\sum_{j < i} \\text{res}_{ij}^2}{p(p - 1)/2}}$$\nMeasures average residual correlation. Values **below 0.08** indicate a good factor model fit."
+        "back": "$$\\text{RMSR} = \\sqrt{\\frac{\\sum \\sum_{j < i} \\text{res}_{ij}^2}{p(p - 1)/2}}$$\nMeasures average residual correlation. Values **below 0.08** indicate a good factor model fit.",
+        "section_reference": "Section 3: Evaluating Model Fit: RMSR",
+        "section_anchor": "3-evaluating-model-fit-residual-correlation-rmsr"
       },
       {
         "id": "fc_l7_7",
@@ -1483,7 +1599,9 @@ export const levelsPart2 = [
         "order_index": 7,
         "category": "Invariance",
         "front": "What quantities remain strictly invariant under orthogonal factor rotation?",
-        "back": "1. Total communality ($h_j^2$) of each variable.\n2. Total unique variance ($\\psi_j$) of each variable.\n3. The model-reproduced correlation matrix ($\\hat{R}$)."
+        "back": "1. Total communality ($h_j^2$) of each variable.\n2. Total unique variance ($\\psi_j$) of each variable.\n3. The model-reproduced correlation matrix ($\\hat{R}$).",
+        "section_reference": "Section 1.1: Factor Rotation Indeterminacy",
+        "section_anchor": "factor-rotation-indeterminacy"
       },
       {
         "id": "fc_l7_8",
@@ -1491,7 +1609,9 @@ export const levelsPart2 = [
         "order_index": 8,
         "category": "Comparison",
         "front": "When do PCF and PAF yield nearly identical factor solutions?",
-        "back": "When the dataset has a **large number of variables ($p > 30$)** and **high communalities ($h^2 > 0.60$)**. With fewer variables, differences become substantial."
+        "back": "When the dataset has a **large number of variables ($p > 30$)** and **high communalities ($h^2 > 0.60$)**. With fewer variables, differences become substantial.",
+        "section_reference": "Section 2.2: Principal Axis Factoring (PAF)",
+        "section_anchor": "principal-axis-factoring-paf"
       }
     ]
   },
@@ -1538,7 +1658,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "c",
-        "explanation": "According to Kaiser's established criteria: $\\ge 0.90$ is Marvelous, $0.80 - 0.89$ is Meritorious, $0.70 - 0.79$ is Middling, $0.60 - 0.69$ is Mediocre, and $< 0.50$ is Unacceptable. A value of $0.81$ is Meritorious."
+        "explanation": "According to Kaiser's established criteria: $\\ge 0.90$ is Marvelous, $0.80 - 0.89$ is Meritorious, $0.70 - 0.79$ is Middling, $0.60 - 0.69$ is Mediocre, and $< 0.50$ is Unacceptable. A value of $0.81$ is Meritorious.",
+        "section_reference": "Section 1.3: Kaiser-Meyer-Olkin (KMO)",
+        "section_anchor": "kaiser-meyer-olkin-kmo-measure-of-sampling-adequacy"
       },
       {
         "id": "q_l8_2",
@@ -1573,7 +1695,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Varimax rotation (Kaiser, 1958) is the most popular orthogonal rotation method. It maximizes the variance of squared loadings across columns, making loadings as close as possible to 1.0 (or -1.0) and 0.0."
+        "explanation": "Varimax rotation (Kaiser, 1958) is the most popular orthogonal rotation method. It maximizes the variance of squared loadings across columns, making loadings as close as possible to 1.0 (or -1.0) and 0.0.",
+        "section_reference": "Section 2.1: Orthogonal Rotations",
+        "section_anchor": "orthogonal-rotations"
       },
       {
         "id": "q_l8_3",
@@ -1608,7 +1732,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "a",
-        "explanation": "Orthogonal rotations (Varimax, Quartimax) maintain strict 90-degree perpendicularity between factor axes, enforcing zero factor correlation. Oblique rotations (Promax, Oblimin) allow axes to intersect at arbitrary angles, reflecting real-world correlation between latent traits."
+        "explanation": "Orthogonal rotations (Varimax, Quartimax) maintain strict 90-degree perpendicularity between factor axes, enforcing zero factor correlation. Oblique rotations (Promax, Oblimin) allow axes to intersect at arbitrary angles, reflecting real-world correlation between latent traits.",
+        "section_reference": "Section 2: Factor Rotation Techniques",
+        "section_anchor": "2-factor-rotation-techniques"
       },
       {
         "id": "q_l8_4",
@@ -1643,7 +1769,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "In EFA, the researcher has no strict prior model and allows the data to reveal the number of factors and loading patterns. In CFA, the researcher specifies exact factor-indicator links upfront based on theory and empirically tests the model fit."
+        "explanation": "In EFA, the researcher has no strict prior model and allows the data to reveal the number of factors and loading patterns. In CFA, the researcher specifies exact factor-indicator links upfront based on theory and empirically tests the model fit.",
+        "section_reference": "Section 1: Testing Data Suitability",
+        "section_anchor": "1-testing-data-suitability-for-factor-analysis"
       },
       {
         "id": "q_l8_5",
@@ -1678,7 +1806,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Quartimax maximizes the variance of squared loadings across rows. Because the first factor accounts for the largest proportion of total variance, Quartimax often causes almost all variables to load heavily on Factor 1, creating a single general factor."
+        "explanation": "Quartimax maximizes the variance of squared loadings across rows. Because the first factor accounts for the largest proportion of total variance, Quartimax often causes almost all variables to load heavily on Factor 1, creating a single general factor.",
+        "section_reference": "Section 2.1: Orthogonal Rotations",
+        "section_anchor": "orthogonal-rotations"
       },
       {
         "id": "q_l8_6",
@@ -1713,7 +1843,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "$a_{jk}$ are the anti-image correlations (negative partial correlations controlling for all other variables). If common factors drive associations, partial correlations should vanish, making the denominator close to the numerator and driving KMO toward 1.0."
+        "explanation": "$a_{jk}$ are the anti-image correlations (negative partial correlations controlling for all other variables). If common factors drive associations, partial correlations should vanish, making the denominator close to the numerator and driving KMO toward 1.0.",
+        "section_reference": "Section 1.3: Kaiser-Meyer-Olkin (KMO)",
+        "section_anchor": "kaiser-meyer-olkin-kmo-measure-of-sampling-adequacy"
       },
       {
         "id": "q_l8_7",
@@ -1748,7 +1880,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Because oblique factors correlate, the direct unique contribution of a factor (pattern loading, a standardized regression beta) differs from the total linear association (structure loading, the bivariate correlation between indicator and factor)."
+        "explanation": "Because oblique factors correlate, the direct unique contribution of a factor (pattern loading, a standardized regression beta) differs from the total linear association (structure loading, the bivariate correlation between indicator and factor).",
+        "section_reference": "Section 2.2: Oblique Rotations",
+        "section_anchor": "oblique-rotations"
       },
       {
         "id": "q_l8_8",
@@ -1783,7 +1917,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "As slide 62 notes: \"using individual KMO, one can delete those variables in which this value is lower.\" An individual KMO below 0.50 is classified as Unacceptable, indicating the variable shares insufficient common variance with the remaining indicators."
+        "explanation": "As slide 62 notes: \"using individual KMO, one can delete those variables in which this value is lower.\" An individual KMO below 0.50 is classified as Unacceptable, indicating the variable shares insufficient common variance with the remaining indicators.",
+        "section_reference": "Section 1.3: Kaiser-Meyer-Olkin (KMO)",
+        "section_anchor": "kaiser-meyer-olkin-kmo-measure-of-sampling-adequacy"
       },
       {
         "id": "q_l8_9",
@@ -1818,7 +1954,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "In credit scoring, debt, income, and delinquencies combine to form an index (formative perspective). The goal is mathematical variance summarization and dimension reduction, making PCA the proper tool. Factor Analysis would assume that an unobservable \"creditworthiness\" trait generates debt and delinquencies as reflective symptoms."
+        "explanation": "In credit scoring, debt, income, and delinquencies combine to form an index (formative perspective). The goal is mathematical variance summarization and dimension reduction, making PCA the proper tool. Factor Analysis would assume that an unobservable \"creditworthiness\" trait generates debt and delinquencies as reflective symptoms.",
+        "section_reference": "Section 3: Systematic Summary: PCA vs. Factor Analysis",
+        "section_anchor": "3-systematic-summary-pca-vs-factor-analysis"
       },
       {
         "id": "q_l8_10",
@@ -1853,7 +1991,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "a",
-        "explanation": "Trust is an unobservable latent mental state. The survey questions are reflective manifestations of that trait. Each question contains unique wording error and specific variance. Factor Analysis separates this unique error $\\psi_j$ from the shared common factor variance $h_j^2$."
+        "explanation": "Trust is an unobservable latent mental state. The survey questions are reflective manifestations of that trait. Each question contains unique wording error and specific variance. Factor Analysis separates this unique error $\\psi_j$ from the shared common factor variance $h_j^2$.",
+        "section_reference": "Section 3: Systematic Summary: PCA vs. Factor Analysis",
+        "section_anchor": "3-systematic-summary-pca-vs-factor-analysis"
       },
       {
         "id": "q_l8_11",
@@ -1888,7 +2028,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "In the KMO formula, $\\text{KMO} = \\frac{\\sum r^2}{\\sum r^2 + \\sum a^2}$. If partial correlations $a_{jk} \\to 0$, then $\\sum a^2 \\to 0$, so $\\text{KMO} \\to \\frac{\\sum r^2}{\\sum r^2 + 0} = 1.00$. This indicates that zero-order correlations are completely accounted for by the underlying factors."
+        "explanation": "In the KMO formula, $\\text{KMO} = \\frac{\\sum r^2}{\\sum r^2 + \\sum a^2}$. If partial correlations $a_{jk} \\to 0$, then $\\sum a^2 \\to 0$, so $\\text{KMO} \\to \\frac{\\sum r^2}{\\sum r^2 + 0} = 1.00$. This indicates that zero-order correlations are completely accounted for by the underlying factors.",
+        "section_reference": "Section 1.3: Kaiser-Meyer-Olkin (KMO)",
+        "section_anchor": "kaiser-meyer-olkin-kmo-measure-of-sampling-adequacy"
       },
       {
         "id": "q_l8_12",
@@ -1923,7 +2065,9 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "As shown on slide 51 of Chapter 3: `Method=prinit` specifies iterated principal axis factoring (PAF); `Rotate=varimax` performs Varimax orthogonal rotation; `MSA` requests Kaiser's Measure of Sampling Adequacy (overall and individual KMO); `Residuals` requests the residual correlation matrix and RMSR."
+        "explanation": "As shown on slide 51 of Chapter 3: `Method=prinit` specifies iterated principal axis factoring (PAF); `Rotate=varimax` performs Varimax orthogonal rotation; `MSA` requests Kaiser's Measure of Sampling Adequacy (overall and individual KMO); `Residuals` requests the residual correlation matrix and RMSR.",
+        "section_reference": "Section 2: Factor Rotation Techniques",
+        "section_anchor": "2-factor-rotation-techniques"
       }
     ],
     "flashcards": [
@@ -1933,7 +2077,9 @@ export const levelsPart2 = [
         "order_index": 1,
         "category": "Diagnostics",
         "front": "What is the **Kaiser-Meyer-Olkin (KMO)** index, and what does it measure?",
-        "back": "$$\\text{KMO} = \\frac{\\sum r^2}{\\sum r^2 + \\sum a^2}$$\nMeasures sampling adequacy and data suitability for Factor Analysis by comparing zero-order correlations to anti-image partial correlations."
+        "back": "$$\\text{KMO} = \\frac{\\sum r^2}{\\sum r^2 + \\sum a^2}$$\nMeasures sampling adequacy and data suitability for Factor Analysis by comparing zero-order correlations to anti-image partial correlations.",
+        "section_reference": "Section 1.3: Kaiser-Meyer-Olkin (KMO)",
+        "section_anchor": "kaiser-meyer-olkin-kmo-measure-of-sampling-adequacy"
       },
       {
         "id": "fc_l8_2",
@@ -1941,7 +2087,9 @@ export const levelsPart2 = [
         "order_index": 2,
         "category": "Benchmarks",
         "front": "What are Kaiser's benchmarks for evaluating the **KMO index**?",
-        "back": "- $\\ge 0.90$: Marvelous\n- $0.80 - 0.89$: Meritorious\n- $0.70 - 0.79$: Middling\n- $0.60 - 0.69$: Mediocre (tolerable minimum)\n- $< 0.50$: Unacceptable (abort FA)."
+        "back": "- $\\ge 0.90$: Marvelous\n- $0.80 - 0.89$: Meritorious\n- $0.70 - 0.79$: Middling\n- $0.60 - 0.69$: Mediocre (tolerable minimum)\n- $< 0.50$: Unacceptable (abort FA).",
+        "section_reference": "Section 1.3: Kaiser-Meyer-Olkin (KMO)",
+        "section_anchor": "kaiser-meyer-olkin-kmo-measure-of-sampling-adequacy"
       },
       {
         "id": "fc_l8_3",
@@ -1949,7 +2097,9 @@ export const levelsPart2 = [
         "order_index": 3,
         "category": "Diagnostics",
         "front": "What is the **Anti-Image Correlation Matrix**, and what should its off-diagonal values be?",
-        "back": "Contains negative partial correlations between variables controlling for all others.\nFor good factor data, off-diagonal values should be **very small (near zero)**."
+        "back": "Contains negative partial correlations between variables controlling for all others.\nFor good factor data, off-diagonal values should be **very small (near zero)**.",
+        "section_reference": "Section 1.3: Kaiser-Meyer-Olkin (KMO)",
+        "section_anchor": "kaiser-meyer-olkin-kmo-measure-of-sampling-adequacy"
       },
       {
         "id": "fc_l8_4",
@@ -1957,7 +2107,9 @@ export const levelsPart2 = [
         "order_index": 4,
         "category": "Rotations",
         "front": "What is the objective of **Varimax Rotation**, and why is it preferred?",
-        "back": "Simplifies **columns (factors)** by maximizing the variance of squared loadings. Pushes loadings toward $\\pm 1.0$ or $0.0$, creating clear, distinct factor groupings."
+        "back": "Simplifies **columns (factors)** by maximizing the variance of squared loadings. Pushes loadings toward $\\pm 1.0$ or $0.0$, creating clear, distinct factor groupings.",
+        "section_reference": "Section 2.1: Orthogonal Rotations",
+        "section_anchor": "orthogonal-rotations"
       },
       {
         "id": "fc_l8_5",
@@ -1965,7 +2117,9 @@ export const levelsPart2 = [
         "order_index": 5,
         "category": "Rotations",
         "front": "What is the main drawback of **Quartimax Rotation**?",
-        "back": "It simplifies **rows (variables)** and tends to create one massive **general factor** where all variables load heavily, hindering multi-factor interpretation."
+        "back": "It simplifies **rows (variables)** and tends to create one massive **general factor** where all variables load heavily, hindering multi-factor interpretation.",
+        "section_reference": "Section 2.1: Orthogonal Rotations",
+        "section_anchor": "orthogonal-rotations"
       },
       {
         "id": "fc_l8_6",
@@ -1973,7 +2127,9 @@ export const levelsPart2 = [
         "order_index": 6,
         "category": "Rotations",
         "front": "When should an analyst use **Oblique Rotations** (Promax, Oblimin)?",
-        "back": "When underlying theoretical constructs are naturally expected to correlate in the real world (e.g. quantitative and verbal abilities)."
+        "back": "When underlying theoretical constructs are naturally expected to correlate in the real world (e.g. quantitative and verbal abilities).",
+        "section_reference": "Section 2.2: Oblique Rotations",
+        "section_anchor": "oblique-rotations"
       },
       {
         "id": "fc_l8_7",
@@ -1981,7 +2137,9 @@ export const levelsPart2 = [
         "order_index": 7,
         "category": "Comparison",
         "front": "Summarize the core differences between **PCA** and **Factor Analysis**.",
-        "back": "- **PCA**: Analyzes total observed variance; formative index creation ($PC = w'X$); mathematical rotation.\n- **FA**: Analyzes shared common variance ($h^2$); reflective latent modeling ($X = \\Lambda\\xi + \\varepsilon$); estimates unique error."
+        "back": "- **PCA**: Analyzes total observed variance; formative index creation ($PC = w'X$); mathematical rotation.\n- **FA**: Analyzes shared common variance ($h^2$); reflective latent modeling ($X = \\Lambda\\xi + \\varepsilon$); estimates unique error.",
+        "section_reference": "Section 3: Systematic Summary: PCA vs. Factor Analysis",
+        "section_anchor": "3-systematic-summary-pca-vs-factor-analysis"
       },
       {
         "id": "fc_l8_8",
@@ -1989,7 +2147,9 @@ export const levelsPart2 = [
         "order_index": 8,
         "category": "Comparison",
         "front": "What is the difference between **Exploratory (EFA)** and **Confirmatory (CFA)** Factor Analysis?",
-        "back": "- **EFA**: Data-driven search to discover factor structure without prior constraints.\n- **CFA**: Theory-driven hypothesis test of an explicit pre-specified factor loading model using SEM."
+        "back": "- **EFA**: Data-driven search to discover factor structure without prior constraints.\n- **CFA**: Theory-driven hypothesis test of an explicit pre-specified factor loading model using SEM.",
+        "section_reference": "Section 1: Testing Data Suitability",
+        "section_anchor": "1-testing-data-suitability-for-factor-analysis"
       }
     ]
   }
