@@ -405,68 +405,70 @@ export const ExamSimulation: React.FC<ExamSimulationProps> = ({
         {/* Sticky Exam Progress & Countdown Header */}
         <div style={{
           position: 'sticky',
-          top: '64px',
+          top: 'clamp(58px, 12vw, 88px)',
           zIndex: 35,
           backgroundColor: '#ffffff',
           border: '1.5px solid #e7e2d7',
           borderRadius: '12px',
-          padding: '0.75rem 1.15rem',
+          padding: 'clamp(0.45rem, 2vw, 0.75rem) clamp(0.6rem, 2.5vw, 1.15rem)',
           boxShadow: '0 6px 20px rgba(120, 53, 15, 0.08)',
           display: 'flex',
           flexDirection: 'column',
-          gap: '0.65rem'
+          gap: '0.45rem'
         }}>
           <div style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             flexWrap: 'wrap',
-            gap: '0.5rem'
+            gap: '0.4rem'
           }}>
             {/* Countdown Clock */}
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '0.45rem',
-              padding: '0.35rem 0.8rem',
+              gap: '0.35rem',
+              padding: '0.28rem 0.65rem',
               borderRadius: '8px',
               backgroundColor: isUrgentTimer ? '#fef2f2' : '#fffbeb',
               border: isUrgentTimer ? '1.5px solid #fca5a5' : '1.5px solid #fde68a',
               color: isUrgentTimer ? '#b91c1c' : '#78350f',
               fontWeight: 800,
-              fontSize: '1rem',
+              fontSize: '0.9rem',
               fontVariantNumeric: 'tabular-nums'
             }}>
-              <Clock size={16} color={isUrgentTimer ? '#b91c1c' : '#b45309'} />
+              <Clock size={14} color={isUrgentTimer ? '#b91c1c' : '#b45309'} />
               <span>{formatTimer(timeRemaining)}</span>
-              {isUrgentTimer && <span style={{ fontSize: '0.72rem', fontWeight: 700 }}>(Time running low!)</span>}
+              {isUrgentTimer && <span className="desktop-only" style={{ fontSize: '0.72rem', fontWeight: 700 }}>(Time running low!)</span>}
             </div>
 
             {/* Answered Counter */}
-            <div style={{ fontSize: '0.84rem', fontWeight: 700, color: '#57534e' }}>
-              Answered: <strong style={{ color: '#78350f' }}>{answeredCount}</strong> of {examQuestions.length}
+            <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#57534e' }}>
+              <span className="desktop-only">Answered: </span>
+              <strong style={{ color: '#78350f' }}>{answeredCount}</strong>/{examQuestions.length}
             </div>
 
             {/* Action Buttons */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
               <button
                 onClick={() => onOpenScratchpad()}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.3rem',
-                  padding: '0.35rem 0.65rem',
+                  gap: '0.25rem',
+                  padding: '0.3rem 0.55rem',
                   borderRadius: '6px',
                   backgroundColor: '#fdfbf7',
                   border: '1px solid #d6cebf',
                   color: '#78350f',
-                  fontSize: '0.74rem',
+                  fontSize: '0.72rem',
                   fontWeight: 700,
                   cursor: 'pointer'
                 }}
               >
-                <Edit3 size={13} color="#78350f" />
-                <span>Scratchpad / Notes</span>
+                <Edit3 size={12} color="#78350f" />
+                <span className="desktop-only">Scratchpad / Notes</span>
+                <span className="mobile-only">Notes</span>
               </button>
 
               <button
@@ -474,34 +476,39 @@ export const ExamSimulation: React.FC<ExamSimulationProps> = ({
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.35rem',
-                  padding: '0.4rem 0.95rem',
+                  gap: '0.3rem',
+                  padding: '0.32rem 0.75rem',
                   borderRadius: '6px',
                   backgroundColor: '#15803d',
                   color: '#ffffff',
                   border: 'none',
-                  fontSize: '0.8rem',
+                  fontSize: '0.76rem',
                   fontWeight: 800,
                   cursor: 'pointer',
                   boxShadow: '0 2px 8px rgba(21, 128, 61, 0.25)'
                 }}
               >
-                <span>Finish & Submit</span>
-                <Check size={14} strokeWidth={3} />
+                <span className="desktop-only">Finish & Submit</span>
+                <span className="mobile-only">Submit</span>
+                <Check size={13} strokeWidth={3} />
               </button>
             </div>
           </div>
 
-          {/* Quick Jump Navigator Grid (1..25) */}
-          <div style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '0.3rem',
-            alignItems: 'center',
-            paddingTop: '0.4rem',
-            borderTop: '1px solid #f2ede4'
-          }}>
-            <span style={{ fontSize: '0.68rem', fontWeight: 800, color: '#a8a29e', textTransform: 'uppercase', marginRight: '0.2rem' }}>
+          {/* Quick Jump Navigator: Swipeable scroll on mobile to save vertical space */}
+          <div
+            className="mobile-scroll-x"
+            style={{
+              display: 'flex',
+              gap: '0.25rem',
+              alignItems: 'center',
+              paddingTop: '0.35rem',
+              borderTop: '1px solid #f2ede4',
+              overflowX: 'auto',
+              flexWrap: 'nowrap'
+            }}
+          >
+            <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#a8a29e', textTransform: 'uppercase', marginRight: '0.15rem', flexShrink: 0 }}>
               Jump:
             </span>
             {examQuestions.map((q, idx) => {
@@ -523,31 +530,36 @@ export const ExamSimulation: React.FC<ExamSimulationProps> = ({
 
               return (
                 <button
-                  key={q.id}
+                  key={`jump-${q.id}`}
                   onClick={() => {
                     const el = document.getElementById(`exam-q-${idx}`);
-                    el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    if (el) {
+                      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
                   }}
-                  title={`Question ${idx + 1}${isFlagged ? ' (Flagged)' : ''}${isAnswered ? ' (Answered)' : ''}`}
                   style={{
+                    flexShrink: 0,
                     width: '24px',
                     height: '24px',
                     borderRadius: '5px',
+                    border,
                     backgroundColor: bg,
                     color: text,
-                    border,
-                    fontSize: '0.7rem',
-                    fontWeight: 800,
+                    fontSize: '0.68rem',
+                    fontWeight: 700,
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
+                    padding: 0,
+                    transition: 'all 0.12s ease',
                     position: 'relative'
                   }}
+                  title={`Question ${idx + 1}${isAnswered ? ' (Answered)' : ''}${isFlagged ? ' (Flagged)' : ''}`}
                 >
                   {idx + 1}
                   {isFlagged && (
-                    <div style={{
+                    <span style={{
                       position: 'absolute',
                       top: '-2px',
                       right: '-2px',

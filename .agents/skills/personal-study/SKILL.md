@@ -11,7 +11,7 @@ description: >-
   large fundamental explanations, scratchpad canvas with palm rejection, Apple Pencil priority,
   faded graph paper grid & pinch/wheel zoom, "Copy for AI" formatted exercise clipboard feature,
   Exercise Zone (Random practice, Sudden Death & 50-Minute Comprehensive Exam),
-  Preparation Score formulation, and self-updating guidelines.
+  Preparation Score formulation, discipline deletion prevention, mobile optimization, and self-updating guidelines.
 ---
 
 # David Study System Skill
@@ -43,21 +43,22 @@ This skill defines the operational specifications, system architecture, database
     - **No (Didn't Know)**: Tactile Crimson Red (`#dc2626` / `#b91c1c`).
 - **No Native Browser Tooltips**: Never use native HTML `title="..."` attributes on buttons or pills. All hover information must be displayed via custom in-app React floating cards to avoid ugly, redundant browser popup balloons.
 - **Strict Negative Constraint**: Avoid generic blues. Use warm, sophisticated leather brown and cream tones matching the book logo.
+- **Discipline Deletion Prohibited**: Delete discipline buttons, trash icons, and deletion modals are strictly prohibited from the student user interface. Disciplines are curated academic curricula managed server-side.
 
 ---
 
 ## 2. Per-Device & Per-Person User Login (Isolated Data Architecture)
 
 - **Device Login & Profile Key**:
-  - Each person logs in with their student name (e.g. `David`, `Sarah`, `Guest`).
-  - The name is persisted locally on that device in `localStorage.getItem('david_study_user')`.
+  - Each person logs in with their student name (e.g. `David`, `Sarah`, `Alex`).
+  - **No Automatic Default to David**: The app must NEVER default to or automatically assign `David`. If `localStorage.getItem('david_study_user')` is not set, `currentUser` is `null`, and `UserLoginModal` is displayed immediately on open, prompting the student to enter their name or select a recent profile on that device.
   - Normalized database key: `username = name.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '')`.
 - **Database Partitioning**:
   - `study_progress`: Stores `username` column, unique composite index on `(username, discipline_id, segment_id)`, and `id = 'prog_' || username || '_' || discipline_id || '_' || segment_id`.
   - `study_user_settings`: Primary key `id = username` and column `username`.
   - Different users on the same device or different devices have 100% separate curriculum completion, quiz attempts, flashcards, sudden death streaks, and 50-minute exam scores.
 - **Header Profile Pill & Switcher**:
-  - Header displays `[ 👤 David ]`. Clicking opens the profile modal with quick-select chips of recent profiles on that device and allows switching students at any time.
+  - Header displays `[ 👤 Username ]` (or `[ 👤 Login ]` if unauthenticated). Clicking opens the profile modal with quick-select chips of recent profiles on that device, a student name input, and a **Sign Out** button to log out and clear the active session.
 
 ---
 
@@ -79,24 +80,27 @@ This skill defines the operational specifications, system architecture, database
 
 ## 4. Curriculum Architecture & Granular Segmentation
 
-- Each slide deck must be divided into **granular, bite-sized segments (~4 to 5 segments per chapter deck)**. For example, Data Analysis Chapters 1–3 are segmented into 8 distinct learning units (LUs):
-  1. `ch1-scales-methods`: Measurement Scales & Multivariate Methods Classification
-  2. `ch1-manipulation-distances`: Data Manipulation Fundamentals & Distance Metrics
-  3. `ch2-pca-geometry`: PCA: Geometric Foundations & Projections (12-Customer Study)
-  4. `ch2-pca-analytical`: PCA: Analytical Formulation, Eigenvalues & Scale Sensitivity
-  5. `ch2-pca-interpretation`: PCA: Loadings, Scores & Retention Diagnostics
-  6. `ch3-fa-theory`: Factor Analysis: Latent Variable Theory & Variance Decomposition
-  7. `ch3-fa-extraction`: Factor Analysis: Indeterminacies & Extraction Methods
-  8. `ch3-fa-rotation-evaluation`: Factor Analysis: Sampling Adequacy, Rotations & FA vs PCA
+Divide university courses (like Multivariate Data Analysis) into **granular 4–5 segment learning units per chapter** to keep focus sharp:
+- **Discipline**: e.g., *Multivariate Data Analysis (MDA)*.
+- **Chapter 1: Foundations & Measurement Scales**:
+  - **L1**: Variable Typologies & Measurement Scales (Nominal, Ordinal, Interval, Ratio).
+  - **L2**: Metric Proximities & Distances (Euclidean, Mahalanobis, Manhattan, Canberra).
+  - **L3**: Non-Metric Associations & Binary Similarities (Jaccard, Dice, Simple Matching).
+  - **L4**: Multivariate Assumptions, Outliers & Missing Data Diagnostics (Mahalanobis $D^2$, Box's $M$).
+- **Chapter 2: Principal Component Analysis (PCA)**:
+  - **L5**: Dimensionality Reduction Geometry & Covariance Eigen-Decomposition ($\mathbf{\Sigma} \mathbf{v} = \lambda \mathbf{v}$).
+  - **L6**: Component Extraction Criteria (Kaiser Criterion, Scree Plot, Variance Explained).
+  - **L7**: Component Scores, Loadings & Geometric Variable Representation.
+  - **L8**: PCA Diagnostic Evaluation & Practical Business Interpretations.
 
 ---
 
-## 5. 3-Phase Mastery Progression per Learning Unit
+## 5. Three-Phase Mastery Progression per Segment
 
-Progress through each segment moves sequentially:
+Each learning unit contains 3 distinct progressive phases:
 
-### Phase 1: Pure Text Guide
-- Comprehensive narrative explanation with formatted KaTeX formulas and practical examples.
+### Phase 1: Comprehensive Text Guide
+- Exhaustive foundational prose with worked examples and formula walkthroughs.
 - Auto-generates clean URL/anchor slugs on all `##` and `###` headers.
 - **Active Question Anchoring & Highlighting**:
   - When jumped to from a live quiz question, the target section is highlighted with an amber callout border and a `"📍 Active Question Reference (Question X)"` badge.
@@ -119,7 +123,7 @@ Progress through each segment moves sequentially:
   - Side-by-side visual comparison displays `"You Selected (Option X)"` in soft red and `"Correct Answer (Option Y)"` in soft green.
 - **"What am I inclined" Helper Feature (Elimination & Pre-decision Tag)**:
   - Appears on the right side of every multiple choice option (A–F) in both the Level Quiz, Exercise Zone, and 50-Min Exam.
-  - Fixed-width button (`width: 62px`, centered) cycling: Faded No -> Active No (Red) -> Maybe (Amber) -> Yes (Green) -> Unclicked.
+  - Fixed-width button cycling: Faded No -> Active No (Red) -> Maybe (Amber) -> Yes (Green) -> Unclicked.
 
 ### Phase 3: Flashcards
 - Fast-recall cards with question on front, answer/insight on back.
@@ -144,7 +148,7 @@ The Exercise Zone provides three specialized training modes:
 - **Full Course Coverage**: Proportional sampling across all 8 learning units (25 substantive questions).
 - **Continuous Paper Format**: All 25 questions are presented in a row on a single paper. Students can answer in any order, scroll through the paper, and change answers before submission.
 - **50-Minute Countdown Clock**: Prominent timer with yellow and red alerts for the final 5 minutes; auto-submits on expiration.
-- **Sticky Jump Navigator**: Horizontal bar (1..25) highlighting answered, unanswered, and flagged questions.
+- **Sticky Jump Navigator**: Horizontal swipeable bar (1..25) highlighting answered, unanswered, and flagged questions without consuming excessive vertical space on mobile devices.
 - **Flag for Review**: Allows bookmarking challenging questions to revisit before final submission.
 - **Comprehensive Grading & Review**:
   - Generates final score percentage, letter grade / tier (Distinction 85%+, Merit 75%+, Pass 50%+).
@@ -211,7 +215,26 @@ Total maximum score: $40 + 20 + 20 + 10 + 10 = 100\%$.
 
 ---
 
-## 9. Database Architecture (Supabase `tracker` Project)
+## 9. Mobile & Touch Screen Optimization
+
+- **2-Tier Mobile Header**:
+  - **Tier 1**: Brand logo & title on the left; Preparation score pill (`Prep: X%`) and User profile pill (`[ 👤 Name ]`) on the right.
+  - **Tier 2**: Full-width unified row with Mode switcher (`[ 📖 Levels ]` flex-1 and `[ 🔥 Exercise Zone ]` flex-1), Quick Notes button, and compact Course dropdown.
+- **Phase Navigation Stepper**:
+  - Segmented control format using `flex: 1` per tab.
+  - Chevrons hidden on mobile (`.hide-on-mobile`).
+  - Responsive labels: `1. Text`, `2. Quiz`, `3. Cards` on mobile viewports so all 3 phases fit cleanly on 1 line without wrapping.
+- **Continuous Exam Header**:
+  - Compact sticky top bar (`top: clamp(58px, 12vw, 88px)`).
+  - Horizontal swipeable jump bar (`.mobile-scroll-x`) prevents 25 buttons from wrapping into 3–4 tall rows, preserving screen space for the exam questions.
+- **Safe Area & Tap Targets**:
+  - Minimum 38–48px touch targets for all multiple-choice cards and action buttons.
+  - FAB positioned with safe area padding: `bottom: max(16px, env(safe-area-inset-bottom, 16px))`.
+  - Global `-webkit-tap-highlight-color: transparent` and `touch-action: manipulation`.
+
+---
+
+## 10. Database Architecture (Supabase `tracker` Project)
 
 - **Target Project**: `https://eurqqiebokwcrrhfbihg.supabase.co` (`tracker`).
 - **Strict Prohibition**: Completely avoid `supabase_novae` / Nova UI. Never touch calorie tracker tables (`food_items`, `weight_logs`).
@@ -226,7 +249,7 @@ Total maximum score: $40 + 20 + 20 + 10 + 10 = 100\%$.
 
 ---
 
-## 10. Web Audio Sound Effects
+## 11. Web Audio Sound Effects
 
 - **Zero-Dependency Procedural Audio**: Uses the Web Audio API (`AudioContext`) to synthesize instant, crisp acoustic feedback without needing external MP3/WAV files.
 - **Audio Palette**:

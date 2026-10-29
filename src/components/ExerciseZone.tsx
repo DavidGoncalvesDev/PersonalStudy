@@ -269,16 +269,25 @@ export const ExerciseZone: React.FC<ExerciseZoneProps> = ({
         alignItems: 'center',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
-        gap: '0.75rem',
-        marginBottom: '1.25rem',
+        gap: '0.5rem',
+        marginBottom: '1rem',
         backgroundColor: '#ffffff',
         borderRadius: '12px',
         border: '1px solid #e7e2d7',
-        padding: '0.75rem 1rem',
+        padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(0.6rem, 2.5vw, 1rem)',
         boxShadow: '0 1px 3px rgba(120, 53, 15, 0.02)'
       }}>
         {/* Mode Switcher */}
-        <div style={{ display: 'flex', gap: '0.4rem', backgroundColor: '#fdfbf7', padding: '0.25rem', borderRadius: '8px', border: '1px solid #e7e2d7' }}>
+        <div style={{
+          display: 'flex',
+          gap: '0.25rem',
+          backgroundColor: '#fdfbf7',
+          padding: '0.2rem',
+          borderRadius: '8px',
+          border: '1px solid #e7e2d7',
+          flex: 1,
+          minWidth: '260px'
+        }}>
           <button
             onClick={() => {
               playClickSound();
@@ -286,22 +295,25 @@ export const ExerciseZone: React.FC<ExerciseZoneProps> = ({
               pickRandomQuestion();
             }}
             style={{
+              flex: 1,
               display: 'flex',
               alignItems: 'center',
-              gap: '0.35rem',
-              padding: '0.45rem 0.85rem',
+              justifyContent: 'center',
+              gap: '0.3rem',
+              padding: '0.4rem 0.5rem',
               borderRadius: '6px',
               border: 'none',
               backgroundColor: zoneMode === 'random' ? '#78350f' : 'transparent',
               color: zoneMode === 'random' ? '#ffffff' : '#78716c',
               fontWeight: 700,
-              fontSize: '0.82rem',
+              fontSize: '0.78rem',
               cursor: 'pointer',
               transition: 'all 0.12s ease'
             }}
           >
-            <Shuffle size={14} />
-            <span>Random Practice</span>
+            <Shuffle size={13} />
+            <span className="desktop-only">Random Practice</span>
+            <span className="mobile-only">Random</span>
           </button>
 
           <button
@@ -311,22 +323,25 @@ export const ExerciseZone: React.FC<ExerciseZoneProps> = ({
               pickRandomQuestion();
             }}
             style={{
+              flex: 1,
               display: 'flex',
               alignItems: 'center',
-              gap: '0.35rem',
-              padding: '0.45rem 0.85rem',
+              justifyContent: 'center',
+              gap: '0.3rem',
+              padding: '0.4rem 0.5rem',
               borderRadius: '6px',
               border: 'none',
               backgroundColor: zoneMode === 'suddendeath' ? '#dc2626' : 'transparent',
               color: zoneMode === 'suddendeath' ? '#ffffff' : '#78716c',
               fontWeight: 700,
-              fontSize: '0.82rem',
+              fontSize: '0.78rem',
               cursor: 'pointer',
               transition: 'all 0.12s ease'
             }}
           >
-            <Flame size={14} />
-            <span>Sudden Death</span>
+            <Flame size={13} />
+            <span className="desktop-only">Sudden Death</span>
+            <span className="mobile-only">Sudden Death</span>
           </button>
 
           <button
@@ -335,22 +350,25 @@ export const ExerciseZone: React.FC<ExerciseZoneProps> = ({
               setZoneMode('exam');
             }}
             style={{
+              flex: 1,
               display: 'flex',
               alignItems: 'center',
-              gap: '0.35rem',
-              padding: '0.45rem 0.85rem',
+              justifyContent: 'center',
+              gap: '0.3rem',
+              padding: '0.4rem 0.5rem',
               borderRadius: '6px',
               border: 'none',
               backgroundColor: zoneMode === 'exam' ? '#b45309' : 'transparent',
               color: zoneMode === 'exam' ? '#ffffff' : '#78716c',
               fontWeight: 700,
-              fontSize: '0.82rem',
+              fontSize: '0.78rem',
               cursor: 'pointer',
               transition: 'all 0.12s ease'
             }}
           >
-            <GraduationCap size={15} />
-            <span>50-Min Exam</span>
+            <GraduationCap size={14} />
+            <span className="desktop-only">50-Min Exam</span>
+            <span className="mobile-only">50m Exam</span>
           </button>
         </div>
 

@@ -93,13 +93,17 @@ export const SegmentSelector: React.FC<SegmentSelectorProps> = ({
       </div>
 
       {/* Horizontal Scrollable Pills */}
-      <div style={{
-        display: 'flex',
-        gap: '0.45rem',
-        overflowX: 'auto',
-        paddingBottom: '0.4rem',
-        scrollbarWidth: 'none'
-      }}>
+      <div
+        className="mobile-scroll-x"
+        style={{
+          display: 'flex',
+          gap: '0.4rem',
+          overflowX: 'auto',
+          paddingBottom: '0.35rem',
+          scrollbarWidth: 'none',
+          WebkitOverflowScrolling: 'touch'
+        }}
+      >
         {segments.map((seg, idx) => {
           const accessible = isAccessible(idx, seg.id);
           const isSelected = currentSegment?.id === seg.id;

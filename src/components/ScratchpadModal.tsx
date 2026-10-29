@@ -491,10 +491,11 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
           <span>Eraser</span>
         </button>
 
-        <div style={{ width: '1px', height: '18px', backgroundColor: '#e7e2d7', margin: '0 0.2rem' }} />
+        <div className="desktop-only" style={{ width: '1px', height: '18px', backgroundColor: '#e7e2d7', margin: '0 0.2rem' }} />
 
-        {/* Stroke Width Selector */}
+        {/* Stroke Width Selector (Desktop) */}
         <button
+          className="desktop-only"
           onClick={() => setLineWidth(2)}
           style={{
             width: '24px',
@@ -512,6 +513,7 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
         </button>
 
         <button
+          className="desktop-only"
           onClick={() => setLineWidth(4)}
           style={{
             width: '24px',
@@ -529,6 +531,7 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
         </button>
 
         <button
+          className="desktop-only"
           onClick={() => setLineWidth(8)}
           style={{
             width: '24px',
@@ -644,7 +647,8 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
           }}
         >
           <Trash2 size={12} />
-          <span>Clear All</span>
+          <span className="desktop-only">Clear All</span>
+          <span className="mobile-only">Clear</span>
         </button>
 
         {/* Close Button */}

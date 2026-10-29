@@ -289,7 +289,7 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
       backgroundColor: '#ffffff',
       borderRadius: '12px',
       border: '1px solid #e7e2d7',
-      padding: '1.75rem 1.5rem',
+      padding: 'clamp(1rem, 3vw, 1.75rem) clamp(0.75rem, 2.5vw, 1.5rem)',
       boxShadow: '0 2px 6px rgba(120, 53, 15, 0.03)'
     }}>
       {/* Top Status & Question Progress */}
@@ -298,14 +298,14 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
         alignItems: 'center',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
-        gap: '0.5rem',
-        marginBottom: '1rem',
-        paddingBottom: '0.85rem',
+        gap: '0.45rem',
+        marginBottom: '0.85rem',
+        paddingBottom: '0.75rem',
         borderBottom: '1px solid #f2ede4'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <span style={{
-            fontSize: '0.85rem',
+            fontSize: '0.82rem',
             fontWeight: 800,
             color: '#78350f',
             textTransform: 'uppercase',
@@ -314,9 +314,9 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
             Question {currentIndex + 1} of {questions.length}
           </span>
           <span style={{
-            padding: '0.2rem 0.55rem',
+            padding: '0.18rem 0.5rem',
             borderRadius: '999px',
-            fontSize: '0.7rem',
+            fontSize: '0.68rem',
             fontWeight: 700,
             backgroundColor: diffStyle.bg,
             color: diffStyle.text,
@@ -327,15 +327,15 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
         </div>
 
         {/* Quick Actions: Review in Text Guide (without quiz reset) + Copy for AI + Scratchpad */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexWrap: 'wrap' }}>
           <button
             onClick={handleCopyQuizExercise}
             title="Copy formatted exercise for AI prompt"
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '0.35rem',
-              padding: '0.35rem 0.65rem',
+              gap: '0.3rem',
+              padding: '0.32rem 0.55rem',
               borderRadius: '6px',
               backgroundColor: copiedQuiz ? '#dcfce7' : '#fffdfa',
               border: copiedQuiz ? '1px solid #86efac' : '1px solid #d6cebf',
@@ -346,8 +346,9 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
               transition: 'all 0.15s ease'
             }}
           >
-            {copiedQuiz ? <Check size={13} strokeWidth={3} /> : <Copy size={13} />}
-            <span>{copiedQuiz ? 'Copied for AI!' : 'Copy for AI'}</span>
+            {copiedQuiz ? <Check size={12} strokeWidth={3} /> : <Copy size={12} />}
+            <span className="desktop-only">{copiedQuiz ? 'Copied for AI!' : 'Copy for AI'}</span>
+            <span className="mobile-only">{copiedQuiz ? 'Copied!' : 'AI'}</span>
           </button>
 
           {onGoToText && (
@@ -359,8 +360,8 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.35rem',
-                padding: '0.35rem 0.65rem',
+                gap: '0.3rem',
+                padding: '0.32rem 0.55rem',
                 borderRadius: '6px',
                 backgroundColor: '#fffdfa',
                 border: '1px solid #d6cebf',
@@ -371,8 +372,9 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
               }}
               aria-label="Reference Text Guide without resetting quiz"
             >
-              <BookOpen size={13} color="#78350f" />
-              <span>Reference Text Guide</span>
+              <BookOpen size={12} color="#78350f" />
+              <span className="desktop-only">Reference Text Guide</span>
+              <span className="mobile-only">Text Guide</span>
             </button>
           )}
 
@@ -385,8 +387,8 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.35rem',
-                padding: '0.35rem 0.65rem',
+                gap: '0.3rem',
+                padding: '0.32rem 0.55rem',
                 borderRadius: '6px',
                 backgroundColor: '#fdfbf7',
                 border: '1px solid #e7e2d7',
@@ -396,8 +398,9 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
                 cursor: 'pointer'
               }}
             >
-              <Edit3 size={13} color="#78350f" />
-              <span>Scratchpad / Calculations</span>
+              <Edit3 size={12} color="#78350f" />
+              <span className="desktop-only">Scratchpad / Calculations</span>
+              <span className="mobile-only">Notes</span>
             </button>
           )}
         </div>
@@ -513,8 +516,8 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
               style={{
                 display: 'flex',
                 alignItems: 'flex-start',
-                gap: '0.75rem',
-                padding: '0.75rem 1rem',
+                gap: '0.65rem',
+                padding: 'clamp(0.6rem, 2vw, 0.75rem) clamp(0.65rem, 2.5vw, 1rem)',
                 borderRadius: '8px',
                 border: `1.5px solid ${border}`,
                 backgroundColor: bg,
@@ -533,7 +536,7 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '0.75rem',
+                fontSize: '0.74rem',
                 fontWeight: 800,
                 backgroundColor: badgeBg,
                 color: badgeColor,
@@ -543,11 +546,11 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
               </span>
               <span style={{
                 flex: 1,
-                fontSize: '0.92rem',
+                fontSize: '0.9rem',
                 fontWeight: isSelected ? 700 : 500,
                 color: textColor,
                 lineHeight: 1.5,
-                paddingRight: '0.5rem',
+                paddingRight: '0.35rem',
                 opacity: !isSelected && !isFailed && currentInclination === 'no' ? 0.65 : 1
               }}>
                 {renderInlineMath(opt.text)}
@@ -563,12 +566,12 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
                 }}
                 style={{
                   flexShrink: 0,
-                  width: '62px',
+                  width: '54px',
                   boxSizing: 'border-box',
                   marginTop: '0.05rem',
-                  padding: '0.22rem 0',
+                  padding: '0.2rem 0',
                   borderRadius: '999px',
-                  fontSize: '0.72rem',
+                  fontSize: '0.68rem',
                   fontWeight: 700,
                   cursor: isFailed ? 'default' : 'pointer',
                   transition: 'all 0.15s ease',

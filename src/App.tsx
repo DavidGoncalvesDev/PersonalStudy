@@ -47,11 +47,13 @@ export const App: React.FC = () => {
   const [highlightedAnchor, setHighlightedAnchor] = useState<string | null>(null);
   const [activeQuizQuestionNumber, setActiveQuizQuestionNumber] = useState<number | null>(null);
 
-  // Per-Device & Per-Person User Login State
+  // Per-Device & Per-Person User Login State (Prompt user first, DO NOT auto-login as David!)
   const [currentUser, setCurrentUser] = useState<string | null>(() => {
-    return localStorage.getItem('david_study_user') || 'David';
+    return localStorage.getItem('david_study_user') || null;
   });
-  const [isUserModalOpen, setIsUserModalOpen] = useState<boolean>(false);
+  const [isUserModalOpen, setIsUserModalOpen] = useState<boolean>(() => {
+    return !localStorage.getItem('david_study_user');
+  });
 
   const normalizeUserKey = (name: string | null) => {
     if (!name) return 'david';
@@ -411,23 +413,6 @@ export const App: React.FC = () => {
     setCurrentDiscipline(newDisc);
   };
 
-  const handleDeleteDiscipline = async (id: string) => {
-    const { error } = await supabase.from('study_disciplines').delete().eq('id', id);
-    if (error) {
-      alert('Error deleting discipline: ' + error.message);
-      return;
-    }
-    const remaining = disciplines.filter(d => d.id !== id);
-    setDisciplines(remaining);
-    if (remaining.length > 0) {
-      setCurrentDiscipline(remaining[0]);
-    } else {
-      setCurrentDiscipline(null);
-      setSegments([]);
-      setCurrentSegment(null);
-    }
-  };
-
   // Exercise Zone Stats Handler
   const handleUpdateExerciseStats = async (correct: boolean, isSuddenDeath: boolean, streak: number) => {
     const uKey = normalizeUserKey(currentUser);
@@ -514,9 +499,16 @@ export const App: React.FC = () => {
 
   const handleLoginUser = (name: string) => {
     const trimmed = name.trim();
+    if (!trimmed) return;
     localStorage.setItem('david_study_user', trimmed);
     setCurrentUser(trimmed);
     setIsUserModalOpen(false);
+  };
+
+  const handleLogoutUser = () => {
+    localStorage.removeItem('david_study_user');
+    setCurrentUser(null);
+    setIsUserModalOpen(true);
   };
 
   // Preparation Score Calculation
@@ -545,7 +537,6 @@ export const App: React.FC = () => {
         currentDiscipline={currentDiscipline}
         onSelectDiscipline={(d) => setCurrentDiscipline(d)}
         onCreateDiscipline={handleCreateDiscipline}
-        onDeleteDiscipline={handleDeleteDiscipline}
         completionPercentage={completionPercentage}
         preparationScore={preparationScore}
         completedCount={completedSegmentsCount}
@@ -561,7 +552,7 @@ export const App: React.FC = () => {
       />
 
       {/* Main Content Area */}
-      <main style={{ flex: 1, maxWidth: '960px', width: '100%', margin: '0 auto', padding: '1.25rem 1rem 4rem' }}>
+      <main style={{ flex: 1, maxWidth: '960px', width: '100%', margin: '0 auto', padding: '0.85rem clamp(0.5rem, 2vw, 1rem) 5.5rem' }}>
         {loading && disciplines.length === 0 ? (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '300px', gap: '0.75rem' }}>
             <Loader2 size={32} color="#78350f" className="animate-spin" />
@@ -615,8 +606,8 @@ export const App: React.FC = () => {
                   backgroundColor: '#ffffff',
                   border: '1px solid #e7e2d7',
                   borderRadius: '10px',
-                  padding: '0.35rem',
-                  gap: '0.4rem',
+                  padding: '0.3rem',
+                  gap: '0.25rem',
                   boxShadow: '0 1px 3px rgba(120, 53, 15, 0.02)'
                 }}>
                   {/* Phase 1 Tab */}
@@ -627,24 +618,25 @@ export const App: React.FC = () => {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      gap: '0.4rem',
-                      padding: '0.55rem 0.75rem',
+                      gap: '0.35rem',
+                      padding: '0.48rem 0.4rem',
                       borderRadius: '8px',
                       border: 'none',
                       backgroundColor: activePhase === 'text' ? '#fef3c7' : 'transparent',
                       color: activePhase === 'text' ? '#78350f' : '#78716c',
                       fontWeight: activePhase === 'text' ? 800 : 600,
-                      fontSize: '0.825rem',
+                      fontSize: '0.8rem',
                       cursor: 'pointer',
                       transition: 'all 0.12s ease'
                     }}
                   >
-                    <BookOpen size={15} />
-                    <span>1. Text Guide</span>
-                    {currentSegmentProgress?.text_completed && <CheckCircle2 size={14} color="#15803d" />}
+                    <BookOpen size={14} />
+                    <span className="desktop-only">1. Text Guide</span>
+                    <span className="mobile-only">1. Text</span>
+                    {currentSegmentProgress?.text_completed && <CheckCircle2 size={13} color="#15803d" />}
                   </button>
 
-                  <ChevronRight size={14} color="#d6cebf" />
+                  <ChevronRight size={14} color="#d6cebf" className="hide-on-mobile" />
 
                   {/* Phase 2 Tab */}
                   <button
@@ -660,8 +652,8 @@ export const App: React.FC = () => {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      gap: '0.4rem',
-                      padding: '0.55rem 0.75rem',
+                      gap: '0.35rem',
+                      padding: '0.48rem 0.4rem',
                       borderRadius: '8px',
                       border: 'none',
                       backgroundColor: activePhase === 'quiz' ? '#fef3c7' : 'transparent',
@@ -671,17 +663,18 @@ export const App: React.FC = () => {
                         ? '#78716c'
                         : '#c7c2b6',
                       fontWeight: activePhase === 'quiz' ? 800 : 600,
-                      fontSize: '0.825rem',
+                      fontSize: '0.8rem',
                       cursor: (currentSegmentProgress?.text_completed || unlockAll) ? 'pointer' : 'not-allowed',
                       transition: 'all 0.12s ease'
                     }}
                   >
-                    <HelpCircle size={15} />
-                    <span>2. Quiz (12 Qs)</span>
-                    {currentSegmentProgress?.quiz_passed && <CheckCircle2 size={14} color="#15803d" />}
+                    <HelpCircle size={14} />
+                    <span className="desktop-only">2. Quiz (12 Qs)</span>
+                    <span className="mobile-only">2. Quiz</span>
+                    {currentSegmentProgress?.quiz_passed && <CheckCircle2 size={13} color="#15803d" />}
                   </button>
 
-                  <ChevronRight size={14} color="#d6cebf" />
+                  <ChevronRight size={14} color="#d6cebf" className="hide-on-mobile" />
 
                   {/* Phase 3 Tab */}
                   <button
@@ -697,8 +690,8 @@ export const App: React.FC = () => {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      gap: '0.4rem',
-                      padding: '0.55rem 0.75rem',
+                      gap: '0.35rem',
+                      padding: '0.48rem 0.4rem',
                       borderRadius: '8px',
                       border: 'none',
                       backgroundColor: activePhase === 'flashcards' ? '#fef3c7' : 'transparent',
@@ -708,14 +701,15 @@ export const App: React.FC = () => {
                         ? '#78716c'
                         : '#c7c2b6',
                       fontWeight: activePhase === 'flashcards' ? 800 : 600,
-                      fontSize: '0.825rem',
+                      fontSize: '0.8rem',
                       cursor: (currentSegmentProgress?.quiz_passed || unlockAll) ? 'pointer' : 'not-allowed',
                       transition: 'all 0.12s ease'
                     }}
                   >
-                    <Layers size={15} />
-                    <span>3. Flashcards</span>
-                    {currentSegmentProgress?.completed && <CheckCircle2 size={14} color="#15803d" />}
+                    <Layers size={14} />
+                    <span className="desktop-only">3. Flashcards</span>
+                    <span className="mobile-only">3. Cards</span>
+                    {currentSegmentProgress?.completed && <CheckCircle2 size={13} color="#15803d" />}
                   </button>
                 </div>
               </div>
@@ -776,15 +770,15 @@ export const App: React.FC = () => {
         }}
         style={{
           position: 'fixed',
-          bottom: '22px',
-          right: '22px',
-          width: '52px',
-          height: '52px',
+          bottom: 'max(16px, env(safe-area-inset-bottom, 16px))',
+          right: '16px',
+          width: '48px',
+          height: '48px',
           borderRadius: '50%',
           backgroundColor: '#78350f',
           color: '#ffffff',
           border: '2px solid #fef3c7',
-          boxShadow: '0 8px 24px rgba(120, 53, 15, 0.3)',
+          boxShadow: '0 6px 20px rgba(120, 53, 15, 0.3)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -794,7 +788,7 @@ export const App: React.FC = () => {
         }}
         aria-label="Open Scratchpad / Notes"
       >
-        <Edit3 size={22} />
+        <Edit3 size={20} />
       </button>
 
       {/* Full-Screen Scratchpad Modal (Apple Pencil & Mouse Canvas) */}
@@ -811,6 +805,7 @@ export const App: React.FC = () => {
         canClose={Boolean(currentUser)}
         onClose={() => setIsUserModalOpen(false)}
         onLogin={handleLoginUser}
+        onLogout={handleLogoutUser}
       />
     </div>
   );

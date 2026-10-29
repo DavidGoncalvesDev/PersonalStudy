@@ -63,4 +63,56 @@ code, pre {
 
 .katex-display {
   margin: 0.5rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25rem 0;
+}
+
+/* Mobile & Touch Responsive Utilities */
+@media (max-width: 640px) {
+  .hide-on-mobile {
+    display: none !important;
+  }
+  .mobile-only {
+    display: inline-flex !important;
+  }
+  .mobile-only-block {
+    display: block !important;
+  }
+  .desktop-only {
+    display: none !important;
+  }
+  .mobile-compact-padding {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+  .mobile-scroll-x {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .mobile-scroll-x::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (min-width: 641px) {
+  .mobile-only {
+    display: none !important;
+  }
+  .mobile-only-block {
+    display: none !important;
+  }
+  .desktop-only {
+    display: inline-flex !important;
+  }
+  .desktop-only-block {
+    display: block !important;
+  }
+}
+
+/* Smooth Touch Interactions */
+button, [role="button"] {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }

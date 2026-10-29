@@ -40,26 +40,26 @@ export const TextSummaryPhase: React.FC<TextSummaryPhaseProps> = ({
       backgroundColor: '#ffffff',
       borderRadius: '12px',
       border: '1px solid #e7e2d7',
-      padding: '2rem 1.75rem',
+      padding: 'clamp(1rem, 3vw, 2rem) clamp(0.75rem, 2.5vw, 1.75rem)',
       boxShadow: '0 1px 3px rgba(120, 53, 15, 0.02)'
     }}>
       {/* Sticky Active Quiz Context Banner: Appears when inspecting a concept from a live question */}
       {activeQuestionNumber && (
         <div style={{
           position: 'sticky',
-          top: '65px',
+          top: 'clamp(58px, 12vw, 88px)',
           zIndex: 35,
-          marginBottom: '1.5rem',
+          marginBottom: '1.25rem',
           backgroundColor: '#fffbeb',
           border: '1.5px solid #fde68a',
           borderRadius: '10px',
-          padding: '0.75rem 1.25rem',
+          padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(0.65rem, 2.5vw, 1.25rem)',
           boxShadow: '0 6px 16px rgba(217, 119, 6, 0.12)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
-          gap: '0.75rem'
+          gap: '0.6rem'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
             <Bookmark size={18} color="#b45309" />
