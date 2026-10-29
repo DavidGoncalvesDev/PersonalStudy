@@ -87,6 +87,16 @@ Progress through each segment moves sequentially:
   - If the user selects an incorrect answer on ANY question, the quiz is **immediately reset back to Question 1 (0/12)**!
   - The user must restart from the beginning until all 12 are answered correctly in a row.
   - An explanation is shown when an error occurs so the user learns the concept before restarting.
+- **"What am I inclined" Helper Feature (Elimination & Pre-decision Tag)**:
+  - Appears on the right side of every multiple choice option (A–F) in both the Level Quiz and the Exercise Zone.
+  - **Purely a Helper Feature**: Clicking the tag does NOT submit or select an answer; it allows the student to reason through choices and cross off options.
+  - **Cycling Sequence**:
+    - *Unclicked (Default)*: Displays a faded-out `No` badge (`opacity: 0.35`).
+    - *First Click*: Highlights as active `No` (solid crimson, marking an eliminated option).
+    - *Second Click*: Highlights as active `Maybe` (warm amber, marking an unsure candidate).
+    - *Third Click*: Highlights as active `Yes` (vibrant green, marking a probable answer).
+    - *Fourth Click*: Cycles back to unclicked faded-out `No`.
+  - Clicking the option card itself submits the answer, whereas clicking the helper tag stops event propagation (`e.stopPropagation()`).
 
 ### Phase 3: Flashcards
 - Fast-recall cards with question on front, answer/insight on back.

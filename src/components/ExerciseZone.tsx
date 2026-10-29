@@ -32,6 +32,8 @@ export const ExerciseZone: React.FC<ExerciseZoneProps> = ({
   const [failedOption, setFailedOption] = useState<string | null>(null);
   const [gameStreak, setGameStreak] = useState<number>(currentStreak);
   const [localBestStreak, setLocalBestStreak] = useState<number>(bestStreak);
+  // "What am I inclined" helper state (No -> Maybe -> Yes -> unselected)
+  const [inclinations, setInclinations] = useState<Record<string, 'no' | 'maybe' | 'yes'>>({});
 
   useEffect(() => {
     setLocalBestStreak(bestStreak);
@@ -71,11 +73,73 @@ export const ExerciseZone: React.FC<ExerciseZoneProps> = ({
     }
   };
 
+  const handleCycleInclination = (optId: string) => {
+    playClickSound();
+    setInclinations(prev => {
+      const current = prev[optId];
+      if (!current) {
+        return { ...prev, [optId]: 'no' };
+      }
+      if (current === 'no') {
+        return { ...prev, [optId]: 'maybe' };
+      }
+      if (current === 'maybe') {
+        return { ...prev, [optId]: 'yes' };
+      }
+      const next = { ...prev };
+      delete next[optId];
+      return next;
+    });
+  };
+
+  const getInclinationStyle = (inc?: 'no' | 'maybe' | 'yes') => {
+    switch (inc) {
+      case 'no':
+        return {
+          label: 'No',
+          opacity: 1,
+          bg: '#fef2f2',
+          color: '#dc2626',
+          border: '1.5px solid #fca5a5',
+          boxShadow: '0 1px 3px rgba(220, 38, 38, 0.12)'
+        };
+      case 'maybe':
+        return {
+          label: 'Maybe',
+          opacity: 1,
+          bg: '#fffbeb',
+          color: '#b45309',
+          border: '1.5px solid #fde68a',
+          boxShadow: '0 1px 3px rgba(217, 119, 6, 0.12)'
+        };
+      case 'yes':
+        return {
+          label: 'Yes',
+          opacity: 1,
+          bg: '#f0fdf4',
+          color: '#15803d',
+          border: '1.5px solid #86efac',
+          boxShadow: '0 1px 3px rgba(22, 163, 74, 0.12)'
+        };
+      default:
+        // Faded out "No" initially when unclicked
+        return {
+          label: 'No',
+          opacity: 0.35,
+          bg: '#f5efe6',
+          color: '#78716c',
+          border: '1px solid #d6cebf',
+          boxShadow: 'none'
+        };
+    }
+  };
+
   const pickRandomQuestion = (pool = questionsPool) => {
     if (pool.length === 0) return;
     const randomIdx = Math.floor(Math.random() * pool.length);
     setCurrentQuestion(pool[randomIdx]);
     setSelectedOption(null);
+    setInclinations({});
     setIsFailed(false);
     setFailedOption(null);
   };
@@ -339,6 +403,8 @@ export const ExerciseZone: React.FC<ExerciseZoneProps> = ({
             {currentQuestion.options.map((opt) => {
               const isSelected = selectedOption === opt.id;
               const isCorrectChoice = opt.id === currentQuestion.correct_option;
+              const currentInclination = inclinations[opt.id];
+              const incStyle = getInclinationStyle(currentInclination);
 
               let bg = '#ffffff';
               let border = '#e7e2d7';
@@ -371,10 +437,17 @@ export const ExerciseZone: React.FC<ExerciseZoneProps> = ({
               }
 
               return (
-                <button
+                <div
                   key={opt.id}
+                  role="button"
+                  tabIndex={0}
                   onClick={() => handleSelectOption(opt.id)}
-                  disabled={isFailed}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handleSelectOption(opt.id);
+                    }
+                  }}
                   style={{
                     display: 'flex',
                     alignItems: 'flex-start',
@@ -386,7 +459,8 @@ export const ExerciseZone: React.FC<ExerciseZoneProps> = ({
                     textAlign: 'left',
                     cursor: isFailed ? 'default' : 'pointer',
                     transition: 'all 0.12s ease',
-                    width: '100%'
+                    width: '100%',
+                    boxSizing: 'border-box'
                   }}
                 >
                   <span style={{
@@ -410,11 +484,45 @@ export const ExerciseZone: React.FC<ExerciseZoneProps> = ({
                     fontSize: '0.92rem',
                     fontWeight: isSelected ? 700 : 500,
                     color: textColor,
-                    lineHeight: 1.5
+                    lineHeight: 1.5,
+                    paddingRight: '0.5rem',
+                    opacity: !isSelected && !isFailed && currentInclination === 'no' ? 0.65 : 1
                   }}>
                     {renderInlineMath(opt.text)}
                   </span>
-                </button>
+
+                  {/* Inclination Helper Pill (No / Maybe / Yes) - not a submission */}
+                  <button
+                    type="button"
+                    disabled={isFailed}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleCycleInclination(opt.id);
+                    }}
+                    style={{
+                      flexShrink: 0,
+                      marginTop: '0.05rem',
+                      padding: '0.22rem 0.65rem',
+                      borderRadius: '999px',
+                      fontSize: '0.72rem',
+                      fontWeight: 700,
+                      cursor: isFailed ? 'default' : 'pointer',
+                      transition: 'all 0.15s ease',
+                      border: incStyle.border,
+                      backgroundColor: incStyle.bg,
+                      color: incStyle.color,
+                      opacity: incStyle.opacity,
+                      boxShadow: incStyle.boxShadow,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      userSelect: 'none'
+                    }}
+                    aria-label="Inclination helper: click to cycle No, Maybe, Yes"
+                  >
+                    {incStyle.label}
+                  </button>
+                </div>
               );
             })}
           </div>
