@@ -51,5 +51,13 @@ export interface SegmentProgress {
   quiz_attempts: number;
   flashcards_passed: boolean;
   completed: boolean;
+  manually_unlocked?: boolean;
+  updated_at?: string;
+}
+
+export interface UserSettings {
+  id: string;
+  unlock_all: boolean;
+  active_discipline_id?: string;
   updated_at?: string;
 }

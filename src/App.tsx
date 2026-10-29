@@ -20,10 +20,81 @@ export const App: React.FC = () => {
   const [activePhase, setActivePhase] = useState<'text' | 'quiz' | 'flashcards'>('text');
   const [loading, setLoading] = useState<boolean>(true);
 
-  // 1. Load all disciplines on mount
+  // 1. Load all disciplines and user settings on mount
   useEffect(() => {
     fetchDisciplines();
+    fetchUserSettings();
   }, []);
+
+  const fetchUserSettings = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('study_user_settings')
+        .select('*')
+        .eq('id', 'default')
+        .maybeSingle();
+
+      if (data && typeof data.unlock_all === 'boolean') {
+        setUnlockAll(data.unlock_all);
+      }
+    } catch (err) {
+      console.error('Error fetching user settings:', err);
+    }
+  };
+
+  const handleToggleUnlockAll = async () => {
+    const nextVal = !unlockAll;
+    setUnlockAll(nextVal);
+    try {
+      await supabase
+        .from('study_user_settings')
+        .upsert({
+          id: 'default',
+          unlock_all: nextVal,
+          updated_at: new Date().toISOString()
+        });
+    } catch (err) {
+      console.error('Failed to persist unlock_all setting to Supabase:', err);
+    }
+  };
+
+  const handleDoubleClickSegment = async (seg: Segment) => {
+    if (!currentDiscipline) return;
+    const currentProg = progressMap[seg.id] || {
+      id: `prog_${currentDiscipline.id}_${seg.id}`,
+      discipline_id: currentDiscipline.id,
+      segment_id: seg.id,
+      text_completed: false,
+      quiz_passed: false,
+      quiz_score: 0,
+      quiz_attempts: 0,
+      flashcards_passed: false,
+      completed: false,
+      manually_unlocked: false
+    };
+
+    const nextManualState = !currentProg.manually_unlocked;
+    const updatedProg: SegmentProgress = {
+      ...currentProg,
+      manually_unlocked: nextManualState,
+      updated_at: new Date().toISOString()
+    };
+
+    setProgressMap(prev => ({
+      ...prev,
+      [seg.id]: updatedProg
+    }));
+
+    setCurrentSegment(seg);
+
+    try {
+      await supabase
+        .from('study_progress')
+        .upsert(updatedProg);
+    } catch (err) {
+      console.error('Failed to update manual unlock:', err);
+    }
+  };
 
   const fetchDisciplines = async () => {
     setLoading(true);
@@ -301,9 +372,10 @@ export const App: React.FC = () => {
               segments={segments}
               currentSegment={currentSegment}
               onSelectSegment={(seg) => setCurrentSegment(seg)}
+              onDoubleClickSegment={handleDoubleClickSegment}
               progressMap={progressMap}
               unlockAll={unlockAll}
-              onToggleUnlockAll={() => setUnlockAll(!unlockAll)}
+              onToggleUnlockAll={handleToggleUnlockAll}
             />
 
             {/* Current Segment Workflow Phase Stepper */}
