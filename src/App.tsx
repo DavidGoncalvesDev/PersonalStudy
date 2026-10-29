@@ -6,7 +6,10 @@ import { SegmentSelector } from './components/SegmentSelector';
 import { TextSummaryPhase } from './components/TextSummaryPhase';
 import { QuizPhase } from './components/QuizPhase';
 import { FlashcardsPhase } from './components/FlashcardsPhase';
-import { BookOpen, HelpCircle, Layers, CheckCircle2, ChevronRight, Loader2 } from 'lucide-react';
+import { ExerciseZone } from './components/ExerciseZone';
+import { ScratchpadModal } from './components/ScratchpadModal';
+import { calculatePreparationScore } from './utils/scoreCalculator';
+import { BookOpen, HelpCircle, Layers, CheckCircle2, ChevronRight, Loader2, Edit3 } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [disciplines, setDisciplines] = useState<Discipline[]>([]);
@@ -20,7 +23,21 @@ export const App: React.FC = () => {
   const [activePhase, setActivePhase] = useState<'text' | 'quiz' | 'flashcards'>('text');
   const [loading, setLoading] = useState<boolean>(true);
 
-  // 1. Load all disciplines and user settings on mount
+  // Top navigation mode: Curriculum vs Exercise Zone
+  const [activeTab, setActiveTab] = useState<'curriculum' | 'exercise_zone'>('curriculum');
+
+  // Stats & Gamification
+  const [bestStreak, setBestStreak] = useState<number>(0);
+  const [currentStreak, setCurrentStreak] = useState<number>(0);
+  const [randomExercisesCount, setRandomExercisesCount] = useState<number>(0);
+  const [totalCorrect, setTotalCorrect] = useState<number>(0);
+  const [totalWrong, setTotalWrong] = useState<number>(0);
+
+  // Global Scratchpad Modal
+  const [isScratchpadOpen, setIsScratchpadOpen] = useState<boolean>(false);
+  const [scratchpadQuestion, setScratchpadQuestion] = useState<Question | null>(null);
+
+  // 1. Load disciplines & user settings on mount
   useEffect(() => {
     fetchDisciplines();
     fetchUserSettings();
@@ -34,11 +51,182 @@ export const App: React.FC = () => {
         .eq('id', 'default')
         .maybeSingle();
 
-      if (data && typeof data.unlock_all === 'boolean') {
-        setUnlockAll(data.unlock_all);
+      if (data) {
+        if (typeof data.unlock_all === 'boolean') {
+          setUnlockAll(data.unlock_all);
+        }
+        if (typeof data.sudden_death_best_streak === 'number') {
+          setBestStreak(data.sudden_death_best_streak);
+        }
+        if (typeof data.sudden_death_current_streak === 'number') {
+          setCurrentStreak(data.sudden_death_current_streak);
+        }
+        if (typeof data.random_exercises_completed === 'number') {
+          setRandomExercisesCount(data.random_exercises_completed);
+        }
+        if (typeof data.total_correct_answers === 'number') {
+          setTotalCorrect(data.total_correct_answers);
+        }
+        if (typeof data.total_wrong_answers === 'number') {
+          setTotalWrong(data.total_wrong_answers);
+        }
       }
     } catch (err) {
       console.error('Error fetching user settings:', err);
+    }
+  };
+
+  const fetchDisciplines = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('study_disciplines')
+        .select('*')
+        .order('created_at', { ascending: true });
+
+      if (error) {
+        console.error('Error fetching disciplines:', error);
+        return;
+      }
+
+      if (data && data.length > 0) {
+        setDisciplines(data);
+        const defaultDisc = data.find(d => d.id === 'data-analysis') || data[0];
+        setCurrentDiscipline(defaultDisc);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 2. Load segments and progress when currentDiscipline changes
+  useEffect(() => {
+    if (!currentDiscipline) return;
+    fetchSegmentsAndProgress(currentDiscipline.id);
+  }, [currentDiscipline]);
+
+  const fetchSegmentsAndProgress = async (disciplineId: string) => {
+    setLoading(true);
+    try {
+      const { data: segData, error: segError } = await supabase
+        .from('study_segments')
+        .select('*')
+        .eq('discipline_id', disciplineId)
+        .order('order_index', { ascending: true });
+
+      if (segError) {
+        console.error('Error fetching segments:', segError);
+        return;
+      }
+
+      setSegments(segData || []);
+      if (segData && segData.length > 0) {
+        setCurrentSegment(segData[0]);
+      } else {
+        setCurrentSegment(null);
+      }
+
+      const { data: progData, error: progError } = await supabase
+        .from('study_progress')
+        .select('*')
+        .eq('discipline_id', disciplineId);
+
+      if (progError) {
+        console.error('Error fetching progress:', progError);
+      } else if (progData) {
+        const map: Record<string, SegmentProgress> = {};
+        progData.forEach(p => {
+          map[p.segment_id] = p;
+        });
+        setProgressMap(map);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 3. Load segment quiz questions (pool_type = 'quiz') and flashcards
+  useEffect(() => {
+    if (!currentSegment) return;
+    fetchSegmentDetails(currentSegment.id);
+
+    const prog = progressMap[currentSegment.id];
+    if (prog?.completed) {
+      setActivePhase('text');
+    } else if (prog?.quiz_passed) {
+      setActivePhase('flashcards');
+    } else if (prog?.text_completed) {
+      setActivePhase('quiz');
+    } else {
+      setActivePhase('text');
+    }
+  }, [currentSegment]);
+
+  const fetchSegmentDetails = async (segmentId: string) => {
+    try {
+      const { data: qData, error: qError } = await supabase
+        .from('study_questions')
+        .select('*')
+        .eq('segment_id', segmentId)
+        .eq('pool_type', 'quiz')
+        .order('order_index', { ascending: true });
+
+      if (qError) {
+        console.error('Error fetching quiz questions:', qError);
+      } else {
+        setQuestions(qData || []);
+      }
+
+      const { data: fcData, error: fcError } = await supabase
+        .from('study_flashcards')
+        .select('*')
+        .eq('segment_id', segmentId)
+        .order('order_index', { ascending: true });
+
+      if (fcError) {
+        console.error('Error fetching flashcards:', fcError);
+      } else {
+        setFlashcards(fcData || []);
+      }
+    } catch (err) {
+      console.error('Error loading segment details:', err);
+    }
+  };
+
+  // Progress Update in Supabase
+  const updateProgress = async (updates: Partial<SegmentProgress>) => {
+    if (!currentDiscipline || !currentSegment) return;
+
+    const progressId = `prog_${currentDiscipline.id}_${currentSegment.id}`;
+    const existing = progressMap[currentSegment.id] || {
+      id: progressId,
+      discipline_id: currentDiscipline.id,
+      segment_id: currentSegment.id,
+      text_completed: false,
+      quiz_passed: false,
+      quiz_score: 0,
+      quiz_attempts: 0,
+      flashcards_passed: false,
+      completed: false
+    };
+
+    const newProgress: SegmentProgress = {
+      ...existing,
+      ...updates,
+      updated_at: new Date().toISOString()
+    };
+
+    setProgressMap(prev => ({
+      ...prev,
+      [currentSegment.id]: newProgress
+    }));
+
+    try {
+      await supabase
+        .from('study_progress')
+        .upsert(newProgress);
+    } catch (err) {
+      console.error('Failed to persist progress to Supabase:', err);
     }
   };
 
@@ -96,172 +284,11 @@ export const App: React.FC = () => {
     }
   };
 
-  const fetchDisciplines = async () => {
-    setLoading(true);
-    try {
-      const { data, error } = await supabase
-        .from('study_disciplines')
-        .select('*')
-        .order('created_at', { ascending: true });
-
-      if (error) {
-        console.error('Error fetching disciplines:', error);
-        return;
-      }
-
-      if (data && data.length > 0) {
-        setDisciplines(data);
-        // Default to data-analysis or first
-        const defaultDisc = data.find(d => d.id === 'data-analysis') || data[0];
-        setCurrentDiscipline(defaultDisc);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 2. When currentDiscipline changes, load its segments and progress
-  useEffect(() => {
-    if (!currentDiscipline) return;
-    fetchSegmentsAndProgress(currentDiscipline.id);
-  }, [currentDiscipline]);
-
-  const fetchSegmentsAndProgress = async (disciplineId: string) => {
-    setLoading(true);
-    try {
-      // Fetch segments
-      const { data: segData, error: segError } = await supabase
-        .from('study_segments')
-        .select('*')
-        .eq('discipline_id', disciplineId)
-        .order('order_index', { ascending: true });
-
-      if (segError) {
-        console.error('Error fetching segments:', segError);
-        return;
-      }
-
-      setSegments(segData || []);
-      if (segData && segData.length > 0) {
-        setCurrentSegment(segData[0]);
-      } else {
-        setCurrentSegment(null);
-      }
-
-      // Fetch progress
-      const { data: progData, error: progError } = await supabase
-        .from('study_progress')
-        .select('*')
-        .eq('discipline_id', disciplineId);
-
-      if (progError) {
-        console.error('Error fetching progress:', progError);
-      } else if (progData) {
-        const map: Record<string, SegmentProgress> = {};
-        progData.forEach(p => {
-          map[p.segment_id] = p;
-        });
-        setProgressMap(map);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 3. When currentSegment changes, load its questions and flashcards
-  useEffect(() => {
-    if (!currentSegment) return;
-    fetchSegmentDetails(currentSegment.id);
-
-    // Default active phase based on progress
-    const prog = progressMap[currentSegment.id];
-    if (prog?.completed) {
-      setActivePhase('text'); // Review mode
-    } else if (prog?.quiz_passed) {
-      setActivePhase('flashcards');
-    } else if (prog?.text_completed) {
-      setActivePhase('quiz');
-    } else {
-      setActivePhase('text');
-    }
-  }, [currentSegment]);
-
-  const fetchSegmentDetails = async (segmentId: string) => {
-    try {
-      // Fetch 12 questions
-      const { data: qData, error: qError } = await supabase
-        .from('study_questions')
-        .select('*')
-        .eq('segment_id', segmentId)
-        .order('order_index', { ascending: true });
-
-      if (qError) {
-        console.error('Error fetching questions:', qError);
-      } else {
-        setQuestions(qData || []);
-      }
-
-      // Fetch flashcards
-      const { data: fcData, error: fcError } = await supabase
-        .from('study_flashcards')
-        .select('*')
-        .eq('segment_id', segmentId)
-        .order('order_index', { ascending: true });
-
-      if (fcError) {
-        console.error('Error fetching flashcards:', fcError);
-      } else {
-        setFlashcards(fcData || []);
-      }
-    } catch (err) {
-      console.error('Error loading segment details:', err);
-    }
-  };
-
-  // Helper to update progress in Supabase and local state
-  const updateProgress = async (updates: Partial<SegmentProgress>) => {
-    if (!currentDiscipline || !currentSegment) return;
-
-    const progressId = `prog_${currentDiscipline.id}_${currentSegment.id}`;
-    const existing = progressMap[currentSegment.id] || {
-      id: progressId,
-      discipline_id: currentDiscipline.id,
-      segment_id: currentSegment.id,
-      text_completed: false,
-      quiz_passed: false,
-      quiz_score: 0,
-      quiz_attempts: 0,
-      flashcards_passed: false,
-      completed: false
-    };
-
-    const newProgress: SegmentProgress = {
-      ...existing,
-      ...updates,
-      updated_at: new Date().toISOString()
-    };
-
-    // Optimistic UI update
-    setProgressMap(prev => ({
-      ...prev,
-      [currentSegment.id]: newProgress
-    }));
-
-    // Persist to Supabase
-    try {
-      await supabase
-        .from('study_progress')
-        .upsert(newProgress);
-    } catch (err) {
-      console.error('Failed to persist progress to Supabase:', err);
-    }
-  };
-
   // Phase Handlers
   const handleProceedToQuiz = async () => {
     await updateProgress({ text_completed: true });
     setActivePhase('quiz');
-    window.scrollTo({ top: 100, behavior: 'smooth' });
+    window.scrollTo({ top: 80, behavior: 'smooth' });
   };
 
   const handlePassQuiz = async (score: number) => {
@@ -275,7 +302,7 @@ export const App: React.FC = () => {
 
   const handleProceedToFlashcards = () => {
     setActivePhase('flashcards');
-    window.scrollTo({ top: 100, behavior: 'smooth' });
+    window.scrollTo({ top: 80, behavior: 'smooth' });
   };
 
   const handleCompleteSegment = async () => {
@@ -326,7 +353,56 @@ export const App: React.FC = () => {
     }
   };
 
-  // Calculate overall discipline mastery percentage
+  // Exercise Zone Stats Handler
+  const handleUpdateExerciseStats = async (correct: boolean, isSuddenDeath: boolean, streak: number) => {
+    const nextTotalCorrect = correct ? totalCorrect + 1 : totalCorrect;
+    const nextTotalWrong = !correct ? totalWrong + 1 : totalWrong;
+    const nextRandomCount = !isSuddenDeath && correct ? randomExercisesCount + 1 : randomExercisesCount;
+
+    let nextBestStreak = bestStreak;
+    if (isSuddenDeath && streak > bestStreak) {
+      nextBestStreak = streak;
+      setBestStreak(streak);
+    }
+    if (isSuddenDeath) {
+      setCurrentStreak(streak);
+    }
+
+    setTotalCorrect(nextTotalCorrect);
+    setTotalWrong(nextTotalWrong);
+    setRandomExercisesCount(nextRandomCount);
+
+    const nextPrepScore = calculatePreparationScore({
+      totalSegments: segments.length,
+      progressMap,
+      randomExercisesCount: nextRandomCount,
+      bestStreak: nextBestStreak
+    });
+
+    try {
+      await supabase.from('study_user_settings').upsert({
+        id: 'default',
+        preparation_score: nextPrepScore,
+        sudden_death_best_streak: nextBestStreak,
+        sudden_death_current_streak: streak,
+        random_exercises_completed: nextRandomCount,
+        total_correct_answers: nextTotalCorrect,
+        total_wrong_answers: nextTotalWrong,
+        updated_at: new Date().toISOString()
+      });
+    } catch (err) {
+      console.error('Failed to sync exercise stats:', err);
+    }
+  };
+
+  // Preparation Score Calculation
+  const preparationScore = calculatePreparationScore({
+    totalSegments: segments.length,
+    progressMap,
+    randomExercisesCount,
+    bestStreak
+  });
+
   const completedSegmentsCount = segments.filter(s => progressMap[s.id]?.completed).length;
   const completionPercentage = segments.length > 0
     ? Math.round((completedSegmentsCount / segments.length) * 100)
@@ -346,12 +422,19 @@ export const App: React.FC = () => {
         onCreateDiscipline={handleCreateDiscipline}
         onDeleteDiscipline={handleDeleteDiscipline}
         completionPercentage={completionPercentage}
+        preparationScore={preparationScore}
         completedCount={completedSegmentsCount}
         totalSegments={segments.length}
+        activeTab={activeTab}
+        onTabChange={(tab) => setActiveTab(tab)}
+        onOpenScratchpad={() => {
+          setScratchpadQuestion(null);
+          setIsScratchpadOpen(true);
+        }}
       />
 
       {/* Main Content Area */}
-      <main style={{ flex: 1, maxWidth: '960px', width: '100%', margin: '0 auto', padding: '1.25rem 1rem 3rem' }}>
+      <main style={{ flex: 1, maxWidth: '960px', width: '100%', margin: '0 auto', padding: '1.25rem 1rem 4rem' }}>
         {loading && disciplines.length === 0 ? (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '300px', gap: '0.75rem' }}>
             <Loader2 size={32} color="#78350f" className="animate-spin" />
@@ -365,7 +448,21 @@ export const App: React.FC = () => {
               Create your study discipline or load content to begin.
             </p>
           </div>
+        ) : activeTab === 'exercise_zone' ? (
+          /* Exercise Zone Mode */
+          <ExerciseZone
+            segments={segments}
+            progressMap={progressMap}
+            bestStreak={bestStreak}
+            currentStreak={currentStreak}
+            onUpdateStats={handleUpdateExerciseStats}
+            onOpenScratchpad={(q) => {
+              setScratchpadQuestion(q);
+              setIsScratchpadOpen(true);
+            }}
+          />
         ) : (
+          /* Curriculum / Levels Mode */
           <>
             {/* Level / Segment Selector */}
             <SegmentSelector
@@ -487,15 +584,15 @@ export const App: React.FC = () => {
                   >
                     <Layers size={15} />
                     <span>3. Flashcards</span>
-                    {currentSegmentProgress?.flashcards_passed && <CheckCircle2 size={14} color="#15803d" />}
+                    {currentSegmentProgress?.completed && <CheckCircle2 size={14} color="#15803d" />}
                   </button>
                 </div>
               </div>
             )}
 
-            {/* Render Active Phase */}
+            {/* Active Workflow Component */}
             {currentSegment && (
-              <div>
+              <>
                 {activePhase === 'text' && (
                   <TextSummaryPhase
                     segment={currentSegment}
@@ -511,6 +608,10 @@ export const App: React.FC = () => {
                     isAlreadyPassed={!!currentSegmentProgress?.quiz_passed}
                     onPassQuiz={handlePassQuiz}
                     onProceedToFlashcards={handleProceedToFlashcards}
+                    onOpenScratchpad={() => {
+                      setScratchpadQuestion(questions[0] || null);
+                      setIsScratchpadOpen(true);
+                    }}
                   />
                 )}
 
@@ -518,17 +619,53 @@ export const App: React.FC = () => {
                   <FlashcardsPhase
                     flashcards={flashcards}
                     segmentTitle={currentSegment.title}
-                    isAlreadyCompleted={!!currentSegmentProgress?.completed}
+                    isAlreadyCompleted={!!currentSegmentProgress?.flashcards_passed}
                     onCompleteSegment={handleCompleteSegment}
                     onGoToNextSegment={handleGoToNextSegment}
                     hasNextSegment={hasNextSegment}
                   />
                 )}
-              </div>
+              </>
             )}
           </>
         )}
       </main>
+
+      {/* Floating Action Button (FAB) for Scratchpad - Accessible from ANY screen */}
+      <button
+        onClick={() => {
+          setScratchpadQuestion(null);
+          setIsScratchpadOpen(true);
+        }}
+        style={{
+          position: 'fixed',
+          bottom: '22px',
+          right: '22px',
+          width: '52px',
+          height: '52px',
+          borderRadius: '50%',
+          backgroundColor: '#78350f',
+          color: '#ffffff',
+          border: '2px solid #fef3c7',
+          boxShadow: '0 8px 24px rgba(120, 53, 15, 0.3)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          zIndex: 90,
+          transition: 'transform 0.15s ease'
+        }}
+        aria-label="Open Scratchpad / Notes"
+      >
+        <Edit3 size={22} />
+      </button>
+
+      {/* Full-Screen Scratchpad Modal (Apple Pencil & Mouse Canvas) */}
+      <ScratchpadModal
+        isOpen={isScratchpadOpen}
+        onClose={() => setIsScratchpadOpen(false)}
+        activeQuestion={scratchpadQuestion}
+      />
     </div>
   );
 };

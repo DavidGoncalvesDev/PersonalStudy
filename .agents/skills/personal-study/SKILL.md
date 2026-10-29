@@ -6,17 +6,19 @@ description: >-
   or course materials, asks to update or adapt the study app, or modifies disciplines,
   segments, quizzes, and flashcards. Defines the architecture, Supabase schema,
   granular 4-5 segment-per-chapter division, clear brown theme, 3-phase mastery
-  progression (rich text -> 12-question 6-choice quiz -> flashcards), and self-updating guidelines.
+  progression (rich text -> 1-by-1 quiz with reset -> flashcards), scratchpad canvas,
+  Exercise Zone (Random practice & Sudden Death with 18 extra questions/LU),
+  Preparation Score formulation, and self-updating guidelines.
 ---
 
 # Personal Study System Skill
 
-This skill defines the specifications, system architecture, database design, content pedagogy, granular segmentation rules, visual theme, and progression logic for the **Personal Study** platform.
+This skill defines the operational specifications, system architecture, database design, content pedagogy, granular segmentation rules, visual theme, and progression logic for the **Personal Study** platform.
 
 > [!IMPORTANT]
 > **CRITICAL AGENT ADAPTATION DIRECTIVE**:
 > Whenever the user refers to `personal study`, uploads course files (slides, exercises, syllabi), or corrects any aspect of the system in conversation:
-> 1. The agent **MUST immediately update this SKILL.md file** to track and persist the user's instructions and refinements.
+> 1. The agent **MUST immediately update this SKILL.md file** across both workspace and global locations to track and persist the user's instructions and refinements.
 > 2. The agent **MUST adapt the codebase and database** to reflect the new requirements or content immediately.
 > 3. Any future agent loading this skill must adhere to all rules documented here.
 
@@ -26,114 +28,153 @@ This skill defines the specifications, system architecture, database design, con
 
 - **Logo**: The custom Book Icon PNG (warm brown leather cover, yellow title badge, cream pages). Located at `/public/logo.png`.
 - **Color Palette (Clear Warm Brown & Amber)**:
-  - **Primary Brand / Headers / Active Accents**: Deep Leather Brown (`#78350f` / `#6d3b14` / `#582f10`).
+  - **Primary Brand / Headers / Active Accents**: Deep Leather Brown (`#78350f` / `#6d3b14` / `#451a03`).
   - **Warm Accent / Badges**: Warm Amber & Gold (`#d97706` / `#b45309` / `#fef3c7`).
   - **Backgrounds**: Soft Warm Cream / Sand (`#fdfbf7`, `#f8f6f0`, `#fffbeb`).
   - **Borders & Dividers**: Warm Tan / Stone (`#e7e2d7`, `#d6cebf`).
-  - **Card Surfaces**: Pure White (`#ffffff`) or Soft Ivory (`#fffefc`) with subtle warm shadows.
+  - **Card Surfaces**: Pure White (`#ffffff`) with subtle warm shadows.
   - **Flashcard Buttons**:
     - **Yes (Knew It)**: Tactile Vibrant Green (`#16a34a` / `#15803d`).
     - **No (Didn't Know)**: Tactile Crimson Red (`#dc2626` / `#b91c1c`).
-  - **Strict Negative Constraint**: Avoid cold generic blues. Use warm, sophisticated leather brown and cream tones matching the logo.
+- **No Native Browser Tooltips**: Never use native HTML `title="..."` attributes on buttons or pills. All hover information must be displayed via custom in-app React floating cards to avoid ugly, redundant browser popup balloons.
+- **Strict Negative Constraint**: Avoid generic blues. Use warm, sophisticated leather brown and cream tones matching the book logo.
 
 ---
 
-## 2. Minimalist, Screen-by-Screen UI Design
+## 2. Text Formatting, Math Rendering & Pedagogy
 
-- **Eliminate Clutter**: Avoid overwhelming walls of instruction banners, competing cards, or cluttered text.
-- **Mobile-First Focused Flow**: On phone and desktop alike, the user should be in **one focused mode at a time**:
-  - Compact header with Book logo, discipline selector, and minimal progress badge.
-  - Clean Level navigator (unobtrusive dropdown or compact horizontal pill list).
-  - Clean view transitions:
-    - **Reading View**: Distraction-free, comfortable line width, readable typography, elegant formula callouts.
-    - **Quiz View**: 12 substantive questions with clean 6-choice cards, no visual noise.
-    - **Flashcards View**: Single-card 3D flip focus with prominent Yes/No buttons.
-
----
-
-## 3. Granular Segmentation Architecture (~4-5 Segments per Slide Deck)
-
-> [!CAUTION]
-> **Never lump an entire presentation or chapter into 1 monolithic segment!**
-
-- Each slide deck contains multiple distinct sub-topics (explicitly outlined in the presentation's internal program/index).
-- The curriculum must be broken down into **granular, bite-sized segments (~4 to 5 segments per chapter/deck)**:
-  - Each granular segment represents one cohesive, focused conceptual milestone.
-  - Each segment has its own dedicated:
-    1. **Full Narrative Text Summary** (rich prose, deep explanations, no bare formula dumps).
-    2. **Mastery Quiz** (exactly 12 questions: 4 easy, 4 intermediate, 4 hard; 6 choices each).
-    3. **Flashcard Deck** (key terms, formulas, rules).
-- This structure ensures clear, manageable milestones where the user masters one concept completely before advancing.
+1. **Full Narrative Prose (No Fragmented Bullet Outlines)**:
+   - Deliver rich, readable paragraphs that build intuition from the ground up.
+   - Subtitles (e.g. *Nominal Scale*, *Ordinal Scale*, *Varimax Rotation*) must always be formatted as real section headings (`###`), NEVER as bullet points (`- ...`).
+2. **Zero Raw Asterisks (`*`) in Prose**:
+   - The user does not want asterisks or formatting tokens visible in text. All bold terms and headings are formatted cleanly via HTML/CSS without exposing literal `*` symbols.
+3. **No Raw Dividers**:
+   - Do not use raw markdown dividers (`---`). Use subtle styling or spacing dividers.
+4. **Proper KaTeX Math Formatting & Duplicate Suppression**:
+   - All formulas must be cleanly rendered using KaTeX (`$...$` for inline, `$$...$$` for block display equations).
+   - KaTeX must strictly be configured with `output: 'html'` to prevent generating MathML `<math>` tags, which cause duplicate numbers (such as `0 0` or `1 1`).
+   - Every formula must be accompanied by intuitive explanations and concrete numerical walkthroughs.
 
 ---
 
-## 4. Content Pedagogy & Formula Formatting
+## 3. Curriculum Architecture & Granular Segmentation
 
-1. **Full, Engaging Narrative (No Bare Bullet Dumps)**:
-   - Provide comprehensive, readable explanations that build intuition from the ground up.
-   - Explain the "why" and "how" behind every method, connecting concepts directly to the course exercises and real-world scenarios.
-2. **Proper KaTeX Math Formatting**:
-   - All formulas must be cleanly rendered using KaTeX (`$...$` for inline, `$$...$$` for display equations).
-   - Never display raw unparsed LaTeX code (such as raw `$Y_t = a + b Y_0$` or `$20^\circ\text{C}$`).
-   - Every formula must be paired with:
-     - A clear, simple explanation in plain English.
-     - A breakdown of what every variable and symbol represents.
-     - A concrete numerical walkthrough (matching the slides/workbooks).
+- Each slide deck must be divided into **granular, bite-sized segments (~4 to 5 segments per chapter deck)**. For example, Data Analysis Chapters 1–3 are segmented into 8 distinct learning units (LUs):
+  1. `ch1-scales-methods`: Measurement Scales & Multivariate Methods Classification
+  2. `ch1-manipulation-distances`: Data Manipulation Fundamentals & Distance Metrics
+  3. `ch2-pca-geometry`: PCA: Geometric Foundations & Projections (12-Customer Study)
+  4. `ch2-pca-analytical`: PCA: Analytical Formulation, Eigenvalues & Scale Sensitivity
+  5. `ch2-pca-interpretation`: PCA: Loadings, Scores & Retention Diagnostics
+  6. `ch3-fa-theory`: Factor Analysis: Latent Variable Theory & Variance Decomposition
+  7. `ch3-fa-extraction`: Factor Analysis: Indeterminacies & Extraction Methods
+  8. `ch3-fa-rotation-evaluation`: Factor Analysis: Sampling Adequacy, Rotations & FA vs PCA
 
 ---
 
-## 5. 3-Phase Mastery Progression per Segment
+## 4. 3-Phase Mastery Progression per Learning Unit
 
-Progress moves sequentially from **0% to 100%**:
+Progress through each segment moves sequentially:
 
-### Phase 1: Pure Text Summary
-- High-yield, deep narrative explanation with formatted KaTeX formula cards and practical examples.
-- Once understood, clicking **"Mark Text as Understood & Take Quiz"** unlocks Phase 2.
+### Phase 1: Pure Text Guide
+- Comprehensive narrative explanation with formatted KaTeX formulas and practical examples.
+- Clicking **"Mark Text as Understood & Take Quiz"** unlocks Phase 2.
 
-### Phase 2: Exercises & Quiz (12 Questions, 6 Choices Each)
-- **Question Composition**:
-  - 4 Easy / Elemental (basic definitions, direct properties).
-  - 4 Intermediate (conceptual reasoning, interpretation of models).
-  - 4 Hard (calculations, multi-step output interpretations).
-- **Format**: Exactly **6 choices** per question with **1 correct answer**. Choices must be substantive and content-focused.
-- **Strict Mastery Rule**:
-  - The user **MUST score 12/12 (100%)** to pass!
-  - If any question is missed, the user **CANNOT advance** to flashcards.
-  - They **MUST redo the entire 12-question quiz** from question 1.
-  - In-depth explanations are displayed after submission so the user learns from any error.
+### Phase 2: Level Quiz (1 Question at a Time • Immediate Reset on Error)
+- **Question Format**: Exactly **12 substantive questions** (4 elemental, 4 conceptual, 4 advanced) with **6 choices each (A–F)**.
+- **One Question at a Time**: The user is presented with one question at a time (Question $i$ of 12).
+- **Strict Reset on Failure**:
+  - The user must score **12/12 in a single consecutive run**!
+  - If the user selects an incorrect answer on ANY question, the quiz is **immediately reset back to Question 1 (0/12)**!
+  - The user must restart from the beginning until all 12 are answered correctly in a row.
+  - An explanation is shown when an error occurs so the user learns the concept before restarting.
 
 ### Phase 3: Flashcards
 - Fast-recall cards with question on front, answer/insight on back.
 - Self-assessment: **Yes (Green)** vs **No (Red)**.
-- **Strict Mastery Rule**:
-  - The user **MUST answer "Yes" to all cards (100% mastery)** in the deck to complete the level.
-  - Cards marked "No" cycle back through the review loop until mastered.
-
-### Completion & Freedom:
-- Completing all 3 phases marks the segment as **Mastered** (checkmarked), increments the overall course progress bar, and automatically unlocks the next level.
-- **"Unlock All Levels" Toggle**: Available in the level selector to allow free jumping between levels for flexible study and revision.
+- **100% Mastery Rule**: All cards must be answered "Yes" to complete the deck.
 
 ---
 
-## 6. Multi-Discipline Management & Deletion
+## 5. Exercise Zone (Random Practice & Sudden Death Minigame)
 
-- Multi-discipline support via a clean dropdown selector.
-- Easy deletion of any discipline with one click (cascading in PostgreSQL to remove all its segments, questions, flashcards, and progress records when an exam or course ends).
+The Exercise Zone provides dedicated practice outside the sequential curriculum:
+
+### Question Bank Architecture (18 Extra Questions per LU)
+- In addition to the base 12 quiz questions per segment, every learning unit has **18 additional practice questions** (`pool_type = 'practice'`).
+- For 8 learning units, this provides **144 extra questions** (total question bank = 240 questions with 6 choices each).
+- These extra questions appear exclusively in the Exercise Zone and Sudden Death.
+
+### Mode A: Random Practice
+- Draws random questions from topics the user has already completed (or from Level 1 if none completed yet).
+- Immediate feedback with explanation on every question.
+
+### Mode B: Sudden Death Minigame
+- High-stakes consecutive streak challenge!
+- The user must answer questions in a row.
+- **One mistake = Sudden Death**: Streak immediately resets to 0!
+- Tracks and displays **Current Streak (🔥)** and all-time **Best Streak (🏆)**.
+- Saves streaks to Supabase `study_user_settings`.
 
 ---
 
-## 7. Cloud Database (Supabase `tracker` Project)
+## 6. The Preparation Score Algorithm (0% to 100%)
 
-- **Connected Project**: Supabase `tracker` (`https://eurqqiebokwcrrhfbihg.supabase.co`).
-- **STRICT PROHIBITION**:
-  - Completely avoid Nova UI / `supabase_novae`.
-  - Isolate all personal study tables using the `study_*` prefix (`study_disciplines`, `study_segments`, `study_questions`, `study_flashcards`, `study_progress`).
-  - Never touch calorie tracker tables (`food_items`, `weight_logs`).
-- Public anon access enabled for seamless multi-device cloud sync.
+The Preparation Score is a weighted index reflecting the student's exam readiness. It is calibrated to be challenging to reach 100%:
+
+$$\text{Preparation Score} = \min(100, \text{round}(C + A + P + D))$$
+
+1. **Curriculum Completion ($C$, up to 50 points)**:
+   - Evaluates completed learning units (Text read + Quiz 12/12 passed + Flashcards completed).
+   - $C = 50 \times \frac{\text{completed\_segments}}{\text{total\_segments}}$.
+2. **Quiz First-Time Efficiency ($A$, up to 25 points)**:
+   - Rewards passing quizzes on the first attempt; penalizes repeated restarts.
+   - For each passed segment:
+     - 1st attempt: 100% credit ($\approx 3.125$ pts per segment for 8 segments).
+     - 2nd attempt: 75% credit.
+     - 3rd attempt: 50% credit.
+     - 4+ attempts: 25% credit.
+3. **Random Practice Volume ($P$, up to 15 points)**:
+   - Rewards answering questions in the Exercise Zone.
+   - $P = \min(15, \text{random\_exercises\_completed} \times 0.5)$ (30 correct random exercises needed for full 15 pts).
+4. **Sudden Death Streak ($D$, up to 10 points)**:
+   - Rewards high performance under pressure based on all-time best streak:
+     - $D = \min(10, \text{best\_streak} \times 0.5)$ (a streak of 20+ consecutive correct answers needed for full 10 pts).
 
 ---
 
-## 8. Hosting & Deployment
+## 7. Global Scratchpad / Calculation Canvas
 
-- Hosting will be managed by the user on Netlify.
-- The codebase must always produce a clean, zero-error production build (`npm run build` -> `dist/`) with `netlify.toml` and `public/_redirects` configured for SPA routing.
+- **Openable Everywhere**: Available across all screens via a floating action button (FAB) at the bottom-right and top-bar button.
+- **Apple Pencil & Mouse Support**: Uses `PointerEvent` with `touch-action: none` to support Apple Pencil on iPad without triggering screen gestures or scrolling.
+- **Tools**:
+  - Pen (crisp black ink with fine 2px, medium 4px, broad 8px thickness).
+  - Eraser (allows erasing specific drawn strokes).
+  - Clear All (clears the canvas).
+  - Close / Done (one-tap return to the study interface; notes persist in canvas memory across opens).
+- **Corner HUD**: When opened during a quiz or exercise, shows a collapsible floating card with the current question and 6 choices for easy reference during calculations.
+
+---
+
+## 8. Database Architecture (Supabase `tracker` Project)
+
+- **Target Project**: `https://eurqqiebokwcrrhfbihg.supabase.co` (`tracker`).
+- **Strict Prohibition**: Completely avoid `supabase_novae` / Nova UI. Never touch calorie tracker tables (`food_items`, `weight_logs`).
+- **Tables**:
+  - `study_disciplines`: `id, name, code, description, created_at`
+  - `study_segments`: `id, discipline_id, order_index, title, subtitle, summary_markdown, created_at`
+  - `study_questions`: `id, segment_id, order_index, difficulty, question, options (jsonb), correct_option, explanation, pool_type, created_at`
+  - `study_flashcards`: `id, segment_id, order_index, category, front, back, created_at`
+  - `study_progress`: `id, discipline_id, segment_id, text_completed, quiz_passed, quiz_score, quiz_attempts, flashcards_passed, completed, manually_unlocked, updated_at`
+  - `study_user_settings`: `id, unlock_all, active_discipline_id, preparation_score, sudden_death_best_streak, sudden_death_current_streak, random_exercises_completed, total_correct_answers, total_wrong_answers, updated_at`
+- **Double-Click Unlocking**: Double-clicking any level pill unlocks it directly, toggling `manually_unlocked = true` in `study_progress`.
+
+---
+
+## 9. Web Audio Sound Effects
+
+- **Zero-Dependency Procedural Audio**: Uses the Web Audio API (`AudioContext`) to synthesize instant, crisp acoustic feedback without needing external MP3/WAV files (fully compatible with iPad Safari, iPhone, and desktop browsers).
+- **Audio Palette**:
+  - `playCorrectSound()`: Pleasant, ascending sine-wave chime (E5 -> A5) played immediately upon selecting a correct answer.
+  - `playWrongSound()`: Low, subdued downward triangle-wave tone played when an incorrect answer triggers a quiz/sudden death reset.
+  - `playSuccessChime()`: Triumphant 4-note ascending major arpeggio (C5 -> E5 -> G5 -> C6) for passing 12/12 quiz questions, mastering all flashcards, or hitting 5-question milestones.
+  - `playClickSound()`: Subtle, crisp 900 Hz acoustic tick for card flips, tab changes, and UI buttons.

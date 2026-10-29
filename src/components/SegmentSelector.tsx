@@ -86,7 +86,6 @@ export const SegmentSelector: React.FC<SegmentSelectorProps> = ({
             transition: 'all 0.15s ease',
             boxShadow: '0 1px 2px rgba(0,0,0,0.03)'
           }}
-          title={unlockAll ? "Locked progression mode (sequential progression)" : "Unlock all levels simultaneously"}
         >
           {unlockAll ? <Unlock size={13} color="#78350f" /> : <Lock size={13} color="#78716c" />}
           <span>{unlockAll ? 'Unlock All (Active)' : 'Unlock All'}</span>
@@ -157,11 +156,6 @@ export const SegmentSelector: React.FC<SegmentSelectorProps> = ({
                 position: 'relative',
                 userSelect: 'none'
               }}
-              title={
-                accessible
-                  ? `Level ${seg.order_index}: ${seg.title} (Click to open)`
-                  : `Level ${seg.order_index} is locked. Double-click to unlock this level!`
-              }
             >
               <span>L{seg.order_index}</span>
               {isDone ? (

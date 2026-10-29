@@ -40,9 +40,9 @@ $$Y_t = a + b Y_0 \\quad (b > 0)$$
 Permissible statistics include the arithmetic mean, standard deviation, variance, Pearson correlation coefficient, and regression analysis. However, ratio-based statistics such as the Coefficient of Variation ($CV = s / \\bar{x}$) are invalid because the arbitrary shift constant $a$ changes the ratio.
 
 ### Ratio Scale
-A ratio scale possesses all properties of an interval scale, with the critical addition of a natural, absolute, immutable zero base value that signifies the absolute absence of the measured property. Typical examples include age, salary, revenue, unit sales, distance, weight, and elapsed time. A salary of $0 means zero monetary compensation, and an age of $0$ is the moment of birth.
+A ratio scale possesses all properties of an interval scale, with the critical addition of a natural, absolute, immutable zero base value that signifies the absolute absence of the measured property. Typical examples include age, salary, revenue, unit sales, distance, weight, and elapsed time. A salary of 0 dollars means zero monetary compensation, and an age of $0$ is the moment of birth.
 
-Because an absolute origin exists, meaningful ratio comparisons can be made: a firm earning $100,000 earns exactly twice as much as a firm earning $50,000. Under a ratio scale, only similarity transformations (multiplying by a positive constant) are permissible:
+Because an absolute origin exists, meaningful ratio comparisons can be made: a firm earning 100,000 dollars earns exactly twice as much as a firm earning 50,000 dollars. Under a ratio scale, only similarity transformations (multiplying by a positive constant) are permissible:
 $$Y_t = b Y_0 \\quad (b > 0)$$
 Adding a non-zero constant ($a \\neq 0$) is forbidden because it would destroy the absolute zero reference point. All statistical techniques are valid on ratio data, including the geometric mean, harmonic mean, ratios, and the Coefficient of Variation.
 

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Question } from '../types';
 import confetti from 'canvas-confetti';
-import { CheckCircle2, XCircle, ArrowRight, RotateCcw, Award } from 'lucide-react';
+import { Award, Edit3, ShieldAlert, RotateCcw, ArrowRight } from 'lucide-react';
 import { renderInlineMath } from './MathRenderer';
+import { playCorrectSound, playWrongSound, playSuccessChime, playClickSound } from '../utils/soundEffects';
 
 interface QuizPhaseProps {
   questions: Question[];
@@ -10,6 +11,7 @@ interface QuizPhaseProps {
   isAlreadyPassed: boolean;
   onPassQuiz: (score: number) => void;
   onProceedToFlashcards: () => void;
+  onOpenScratchpad?: () => void;
 }
 
 export const QuizPhase: React.FC<QuizPhaseProps> = ({
@@ -17,51 +19,151 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
   segmentTitle,
   isAlreadyPassed,
   onPassQuiz,
-  onProceedToFlashcards
+  onProceedToFlashcards,
+  onOpenScratchpad
 }) => {
-  const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-  const [score, setScore] = useState<number>(0);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [isFailed, setIsFailed] = useState<boolean>(false);
+  const [failedOption, setFailedOption] = useState<string | null>(null);
+  const [isAllCompleted, setIsAllCompleted] = useState<boolean>(false);
 
-  const handleOptionSelect = (qId: string, optionId: string) => {
-    if (isSubmitted) return;
-    setSelectedAnswers(prev => ({
-      ...prev,
-      [qId]: optionId
-    }));
-  };
+  if (!questions || questions.length === 0) {
+    return (
+      <div style={{ textAlign: 'center', padding: '2.5rem', backgroundColor: '#ffffff', borderRadius: '12px', border: '1px solid #e7e2d7' }}>
+        <p style={{ color: '#78716c', fontWeight: 600 }}>No questions available for this level.</p>
+      </div>
+    );
+  }
 
-  const allAnswered = questions.length > 0 && questions.every(q => selectedAnswers[q.id]);
+  const currentQ = questions[currentIndex];
 
-  const handleSubmit = () => {
-    let correctCount = 0;
-    questions.forEach(q => {
-      if (selectedAnswers[q.id] === q.correct_option) {
-        correctCount++;
+  const handleSelectOption = (optId: string) => {
+    if (isFailed || isAllCompleted) return;
+
+    setSelectedOption(optId);
+
+    const isCorrect = optId === currentQ.correct_option;
+
+    if (isCorrect) {
+      playCorrectSound();
+      // Correct! Immediate transition without any intermediate popups or clicking "next"
+      if (currentIndex === questions.length - 1) {
+        // All 12/12 in a row completed!
+        setIsAllCompleted(true);
+        playSuccessChime();
+        confetti({
+          particleCount: 120,
+          spread: 80,
+          origin: { y: 0.6 }
+        });
+        onPassQuiz(12);
+      } else {
+        // Move instantly to the next question after a tiny 150ms visual confirmation
+        setTimeout(() => {
+          setSelectedOption(null);
+          setCurrentIndex(prev => prev + 1);
+        }, 150);
       }
-    });
-
-    setScore(correctCount);
-    setIsSubmitted(true);
-
-    if (correctCount === 12) {
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
-      onPassQuiz(12);
+    } else {
+      // Wrong! Show explanation card and enforce restart
+      playWrongSound();
+      setFailedOption(optId);
+      setIsFailed(true);
     }
   };
 
-  const handleRetakeWholeTest = () => {
-    setSelectedAnswers({});
-    setIsSubmitted(false);
-    setScore(0);
-    window.scrollTo({ top: 120, behavior: 'smooth' });
+  const handleRestartQuiz = () => {
+    playClickSound();
+    setCurrentIndex(0);
+    setSelectedOption(null);
+    setIsFailed(false);
+    setFailedOption(null);
+    setIsAllCompleted(false);
   };
 
-  const isPassed = isSubmitted && score === 12;
+  // If already passed and user visits to review
+  if (isAllCompleted || (isAlreadyPassed && !selectedOption && currentIndex === 0 && !isFailed)) {
+    return (
+      <div style={{
+        backgroundColor: '#ffffff',
+        borderRadius: '12px',
+        border: '1.5px solid #86efac',
+        padding: '2.25rem 1.5rem',
+        boxShadow: '0 4px 12px rgba(22, 163, 74, 0.08)',
+        textAlign: 'center'
+      }}>
+        <div style={{
+          width: '56px',
+          height: '56px',
+          borderRadius: '50%',
+          backgroundColor: '#f0fdf4',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          margin: '0 auto 1rem',
+          border: '1.5px solid #86efac'
+        }}>
+          <Award size={30} color="#15803d" />
+        </div>
+        <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#15803d', marginBottom: '0.5rem' }}>
+          Level Quiz Mastered! (12/12 in a row)
+        </h2>
+        <p style={{ color: '#44403c', fontSize: '0.9rem', maxWidth: '440px', margin: '0 auto 1.5rem', lineHeight: 1.6 }}>
+          You have successfully answered all 12 substantive questions in a row without error for <strong>{segmentTitle}</strong>.
+        </p>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+          <button
+            onClick={handleRestartQuiz}
+            style={{
+              padding: '0.65rem 1.25rem',
+              backgroundColor: '#ffffff',
+              color: '#78350f',
+              border: '1.5px solid #e7e2d7',
+              borderRadius: '8px',
+              fontWeight: 700,
+              fontSize: '0.85rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.4rem'
+            }}
+          >
+            <RotateCcw size={15} />
+            <span>Retake Quiz for Practice</span>
+          </button>
+          <button
+            onClick={onProceedToFlashcards}
+            style={{
+              padding: '0.65rem 1.5rem',
+              backgroundColor: '#15803d',
+              color: '#ffffff',
+              border: 'none',
+              borderRadius: '8px',
+              fontWeight: 800,
+              fontSize: '0.85rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              boxShadow: '0 2px 6px rgba(21, 128, 61, 0.25)'
+            }}
+          >
+            <span>Proceed to Phase 3: Flashcards</span>
+            <ArrowRight size={16} />
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const difficultyColors = {
+    easy: { bg: '#f0fdf4', text: '#15803d', border: '#bbf7d0', label: 'Elemental' },
+    intermediate: { bg: '#fffbeb', text: '#b45309', border: '#fde68a', label: 'Conceptual' },
+    hard: { bg: '#fef2f2', text: '#b91c1c', border: '#fecaca', label: 'Advanced' }
+  };
+
+  const diffStyle = difficultyColors[currentQ.difficulty] || difficultyColors.easy;
 
   return (
     <div style={{
@@ -69,362 +171,243 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
       borderRadius: '12px',
       border: '1px solid #e7e2d7',
       padding: '1.75rem 1.5rem',
-      boxShadow: '0 1px 3px rgba(120, 53, 15, 0.02)'
+      boxShadow: '0 2px 6px rgba(120, 53, 15, 0.03)'
     }}>
-      {/* Header Info */}
+      {/* Top Status & Question Progress */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
-        gap: '0.75rem',
-        paddingBottom: '1rem',
-        marginBottom: '1.5rem',
-        borderBottom: '1px solid #f2eee6'
+        gap: '0.5rem',
+        marginBottom: '1rem',
+        paddingBottom: '0.85rem',
+        borderBottom: '1px solid #f2ede4'
       }}>
-        <div>
-          <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#b45309', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-            Level Quiz (12 Questions • 100% Required)
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+          <span style={{
+            fontSize: '0.85rem',
+            fontWeight: 800,
+            color: '#78350f',
+            textTransform: 'uppercase',
+            letterSpacing: '0.04em'
+          }}>
+            Question {currentIndex + 1} of {questions.length}
           </span>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#451a03', marginTop: '0.15rem' }}>
-            {segmentTitle}
-          </h2>
+          <span style={{
+            padding: '0.2rem 0.55rem',
+            borderRadius: '999px',
+            fontSize: '0.7rem',
+            fontWeight: 700,
+            backgroundColor: diffStyle.bg,
+            color: diffStyle.text,
+            border: `1px solid ${diffStyle.border}`
+          }}>
+            {diffStyle.label}
+          </span>
         </div>
 
-        <div style={{
-          padding: '0.35rem 0.75rem',
-          backgroundColor: '#fffbeb',
-          border: '1px solid #e7e2d7',
-          borderRadius: '6px',
-          fontSize: '0.8rem',
-          fontWeight: 700,
-          color: '#78350f'
-        }}>
-          {Object.keys(selectedAnswers).length} / {questions.length} answered
-        </div>
+        {/* Quick Scratchpad Button */}
+        {onOpenScratchpad && (
+          <button
+            onClick={onOpenScratchpad}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              padding: '0.35rem 0.65rem',
+              borderRadius: '6px',
+              backgroundColor: '#fdfbf7',
+              border: '1px solid #e7e2d7',
+              color: '#78350f',
+              fontWeight: 700,
+              fontSize: '0.74rem',
+              cursor: 'pointer'
+            }}
+          >
+            <Edit3 size={13} color="#78350f" />
+            <span>Scratchpad / Calculations</span>
+          </button>
+        )}
       </div>
 
-      {/* Result Card if Submitted */}
-      {isSubmitted && (
-        <div style={{
-          padding: '1.25rem',
-          borderRadius: '10px',
-          marginBottom: '1.75rem',
-          backgroundColor: isPassed ? '#f0fdf4' : '#fef2f2',
-          border: isPassed ? '1.5px solid #16a34a' : '1.5px solid #dc2626',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: '1rem'
+      {/* Progress Bar (12 Steps) */}
+      <div style={{
+        display: 'flex',
+        gap: '0.3rem',
+        marginBottom: '1.5rem'
+      }}>
+        {questions.map((_, qIdx) => (
+          <div
+            key={`prog-step-${qIdx}`}
+            style={{
+              flex: 1,
+              height: '5px',
+              borderRadius: '3px',
+              backgroundColor: qIdx < currentIndex
+                ? '#15803d'
+                : qIdx === currentIndex
+                ? '#d97706'
+                : '#f2ede4',
+              transition: 'all 0.2s ease'
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Question Prompt */}
+      <div style={{ marginBottom: '1.5rem' }}>
+        <h3 style={{
+          fontSize: '1.05rem',
+          fontWeight: 700,
+          color: '#451a03',
+          lineHeight: 1.6
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            {isPassed ? (
-              <Award size={30} color="#15803d" />
-            ) : (
-              <XCircle size={30} color="#dc2626" />
-            )}
-            <div>
-              <div style={{ fontSize: '1.05rem', fontWeight: 800, color: isPassed ? '#166534' : '#991b1b' }}>
-                {isPassed ? 'Perfect 12 / 12! Level Mastered' : `Score: ${score} / 12 (12/12 required)`}
-              </div>
-              <p style={{ fontSize: '0.825rem', color: isPassed ? '#15803d' : '#b91c1c' }}>
-                {isPassed
-                  ? 'All 12 questions correct! You may now proceed to Flashcards.'
-                  : 'Mastery rule: You must score 12/12 to pass. Redo the whole quiz below.'}
-              </p>
-            </div>
-          </div>
+          {renderInlineMath(currentQ.question)}
+        </h3>
+      </div>
 
-          <div>
-            {!isPassed ? (
-              <button
-                onClick={handleRetakeWholeTest}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.4rem',
-                  padding: '0.55rem 1rem',
-                  backgroundColor: '#dc2626',
-                  color: '#ffffff',
-                  border: 'none',
-                  borderRadius: '6px',
-                  fontWeight: 700,
-                  fontSize: '0.85rem',
-                  cursor: 'pointer'
-                }}
-              >
-                <RotateCcw size={14} />
-                <span>Restart Quiz</span>
-              </button>
-            ) : (
-              <button
-                onClick={onProceedToFlashcards}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.4rem',
-                  padding: '0.55rem 1.1rem',
-                  backgroundColor: '#15803d',
-                  color: '#ffffff',
-                  border: 'none',
-                  borderRadius: '6px',
-                  fontWeight: 700,
-                  fontSize: '0.85rem',
-                  cursor: 'pointer'
-                }}
-              >
-                <span>Go to Flashcards</span>
-                <ArrowRight size={15} />
-              </button>
-            )}
-          </div>
-        </div>
-      )}
+      {/* 6 Choices */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginBottom: '1.5rem' }}>
+        {currentQ.options.map((opt) => {
+          const isSelected = selectedOption === opt.id;
+          const isCorrectChoice = opt.id === currentQ.correct_option;
 
-      {/* 12 Question Cards */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-        {questions.map((q, qIdx) => {
-          const selected = selectedAnswers[q.id];
-          const isCorrect = isSubmitted && selected === q.correct_option;
+          let bg = '#ffffff';
+          let border = '#e7e2d7';
+          let textColor = '#292524';
+          let badgeBg = '#f5efe6';
+          let badgeColor = '#78350f';
 
-          const diffBadge = {
-            easy: { text: 'Basics', color: '#166534', bg: '#f0fdf4' },
-            intermediate: { text: 'Concepts', color: '#92400e', bg: '#fef3c7' },
-            hard: { text: 'Calculations', color: '#991b1b', bg: '#fef2f2' }
-          }[q.difficulty];
+          if (isFailed) {
+            if (isCorrectChoice) {
+              bg = '#f0fdf4';
+              border = '#86efac';
+              textColor = '#15803d';
+              badgeBg = '#dcfce7';
+              badgeColor = '#15803d';
+            } else if (opt.id === failedOption) {
+              bg = '#fef2f2';
+              border = '#fca5a5';
+              textColor = '#b91c1c';
+              badgeBg = '#fee2e2';
+              badgeColor = '#b91c1c';
+            } else {
+              textColor = '#a8a29e';
+              border = '#f2ede4';
+            }
+          } else if (isSelected) {
+            // Instant selection feedback
+            bg = '#f0fdf4';
+            border = '#15803d';
+            badgeBg = '#15803d';
+            badgeColor = '#ffffff';
+          }
 
           return (
-            <div
-              key={q.id}
+            <button
+              key={opt.id}
+              onClick={() => handleSelectOption(opt.id)}
+              disabled={isFailed}
               style={{
-                padding: '1.25rem',
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '0.75rem',
+                padding: '0.75rem 1rem',
                 borderRadius: '8px',
-                border: isSubmitted
-                  ? isCorrect
-                    ? '1.5px solid #16a34a'
-                    : '1.5px solid #dc2626'
-                  : '1px solid #e7e2d7',
-                backgroundColor: isSubmitted
-                  ? isCorrect
-                    ? '#fcfdfd'
-                    : '#fffdfd'
-                  : '#ffffff'
+                border: `1.5px solid ${border}`,
+                backgroundColor: bg,
+                textAlign: 'left',
+                cursor: isFailed ? 'default' : 'pointer',
+                transition: 'all 0.12s ease',
+                width: '100%'
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.65rem' }}>
-                <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#78350f' }}>
-                  Q{qIdx + 1} of 12
-                </span>
-                <span style={{
-                  fontSize: '0.7rem',
-                  fontWeight: 700,
-                  padding: '0.15rem 0.45rem',
-                  borderRadius: '4px',
-                  backgroundColor: diffBadge.bg,
-                  color: diffBadge.color
-                }}>
-                  {diffBadge.text}
-                </span>
-              </div>
-
-              <h3 style={{
-                fontSize: '0.95rem',
-                fontWeight: 700,
-                color: '#292524',
-                lineHeight: 1.5,
-                marginBottom: '1rem'
+              <span style={{
+                flexShrink: 0,
+                width: '24px',
+                height: '24px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '0.75rem',
+                fontWeight: 800,
+                backgroundColor: badgeBg,
+                color: badgeColor,
+                marginTop: '0.1rem'
               }}>
-                {renderInlineMath(q.question)}
-              </h3>
-
-              {/* 6 Options */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                {q.options.map((opt) => {
-                  const isOptSelected = selected === opt.id;
-                  const isOptCorrect = isSubmitted && opt.id === q.correct_option;
-                  const isOptWrongSelected = isSubmitted && isOptSelected && !isOptCorrect;
-
-                  let optBg = '#fdfbf7';
-                  let optBorder = '#e7e2d7';
-                  let optColor = '#44403c';
-
-                  if (isOptSelected && !isSubmitted) {
-                    optBg = '#fffbeb';
-                    optBorder = '#b45309';
-                    optColor = '#451a03';
-                  } else if (isSubmitted) {
-                    if (isOptCorrect) {
-                      optBg = '#dcfce7';
-                      optBorder = '#16a34a';
-                      optColor = '#14532d';
-                    } else if (isOptWrongSelected) {
-                      optBg = '#fee2e2';
-                      optBorder = '#dc2626';
-                      optColor = '#7f1d1d';
-                    }
-                  }
-
-                  return (
-                    <div
-                      key={opt.id}
-                      onClick={() => handleOptionSelect(q.id, opt.id)}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'flex-start',
-                        gap: '0.65rem',
-                        padding: '0.65rem 0.85rem',
-                        borderRadius: '6px',
-                        border: `1.5px solid ${optBorder}`,
-                        backgroundColor: optBg,
-                        color: optColor,
-                        cursor: isSubmitted ? 'default' : 'pointer',
-                        fontSize: '0.875rem',
-                        lineHeight: 1.45
-                      }}
-                    >
-                      <div style={{
-                        width: '20px',
-                        height: '20px',
-                        borderRadius: '4px',
-                        border: isOptSelected || isOptCorrect ? 'none' : '1px solid #d6cebf',
-                        backgroundColor: isOptCorrect
-                          ? '#16a34a'
-                          : isOptWrongSelected
-                          ? '#dc2626'
-                          : isOptSelected
-                          ? '#78350f'
-                          : '#ffffff',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: isOptSelected || isOptCorrect || isOptWrongSelected ? '#ffffff' : '#78716c',
-                        fontWeight: 700,
-                        fontSize: '0.7rem',
-                        flexShrink: 0,
-                        marginTop: '0.1rem'
-                      }}>
-                        {opt.id.toUpperCase()}
-                      </div>
-                      <span style={{ fontWeight: isOptSelected ? 600 : 400 }}>
-                        {renderInlineMath(opt.text)}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Explanation after submit */}
-              {isSubmitted && (
-                <div style={{
-                  marginTop: '0.85rem',
-                  padding: '0.75rem 0.9rem',
-                  borderRadius: '6px',
-                  backgroundColor: '#ffffff',
-                  border: isCorrect ? '1px solid #bbf7d0' : '1px solid #fecaca',
-                  fontSize: '0.825rem',
-                  color: '#44403c',
-                  lineHeight: 1.5
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontWeight: 700, marginBottom: '0.25rem', color: isCorrect ? '#15803d' : '#dc2626' }}>
-                    {isCorrect ? <CheckCircle2 size={14} /> : <XCircle size={14} />}
-                    <span>{isCorrect ? 'Explanation:' : 'Concept Review:'}</span>
-                  </div>
-                  <div>{renderInlineMath(q.explanation)}</div>
-                </div>
-              )}
-            </div>
+                {opt.id.toUpperCase()}
+              </span>
+              <span style={{
+                flex: 1,
+                fontSize: '0.92rem',
+                fontWeight: isSelected ? 700 : 500,
+                color: textColor,
+                lineHeight: 1.5
+              }}>
+                {renderInlineMath(opt.text)}
+              </span>
+            </button>
           );
         })}
       </div>
 
-      {/* Bottom Bar */}
-      <div style={{
-        marginTop: '2rem',
-        paddingTop: '1rem',
-        borderTop: '1px solid #e7e2d7',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        gap: '0.75rem'
-      }}>
-        {!isSubmitted ? (
-          <>
-            <span style={{ fontSize: '0.8rem', color: allAnswered ? '#15803d' : '#78716c', fontWeight: 600 }}>
-              {allAnswered
-                ? 'All 12 answered.'
-                : `${12 - Object.keys(selectedAnswers).length} remaining.`}
+      {/* Failure Screen: Only appears on Wrong Answers! Explains what is wrong and restarts */}
+      {isFailed && (
+        <div style={{
+          backgroundColor: '#fef2f2',
+          border: '1.5px solid #fca5a5',
+          borderRadius: '10px',
+          padding: '1.15rem 1.25rem',
+          animation: 'fadeIn 0.2s ease'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+            <ShieldAlert size={18} color="#b91c1c" />
+            <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#b91c1c' }}>
+              Incorrect Answer • Quiz Resets to Question 1
             </span>
+          </div>
+          <p style={{ fontSize: '0.84rem', color: '#7f1d1d', margin: '0 0 0.75rem', lineHeight: 1.55 }}>
+            You selected <strong>Option {failedOption?.toUpperCase()}</strong>. Correct answer is <strong>Option {currentQ.correct_option.toUpperCase()}</strong>.
+          </p>
+          <div style={{
+            backgroundColor: '#ffffff',
+            border: '1px solid #fecaca',
+            borderRadius: '6px',
+            padding: '0.85rem',
+            marginBottom: '1rem',
+            fontSize: '0.86rem',
+            color: '#44403c',
+            lineHeight: 1.55
+          }}>
+            <strong style={{ color: '#78350f' }}>Explanation: </strong>
+            {renderInlineMath(currentQ.explanation)}
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <button
-              onClick={handleSubmit}
-              disabled={!allAnswered}
+              onClick={handleRestartQuiz}
               style={{
                 padding: '0.65rem 1.5rem',
-                backgroundColor: allAnswered ? '#78350f' : '#d6cebf',
-                color: '#ffffff',
-                border: 'none',
-                borderRadius: '8px',
-                fontSize: '0.9rem',
-                fontWeight: 700,
-                cursor: allAnswered ? 'pointer' : 'not-allowed'
-              }}
-            >
-              Submit & Verify 12/12
-            </button>
-          </>
-        ) : !isPassed ? (
-          <>
-            <span style={{ fontSize: '0.85rem', color: '#dc2626', fontWeight: 700 }}>
-              {score} / 12 correct. Retake required.
-            </span>
-            <button
-              onClick={handleRetakeWholeTest}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.4rem',
-                padding: '0.65rem 1.4rem',
                 backgroundColor: '#dc2626',
                 color: '#ffffff',
                 border: 'none',
                 borderRadius: '8px',
-                fontSize: '0.9rem',
-                fontWeight: 700,
-                cursor: 'pointer'
-              }}
-            >
-              <RotateCcw size={15} />
-              <span>Redo Whole Quiz</span>
-            </button>
-          </>
-        ) : (
-          <>
-            <span style={{ fontSize: '0.85rem', color: '#15803d', fontWeight: 700 }}>
-              ✓ Mastered! 12/12
-            </span>
-            <button
-              onClick={onProceedToFlashcards}
-              style={{
+                fontWeight: 800,
+                fontSize: '0.85rem',
+                cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.4rem',
-                padding: '0.65rem 1.5rem',
-                backgroundColor: '#15803d',
-                color: '#ffffff',
-                border: 'none',
-                borderRadius: '8px',
-                fontSize: '0.9rem',
-                fontWeight: 700,
-                cursor: 'pointer'
+                boxShadow: '0 2px 6px rgba(220, 38, 38, 0.2)'
               }}
             >
-              <span>Continue to Flashcards</span>
-              <ArrowRight size={16} />
+              <RotateCcw size={15} />
+              <span>Restart Quiz from Question 1</span>
             </button>
-          </>
-        )}
-      </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -44,7 +44,7 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "d",
-        "explanation": "The Ratio scale is uniquely characterized by possessing an absolute, immutable natural zero base value (such as $0 in revenue or 0 kg in weight). This allows statements of proportionality (\"twice as much\") to remain valid under any admissible transformation ($Y_t = bY_0$)."
+        "explanation": "The Ratio scale is uniquely characterized by possessing an absolute, immutable natural zero base value (such as 0 dollars in revenue or 0 kg in weight). This allows statements of proportionality (\"twice as much\") to remain valid under any admissible transformation ($Y_t = bY_0$)."
       },
       {
         "id": "q_l1_2",
@@ -331,7 +331,7 @@ export const levelsPart1 = [
         "segment_id": "ch1-scales-methods",
         "order_index": 10,
         "difficulty": "hard",
-        "question": "In a marketing dataset with 1,000 customers, an analyst wants to evaluate the effect of employment sector (Public, Private, Self-employed, Student) on credit card spending ($/year). If the analyst codes three dummy variables ($D_1, D_2, D_3$) leaving \"Student\" as the reference group, what does the regression coefficient of $D_1$ (Public sector) represent?",
+        "question": "In a marketing dataset with 1,000 customers, an analyst wants to evaluate the effect of employment sector (Public, Private, Self-employed, Student) on credit card spending (dollars/year). If the analyst codes three dummy variables ($D_1, D_2, D_3$) leaving \"Student\" as the reference group, what does the regression coefficient of $D_1$ (Public sector) represent?",
         "options": [
           {
             "id": "a",
@@ -985,7 +985,7 @@ export const levelsPart1 = [
         "order_index": 7,
         "category": "Metrics",
         "front": "What is **Mahalanobis Distance ($MD$)** and what does it account for?",
-        "back": "Mahalanobis distance accounts for **both differing variances and inter-variable covariances**:\n$$MD_{ik}^2 = (x_i - x_k)' S^{-1} (x_i - x_k)$$\nIt measures distance relative to the data's ellipsoid distribution."
+        "back": "Mahalanobis distance accounts for **both differing variances and inter-variable covariances**:\n$MD_{ik}^2 = (x_i - x_k)^T S^{-1} (x_i - x_k)$\nIt measures distance relative to the data's ellipsoid distribution."
       },
       {
         "id": "fc_l2_8",
@@ -1864,27 +1864,27 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "$w_2 = (0.728238, 0.685324)'$"
+            "text": "$w_2 = (0.728238, 0.685324)^T$"
           },
           {
             "id": "b",
-            "text": "$w_2 = (-0.685324, 0.728238)'$ or $(0.685324, -0.728238)'$"
+            "text": "$w_2 = (-0.685324, 0.728238)^T$ or $(0.685324, -0.728238)^T$"
           },
           {
             "id": "c",
-            "text": "$w_2 = (1.000000, 0.000000)'$"
+            "text": "$w_2 = (1.000000, 0.000000)^T$"
           },
           {
             "id": "d",
-            "text": "$w_2 = (0.500000, 0.500000)'$"
+            "text": "$w_2 = (0.500000, 0.500000)^T$"
           },
           {
             "id": "e",
-            "text": "$w_2 = (-0.728238, -0.685324)'$"
+            "text": "$w_2 = (-0.728238, -0.685324)^T$"
           },
           {
             "id": "f",
-            "text": "$w_2 = (0.000000, 1.000000)'$"
+            "text": "$w_2 = (0.000000, 1.000000)^T$"
           }
         ],
         "correct_option": "b",

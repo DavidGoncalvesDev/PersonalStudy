@@ -3,6 +3,7 @@ import { Flashcard } from '../types';
 import confetti from 'canvas-confetti';
 import { Check, X, RotateCw, Trophy, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { MathRenderer } from './MathRenderer';
+import { playCorrectSound, playWrongSound, playSuccessChime, playClickSound } from '../utils/soundEffects';
 
 interface FlashcardsPhaseProps {
   flashcards: Flashcard[];
@@ -37,6 +38,7 @@ export const FlashcardsPhase: React.FC<FlashcardsPhaseProps> = ({
   const masteredCount = masteredIds.size;
 
   const handleFlip = () => {
+    playClickSound();
     setIsFlipped(!isFlipped);
   };
 
@@ -44,6 +46,7 @@ export const FlashcardsPhase: React.FC<FlashcardsPhaseProps> = ({
     if (!currentCard) return;
 
     if (knewIt) {
+      playCorrectSound();
       // Mark as mastered
       const updatedMastered = new Set(masteredIds);
       updatedMastered.add(currentCard.id);
@@ -57,6 +60,7 @@ export const FlashcardsPhase: React.FC<FlashcardsPhaseProps> = ({
       if (nextQueue.length === 0) {
         // All mastered!
         setSessionCompleted(true);
+        playSuccessChime();
         confetti({
           particleCount: 120,
           spread: 80,
@@ -69,12 +73,14 @@ export const FlashcardsPhase: React.FC<FlashcardsPhaseProps> = ({
       }
     } else {
       // Didn't know it: keep in queue, flip back, advance to next card in the remaining queue
+      playWrongSound();
       setIsFlipped(false);
       setCurrentIndex(prev => (prev + 1 >= queue.length ? 0 : prev + 1));
     }
   };
 
   const handleResetSession = () => {
+    playClickSound();
     setQueue([...flashcards]);
     setMasteredIds(new Set());
     setIsFlipped(false);

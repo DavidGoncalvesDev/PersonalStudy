@@ -1040,7 +1040,7 @@ export const levelsPart2 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Because $\\Lambda^* (\\Lambda^*) = (\\Lambda T)(T' \\Lambda') = \\Lambda \\Lambda', any orthogonal rotation matrix $T$ yields identical reproduced correlations and total communalities, meaning infinitely many mathematically equivalent solutions exist."
+        "explanation": "Because $\\Lambda^* (\\Lambda^*)^T = (\\Lambda T)(T^T \\Lambda^T) = \\Lambda \\Lambda^T$, any orthogonal rotation matrix $T$ yields identical reproduced correlations and total communalities, meaning infinitely many mathematically equivalent solutions exist."
       },
       {
         "id": "q_l7_2",
