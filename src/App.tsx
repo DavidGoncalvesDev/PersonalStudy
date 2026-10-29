@@ -37,6 +37,10 @@ export const App: React.FC = () => {
   const [isScratchpadOpen, setIsScratchpadOpen] = useState<boolean>(false);
   const [scratchpadQuestion, setScratchpadQuestion] = useState<Question | null>(null);
 
+  // Active Question Reference Navigation (Text Guide highlighting & smooth return to quiz)
+  const [highlightedAnchor, setHighlightedAnchor] = useState<string | null>(null);
+  const [activeQuizQuestionNumber, setActiveQuizQuestionNumber] = useState<number | null>(null);
+
   // 1. Load disciplines & user settings on mount
   useEffect(() => {
     fetchDisciplines();
@@ -287,8 +291,22 @@ export const App: React.FC = () => {
   // Phase Handlers
   const handleProceedToQuiz = async () => {
     await updateProgress({ text_completed: true });
+    setHighlightedAnchor(null);
+    setActiveQuizQuestionNumber(null);
     setActivePhase('quiz');
     window.scrollTo({ top: 80, behavior: 'smooth' });
+  };
+
+  const handleGoToTextFromQuiz = (anchor?: string, qNum?: number) => {
+    setHighlightedAnchor(anchor || null);
+    setActiveQuizQuestionNumber(qNum || null);
+    setActivePhase('text');
+  };
+
+  const handleReturnToQuizFromText = () => {
+    setHighlightedAnchor(null);
+    setActiveQuizQuestionNumber(null);
+    setActivePhase('quiz');
   };
 
   const handlePassQuiz = async (score: number) => {
@@ -598,6 +616,9 @@ export const App: React.FC = () => {
                     segment={currentSegment}
                     isCompleted={!!currentSegmentProgress?.text_completed}
                     onProceedToQuiz={handleProceedToQuiz}
+                    highlightAnchor={highlightedAnchor}
+                    activeQuestionNumber={activeQuizQuestionNumber}
+                    onReturnToQuiz={handleReturnToQuizFromText}
                   />
                 </div>
 
@@ -609,7 +630,7 @@ export const App: React.FC = () => {
                     isAlreadyPassed={!!currentSegmentProgress?.quiz_passed}
                     onPassQuiz={handlePassQuiz}
                     onProceedToFlashcards={handleProceedToFlashcards}
-                    onGoToText={() => setActivePhase('text')}
+                    onGoToText={handleGoToTextFromQuiz}
                     onOpenScratchpad={() => {
                       setScratchpadQuestion(questions[0] || null);
                       setIsScratchpadOpen(true);

@@ -31,6 +31,7 @@ export interface Question {
   correct_option: string;
   explanation: string;
   section_reference?: string;
+  section_anchor?: string;
   pool_type?: 'quiz' | 'practice';
 }
 

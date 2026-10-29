@@ -1,31 +1,34 @@
 ---
 name: personal-study
 description: >-
-  Comprehensive guide and operational rules for the Personal Study system.
-  Use whenever the user mentions 'personal study', provides slides, exercises,
+  Comprehensive guide and operational rules for the David Study (Personal Study) system.
+  Use whenever the user mentions 'personal study' or 'David Study', provides slides, exercises,
   or course materials, asks to update or adapt the study app, or modifies disciplines,
   segments, quizzes, and flashcards. Defines the architecture, Supabase schema,
   granular 4-5 segment-per-chapter division, clear brown theme, 3-phase mastery
-  progression (rich text -> 1-by-1 quiz with reset -> flashcards), scratchpad canvas,
-  Exercise Zone (Random practice & Sudden Death with 18 extra questions/LU),
+  progression (rich text -> 1-by-1 quiz with reset -> flashcards), non-resetting quiz state,
+  text guide anchoring with amber highlights, large fundamental explanations, scratchpad canvas
+  with palm rejection & pinch/wheel zoom, Exercise Zone (Random practice & Sudden Death with 18 extra questions/LU),
   Preparation Score formulation, and self-updating guidelines.
 ---
 
-# Personal Study System Skill
+# David Study System Skill
 
-This skill defines the operational specifications, system architecture, database design, content pedagogy, granular segmentation rules, visual theme, and progression logic for the **Personal Study** platform.
+This skill defines the operational specifications, system architecture, database design, content pedagogy, granular segmentation rules, visual theme, and progression logic for the **David Study** platform (customized for multivariate data analysis and academic coursework).
 
 > [!IMPORTANT]
 > **CRITICAL AGENT ADAPTATION DIRECTIVE**:
-> Whenever the user refers to `personal study`, uploads course files (slides, exercises, syllabi), or corrects any aspect of the system in conversation:
+> Whenever the user refers to `personal study` or `David Study`, uploads course files (slides, exercises, syllabi), or corrects any aspect of the system in conversation:
 > 1. The agent **MUST immediately update this SKILL.md file** across both workspace and global locations to track and persist the user's instructions and refinements.
 > 2. The agent **MUST adapt the codebase and database** to reflect the new requirements or content immediately.
 > 3. Any future agent loading this skill must adhere to all rules documented here.
 
 ---
 
-## 1. Visual Theme & Brand Identity
+## 1. Visual Theme, Branding & Navigation
 
+- **Branding**: Titled **David Study** across the app header, browser tab (`<title>David Study</title>`), and favicon.
+- **Header Navigation**: Clicking the header title ("David Study") or the custom book logo navigates directly back to the main levels overview (`curriculum` tab).
 - **Logo**: The custom Book Icon PNG (warm brown leather cover, yellow title badge, cream pages). Located at `/public/logo.png`.
 - **Color Palette (Clear Warm Brown & Amber)**:
   - **Primary Brand / Headers / Active Accents**: Deep Leather Brown (`#78350f` / `#6d3b14` / `#451a03`).
@@ -77,16 +80,29 @@ Progress through each segment moves sequentially:
 
 ### Phase 1: Pure Text Guide
 - Comprehensive narrative explanation with formatted KaTeX formulas and practical examples.
-- Clicking **"Mark Text as Understood & Take Quiz"** unlocks Phase 2.
+- Auto-generates clean URL/anchor slugs on all `##` and `###` headers.
+- **Active Question Anchoring & Highlighting**:
+  - When jumped to from a live quiz question, the target section is highlighted with an amber callout border and a `"📍 Active Question Reference (Question X)"` badge.
+  - Automatically smooth-scrolls the highlighted section into view (`scrollMarginTop: 110px`).
+  - Displays a sticky top banner: `[← Return to Question X]`, allowing instant return to the in-progress quiz.
+- Clicking **"Mark Text as Understood & Take Quiz"** (or `"Return to Level Quiz (12 Qs)"`) navigates to Phase 2.
 
 ### Phase 2: Level Quiz (1 Question at a Time • Immediate Reset on Error)
 - **Question Format**: Exactly **12 substantive questions** (4 elemental, 4 conceptual, 4 advanced) with **6 choices each (A–F)**.
+- **Strict Content Alignment**:
+  - Every single question must be directly grounded in the concepts, definitions, and formulas taught in that specific Learning Unit's text guide.
+  - No disconnected questions or extraneous scenarios (e.g. Level 1 Q6 strictly tests predicting loan default via Discriminant Analysis matching Chapter 1 Section 3 text, avoiding unrelated e-commerce logistic regression).
+  - Each question stores `section_reference` (e.g. `Section 3: Classification of Methods`) and `section_anchor` (e.g. `#section-3-classification-of-multivariate-methods`).
+- **Non-Resetting Quiz Navigation**:
+  - When the user clicks `"📖 Reference Text Guide"` during a quiz, the quiz state **is preserved and does NOT reset** (retains question index $i$ of 12, chosen options, and inclination tags).
+  - The student can read the highlighted text guide section and return directly to question $i$ via the sticky banner or bottom action button.
 - **One Question at a Time**: The user is presented with one question at a time (Question $i$ of 12).
 - **Strict Reset on Failure**:
   - The user must score **12/12 in a single consecutive run**!
-  - If the user selects an incorrect answer on ANY question, the quiz is **immediately reset back to Question 1 (0/12)**!
-  - The user must restart from the beginning until all 12 are answered correctly in a row.
-  - An explanation is shown when an error occurs so the user learns the concept before restarting.
+  - If the user selects an incorrect answer on ANY question, the quiz is reset back to Question 1 (0/12).
+- **Large, Fundamental Explanations on Failure**:
+  - Failure cards display a comprehensive theoretical breakdown explaining the underlying mathematical principles, analytical derivations, why the correct answer holds, and why each distractor is invalid.
+  - Side-by-side visual comparison displays `"You Selected (Option X)"` in soft red and `"Correct Answer (Option Y)"` in soft green.
 - **"What am I inclined" Helper Feature (Elimination & Pre-decision Tag)**:
   - Appears on the right side of every multiple choice option (A–F) in both the Level Quiz and the Exercise Zone.
   - **Purely a Helper Feature**: Clicking the tag does NOT submit or select an answer; it allows the student to reason through choices and cross off options.
@@ -114,10 +130,11 @@ The Exercise Zone provides dedicated practice outside the sequential curriculum:
 - In addition to the base 12 quiz questions per segment, every learning unit has **18 additional practice questions** (`pool_type = 'practice'`).
 - For 8 learning units, this provides **144 extra questions** (total question bank = 240 questions with 6 choices each).
 - These extra questions appear exclusively in the Exercise Zone and Sudden Death.
+- **Isolated Practice Environment**: The Text Guide is never accessible inside the Exercise Zone to ensure true closed-book recall and test conditions.
 
 ### Mode A: Random Practice
 - Draws random questions from topics the user has already completed (or from Level 1 if none completed yet).
-- Immediate feedback with explanation on every question.
+- Immediate feedback with large fundamental explanation on every question.
 
 ### Mode B: Sudden Death Minigame
 - High-stakes consecutive streak challenge!
@@ -156,12 +173,21 @@ $$\text{Preparation Score} = \min(100, \text{round}(C + A + P + D))$$
 ## 7. Global Scratchpad / Calculation Canvas
 
 - **Openable Everywhere**: Available across all screens via a floating action button (FAB) at the bottom-right and top-bar button.
-- **Apple Pencil & Mouse Support**: Uses `PointerEvent` with `touch-action: none` to support Apple Pencil on iPad without triggering screen gestures or scrolling.
+- **Apple Pencil & Stylus Support**: Uses `PointerEvent` with `touch-action: none` to support Apple Pencil on iPad without triggering screen gestures or accidental scrolling.
+- **Palm Rejection & Text Selection Suppression**:
+  - Global suppression of text selection (`user-select: none`, `-webkit-user-select: none`, `-webkit-touch-callout: none`).
+  - Traps and prevents `selectstart` and `contextmenu` events while the scratchpad is active, preventing text selection boxes or iOS magnifier balloons when resting a palm on the screen.
+  - Pointer capture with `activePointerIdRef` ensures secondary touches created by resting palm contacts are rejected during pen strokes.
+- **Two-Finger Pinch Zoom & Rolling Wheel Pan**:
+  - **Pinch-to-Zoom**: Two fingers dynamically scale the canvas (0.4x to 4.0x) around the touch midpoint.
+  - **Mouse Wheel Movement**: Rolling the mouse wheel pans vertically and horizontally through notes; Ctrl+Wheel zooms centered on the mouse pointer.
+  - **Floating Zoom Controls**: Includes `[-]`, `zoom %` (click to reset view to 100%), `[+]`, and `RotateCcw` reset buttons in the top toolbar.
+  - **Exact Coordinate Mapping**: Drawing coordinates are calculated using `(e.clientX - rect.left) / scale` and `(e.clientY - rect.top) / scale`, guaranteeing exact pixel alignment at any zoom level or pan offset without drift.
 - **Tools**:
   - Pen (crisp black ink with fine 2px, medium 4px, broad 8px thickness).
-  - Eraser (allows erasing specific drawn strokes).
+  - Eraser (erases strokes back to clean paper background).
   - Clear All (clears the canvas).
-  - Close / Done (one-tap return to the study interface; notes persist in canvas memory across opens).
+  - Close / Done (one-tap return to the study interface; notes persist across modal toggles).
 - **Corner HUD**: When opened during a quiz or exercise, shows a collapsible floating card with the current question and 6 choices for easy reference during calculations.
 
 ---
@@ -173,7 +199,7 @@ $$\text{Preparation Score} = \min(100, \text{round}(C + A + P + D))$$
 - **Tables**:
   - `study_disciplines`: `id, name, code, description, created_at`
   - `study_segments`: `id, discipline_id, order_index, title, subtitle, summary_markdown, created_at`
-  - `study_questions`: `id, segment_id, order_index, difficulty, question, options (jsonb), correct_option, explanation, pool_type, created_at`
+  - `study_questions`: `id, segment_id, order_index, difficulty, question, options (jsonb), correct_option, explanation, pool_type, section_reference, section_anchor, created_at`
   - `study_flashcards`: `id, segment_id, order_index, category, front, back, created_at`
   - `study_progress`: `id, discipline_id, segment_id, text_completed, quiz_passed, quiz_score, quiz_attempts, flashcards_passed, completed, manually_unlocked, updated_at`
   - `study_user_settings`: `id, unlock_all, active_discipline_id, preparation_score, sudden_death_best_streak, sudden_death_current_streak, random_exercises_completed, total_correct_answers, total_wrong_answers, updated_at`

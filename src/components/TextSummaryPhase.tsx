@@ -1,19 +1,40 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Segment } from '../types';
 import { MathRenderer } from './MathRenderer';
-import { ArrowRight, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Bookmark, ArrowLeft } from 'lucide-react';
 
 interface TextSummaryPhaseProps {
   segment: Segment;
   isCompleted: boolean;
   onProceedToQuiz: () => void;
+  highlightAnchor?: string | null;
+  activeQuestionNumber?: number | null;
+  onReturnToQuiz?: () => void;
 }
 
 export const TextSummaryPhase: React.FC<TextSummaryPhaseProps> = ({
   segment,
   isCompleted,
-  onProceedToQuiz
+  onProceedToQuiz,
+  highlightAnchor,
+  activeQuestionNumber,
+  onReturnToQuiz
 }) => {
+  // Smoothly scroll to the referenced section when requested from a quiz question
+  useEffect(() => {
+    if (!highlightAnchor) return;
+    const timer = setTimeout(() => {
+      const slug = highlightAnchor.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      const target = document.getElementById(slug) ||
+                     document.querySelector(`[id*="${slug}"]`) ||
+                     document.getElementById(highlightAnchor);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 150);
+    return () => clearTimeout(timer);
+  }, [highlightAnchor]);
+
   return (
     <div style={{
       backgroundColor: '#ffffff',
@@ -22,6 +43,62 @@ export const TextSummaryPhase: React.FC<TextSummaryPhaseProps> = ({
       padding: '2rem 1.75rem',
       boxShadow: '0 1px 3px rgba(120, 53, 15, 0.02)'
     }}>
+      {/* Sticky Active Quiz Context Banner: Appears when inspecting a concept from a live question */}
+      {activeQuestionNumber && (
+        <div style={{
+          position: 'sticky',
+          top: '65px',
+          zIndex: 35,
+          marginBottom: '1.5rem',
+          backgroundColor: '#fffbeb',
+          border: '1.5px solid #fde68a',
+          borderRadius: '10px',
+          padding: '0.75rem 1.25rem',
+          boxShadow: '0 6px 16px rgba(217, 119, 6, 0.12)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '0.75rem'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <Bookmark size={18} color="#b45309" />
+            <div>
+              <span style={{ fontSize: '0.88rem', fontWeight: 800, color: '#92400e', display: 'block' }}>
+                Reviewing Concept for Question {activeQuestionNumber} of 12
+              </span>
+              <span style={{ fontSize: '0.78rem', color: '#b45309' }}>
+                The relevant section is highlighted below in amber. Your quiz is still in progress.
+              </span>
+            </div>
+          </div>
+
+          {onReturnToQuiz && (
+            <button
+              onClick={onReturnToQuiz}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                padding: '0.5rem 1rem',
+                borderRadius: '8px',
+                backgroundColor: '#78350f',
+                color: '#ffffff',
+                border: 'none',
+                fontWeight: 800,
+                fontSize: '0.82rem',
+                cursor: 'pointer',
+                boxShadow: '0 2px 6px rgba(120, 53, 15, 0.25)',
+                transition: 'all 0.12s ease'
+              }}
+            >
+              <ArrowLeft size={14} />
+              <span>Return to Question {activeQuestionNumber}</span>
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Title & Subtitle */}
       <div style={{ marginBottom: '1.75rem', borderBottom: '1px solid #f2eee6', paddingBottom: '1rem' }}>
         <div style={{
@@ -50,9 +127,13 @@ export const TextSummaryPhase: React.FC<TextSummaryPhaseProps> = ({
         )}
       </div>
 
-      {/* Narrative Text with KaTeX formulas */}
+      {/* Narrative Text with KaTeX formulas and highlighted anchor */}
       <div style={{ maxWidth: '820px', margin: '0 auto' }}>
-        <MathRenderer content={segment.summary_markdown} />
+        <MathRenderer
+          content={segment.summary_markdown}
+          highlightAnchor={highlightAnchor}
+          activeQuestionNumber={activeQuestionNumber}
+        />
       </div>
 
       {/* Clean Bottom Action */}

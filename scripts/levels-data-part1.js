@@ -44,7 +44,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "d",
-        "explanation": "The Ratio scale is uniquely characterized by possessing an absolute, immutable natural zero base value (such as 0 dollars in revenue or 0 kg in weight). This allows statements of proportionality (\"twice as much\") to remain valid under any admissible transformation ($Y_t = bY_0$)."
+        "explanation": "### 1. Fundamental Definition of the Origin\nA **Ratio Scale** is uniquely characterized by possessing an **absolute, non-arbitrary, immutable zero origin** that corresponds to the complete absence of the property being measured (e.g., zero dollars in revenue, zero units produced, zero degrees Kelvin).\n\n### 2. Analytical Invariance Property\nBecause the zero point is fixed, the only admissible transformation is proportional similarity scaling:\n$$Y_t = b \\cdot Y_0 \\quad (b > 0)$$\nWhen computing the ratio between two firms $i$ and $k$:\n$$\\frac{Y_{t,i}}{Y_{t,k}} = \\frac{b Y_{0,i}}{b Y_{0,k}} = \\frac{Y_{0,i}}{Y_{0,k}}$$\nThe transformation constant $b$ cancels out algebraically. This mathematical cancellation is why statements of proportionality ('Company A has twice the revenue of Company B') remain objectively valid across all currencies (USD, EUR, Yen).\n\n### 3. Why Other Scales Fail\nOn an interval scale ($Y_t = a + b Y_0$), the additive translation $a$ prevents cancellation, rendering ratio statements meaningless (e.g., $20^\\circ\\text{C}$ is not twice as hot as $10^\\circ\\text{C}$).",
+        "section_anchor": "ratio-scale",
+        "section_reference": "Section 2.4: Ratio Scale"
       },
       {
         "id": "q_l1_2",
@@ -79,7 +81,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "For a nominal variable with $k$ categories, exactly $k - 1$ dummy variables are needed. If all $k$ dummies were included along with the intercept, their sum would equal 1, causing the \"dummy variable trap\" (perfect multicollinearity)."
+        "explanation": "### 1. The Dummy Variable Trap & Multicollinearity\nIn linear regression models, nominal categorical variables with $k$ levels cannot be entered directly as integers because the numbers possess zero quantitative meaning. Instead, they are represented through binary $(0/1)$ indicator variables.\n\n### 2. Mathematical Proof of $k - 1$ Degrees of Freedom\nIf an analyst were to include dummy variables for all $k$ categories ($D_1 + D_2 + \\dots + D_k = 1$), their sum would be identically equal to the constant intercept column ($X_0 = 1$) for every observation in the sample. This creates **exact linear dependence** (perfect multicollinearity), causing the matrix $(X^T X)$ to become singular and mathematically non-invertible:\n$$\\det(X^T X) = 0$$\nTo ensure $(X^T X)$ has full column rank, exactly **$k - 1$ binary variables** must be introduced. The omitted $k$-th category serves as the baseline reference benchmark.",
+        "section_anchor": "nominal-scale",
+        "section_reference": "Section 2.1: Nominal Scale"
       },
       {
         "id": "q_l1_3",
@@ -114,7 +118,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "In dependence methods (such as regression or discriminant analysis), variables are partitioned into independent (predictors) and dependent (criterion) variables. In interdependence methods (such as PCA, FA, cluster analysis), variables cannot be conceptually split, and their mutual interrelationships are studied together."
+        "explanation": "### 1. The Core Methodological Division\nMultivariate methods are fundamentally partitioned by whether variables play distinct asymmetric functional roles in the scientific inquiry.\n\n### 2. Dependence Methods (Predictive & Causal Modeling)\nUsed when the research problem designates one or more variables as **dependent (criterion/target)** to be predicted or explained by a set of **independent (predictor/explanatory)** variables. Examples: Multiple Linear Regression, Discriminant Analysis, Logistic Regression, MANOVA.\n\n### 3. Interdependence Methods (Structural & Geometric Modeling)\nUsed when variables **cannot be conceptually partitioned** into inputs and outputs. All variables are analyzed simultaneously to uncover mutual correlation patterns, extract latent dimensions, or identify natural groupings. Examples: Principal Components Analysis (PCA), Factor Analysis (FA), Cluster Analysis, Multidimensional Scaling (MDS).",
+        "section_anchor": "classification-of-multivariate-methods",
+        "section_reference": "Section 3: Classification of Methods"
       },
       {
         "id": "q_l1_4",
@@ -149,7 +155,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "e",
-        "explanation": "Because the intervals between ranks on an ordinal scale are not equal, taking an arithmetic mean or standard deviation makes the false assumption of equidistant scale intervals."
+        "explanation": "### 1. Ordinal Distance Non-Uniformity\nAn **Ordinal Scale** preserves only monotonic rank order ($x_i > x_k$). It guarantees direction of preference, but the intervals between consecutive ranks are strictly unknown and unequal. The perceived utility gap between rank 1 and rank 2 is not equal to the gap between rank 2 and rank 3.\n\n### 2. Mathematical Invalidity of Means and Variances\nComputing the arithmetic mean $\\bar{x} = \\frac{1}{n} \\sum x_i$ or standard deviation $s = \\sqrt{\\frac{1}{n-1}\\sum (x_i - \\bar{x})^2}$ relies on the mathematical assumption that intervals between adjacent integer values are identical. Performing these operations on ordinal ranks yields distorted, arbitrary statistics.\n\n### 3. Permissible Statistics\nPermissible summary metrics for ordinal data include the **median**, **mode**, percentiles, and rank-order correlation metrics like Spearman's rank correlation coefficient ($r_s$) or Kendall's tau ($\\tau$).",
+        "section_anchor": "ordinal-scale",
+        "section_reference": "Section 2.2: Ordinal Scale"
       },
       {
         "id": "q_l1_5",
@@ -184,42 +192,46 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "c",
-        "explanation": "On an interval scale, the zero point is arbitrary. A permissible transformation is $Y_t = a + bY_0$. Under this shift, the mean transforms as $\\bar{Y}_t = a + b\\bar{Y}_0$ while the standard deviation transforms as $s_t = b s_0$. Therefore, $CV_t = b s_0 / (a + b\\bar{Y}_0) \\neq s_0 / \\bar{Y}_0$. Because the constant $a$ alters the ratio, ratio-based statistics are invalid."
+        "explanation": "### 1. The Coefficient of Variation ($CV$) Formula\nThe Coefficient of Variation is a dimensionless relative dispersion metric defined as:\n$$CV = \\frac{s}{\\bar{x}}$$\n\n### 2. Behavior Under Interval Linear Transformations\nInterval scales permit linear transformations $Y_t = a + b Y_0$ ($b > 0$), where $a$ is an arbitrary origin shift. Under this transformation:\n- The standard deviation transforms purely proportionally: $s_t = b \\cdot s_0$.\n- The arithmetic mean shifts additively: $\\bar{Y}_t = a + b \\cdot \\bar{Y}_0$.\n\nSubstituting these into the $CV$ equation yields:\n$$CV_t = \\frac{b \\cdot s_0}{a + b \\cdot \\bar{Y}_0} \\neq \\frac{s_0}{\\bar{Y}_0}$$\nBecause the arbitrary constant $a$ does not cancel out, the value of $CV$ changes arbitrarily depending on whether temperature is measured in Celsius or Fahrenheit. Therefore, $CV$ is statistically invalid on interval scales.",
+        "section_anchor": "interval-scale",
+        "section_reference": "Section 2.3: Interval Scale"
       },
       {
         "id": "q_l1_6",
         "segment_id": "ch1-scales-methods",
         "order_index": 6,
         "difficulty": "intermediate",
-        "question": "An e-commerce retailer wants to predict whether a customer will subscribe to a premium membership (Yes/No) based on their annual spend, browsing minutes, and account age. Which multivariate technique is appropriate?",
+        "section_reference": "Section 3.1: Dependence Methods",
+        "section_anchor": "dependence-methods",
+        "question": "A commercial bank wants to predict whether a credit applicant will default on a loan (a nonmetric categorical variable: Default vs Non-Default) based on three metric indicators: annual income, debt ratio, and credit history score. According to the classification of multivariate dependence methods in Chapter 1, which technique is specifically designated for this structure?",
         "options": [
           {
             "id": "a",
-            "text": "Principal Components Analysis (PCA)"
+            "text": "Multiple Linear Regression, because it evaluates relationships between continuous predictors"
           },
           {
             "id": "b",
-            "text": "Discriminant Analysis or Binary Logistic Regression"
+            "text": "Discriminant Analysis, because a single nonmetric categorical dependent variable is predicted by multiple metric independent variables"
           },
           {
             "id": "c",
-            "text": "Correspondence Analysis (CA)"
+            "text": "Multivariate Analysis of Variance (MANOVA), because several independent variables are tested simultaneously"
           },
           {
             "id": "d",
-            "text": "Multidimensional Scaling (MDS)"
+            "text": "Principal Components Analysis (PCA), because it reduces dimensions across all applicant variables without a target"
           },
           {
             "id": "e",
-            "text": "Factor Analysis (FA)"
+            "text": "Canonical Correlation, because multiple metric variables are included in the bank model"
           },
           {
             "id": "f",
-            "text": "Simple Pearson Correlation Matrix"
+            "text": "Exploratory Factor Analysis (FA), because it extracts latent credit scores from observed bank data"
           }
         ],
         "correct_option": "b",
-        "explanation": "The problem involves a single nonmetric categorical dependent variable (Subscription: Yes/No) and multiple metric independent variables (spend, browsing minutes, age). This is the classic setup for Discriminant Analysis or Logistic Regression (a dependence method)."
+        "explanation": "### 1. Theoretical Classification Rule\nIn multivariate dependence methods, techniques are systematically classified by the measurement scale of variables (metric vs. nonmetric) and the number of dependent and independent variables.\n\n### 2. Why Discriminant Analysis is Correct\nWhen the research objective is to explain or predict a **single nonmetric (categorical) dependent variable** (such as loan default status: Default vs. Non-Default) using **multiple metric independent variables** (annual income, debt ratio, credit score), the exact designated technique is **Discriminant Analysis**. It constructs linear combinations of metric predictors that maximize separation between categorical groups.\n\n### 3. Why Other Multivariate Techniques Fail in This Context\n- **Multiple Linear Regression**: Strictly requires a **metric continuous** dependent variable (such as predicting exact credit balance in dollars, not a qualitative Yes/No group).\n- **MANOVA (Multivariate Analysis of Variance)**: Operates in the exact opposite direction: it evaluates **multiple metric dependent variables** across nonmetric treatment/categorical groups.\n- **Canonical Correlation**: Assesses linear relationships between **multiple metric dependent** variables and multiple metric independent variables.\n- **PCA and Factor Analysis**: Are **interdependence methods** where variables are not partitioned into predictors and criterion targets at all."
       },
       {
         "id": "q_l1_7",
@@ -254,7 +266,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Interval scale properties are preserved under linear transformations $Y_t = a + bY_0$ ($b > 0$), where $a$ represents an origin translation and $b$ represents a change in the unit of measurement."
+        "explanation": "Interval scale properties are preserved under linear transformations $Y_t = a + bY_0$ ($b > 0$), where $a$ represents an origin translation and $b$ represents a change in the unit of measurement.",
+        "section_anchor": "interval-scale",
+        "section_reference": "Section 2.3: Interval Scale"
       },
       {
         "id": "q_l1_8",
@@ -289,7 +303,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "c",
-        "explanation": "Correspondence Analysis (CA) is an interdependence technique designed to reduce dimensionality and display relationships in cross-tabulations of categorical (nonmetric) data, serving as the categorical counterpart to PCA."
+        "explanation": "Correspondence Analysis (CA) is an interdependence technique designed to reduce dimensionality and display relationships in cross-tabulations of categorical (nonmetric) data, serving as the categorical counterpart to PCA.",
+        "section_anchor": "interdependence-methods",
+        "section_reference": "Section 3.2: Interdependence Methods"
       },
       {
         "id": "q_l1_9",
@@ -324,7 +340,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "In the original scale (1 to 5), the distance between adjacent points is 1 and the ratio is $5/1 = 5.0$. Applying $Y_t = 2Y_0 + 10$ yields points 12, 14, 16, 18, 20. The interval between adjacent points is uniformly 2 (equal differences are preserved), but the ratio becomes $20/12 = 1.667$. This proves that interval scales preserve equal increments, but ratios of raw values are meaningless."
+        "explanation": "In the original scale (1 to 5), the distance between adjacent points is 1 and the ratio is $5/1 = 5.0$. Applying $Y_t = 2Y_0 + 10$ yields points 12, 14, 16, 18, 20. The interval between adjacent points is uniformly 2 (equal differences are preserved), but the ratio becomes $20/12 = 1.667$. This proves that interval scales preserve equal increments, but ratios of raw values are meaningless.",
+        "section_anchor": "interval-scale",
+        "section_reference": "Section 2.3: Interval Scale"
       },
       {
         "id": "q_l1_10",
@@ -359,7 +377,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "When $k - 1$ dummy variables are included in a linear regression model, the coefficient on any dummy variable represents the differential intercept—the expected difference in the dependent variable relative to the omitted baseline category (in this case, Students)."
+        "explanation": "When $k - 1$ dummy variables are included in a linear regression model, the coefficient on any dummy variable represents the differential intercept—the expected difference in the dependent variable relative to the omitted baseline category (in this case, Students).",
+        "section_anchor": "nominal-scale",
+        "section_reference": "Section 2.1: Nominal Scale"
       },
       {
         "id": "q_l1_11",
@@ -394,7 +414,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Multidimensional Scaling (MDS) is an interdependence technique that takes pairwise similarity or dissimilarity ratings among $n$ objects and constructs a geometric configuration of points in low-dimensional space such that distances between points reproduce observed proximities."
+        "explanation": "Multidimensional Scaling (MDS) is an interdependence technique that takes pairwise similarity or dissimilarity ratings among $n$ objects and constructs a geometric configuration of points in low-dimensional space such that distances between points reproduce observed proximities.",
+        "section_anchor": "interdependence-methods",
+        "section_reference": "Section 3.2: Interdependence Methods"
       },
       {
         "id": "q_l1_12",
@@ -429,7 +451,9 @@ export const levelsPart1 = [
           }
         ],
         "correct_option": "b",
-        "explanation": "Ratio scales are strictly restricted to similarity transformations $Y_t = bY_0$ ($b > 0$). Adding a constant $a \\neq 0$ shifts the natural zero point, destroying the property that zero means absence of the attribute. For example, if Firm A has $10M and Firm B has $5M (ratio = 2.0), adding 50 gives $60M and $55M (ratio = 1.09), destroying the true ratio relationship."
+        "explanation": "Ratio scales are strictly restricted to similarity transformations $Y_t = bY_0$ ($b > 0$). Adding a constant $a \\neq 0$ shifts the natural zero point, destroying the property that zero means absence of the attribute. For example, if Firm A has $10M and Firm B has $5M (ratio = 2.0), adding 50 gives $60M and $55M (ratio = 1.09), destroying the true ratio relationship.",
+        "section_anchor": "ratio-scale",
+        "section_reference": "Section 2.4: Ratio Scale"
       }
     ],
     "flashcards": [

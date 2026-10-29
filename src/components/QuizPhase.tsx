@@ -12,7 +12,7 @@ interface QuizPhaseProps {
   onPassQuiz: (score: number) => void;
   onProceedToFlashcards: () => void;
   onOpenScratchpad?: () => void;
-  onGoToText?: () => void;
+  onGoToText?: (anchor?: string, qNum?: number) => void;
 }
 
 export const QuizPhase: React.FC<QuizPhaseProps> = ({
@@ -287,7 +287,7 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
             <button
               onClick={() => {
                 playClickSound();
-                onGoToText();
+                onGoToText(currentQ.section_anchor || currentQ.section_reference, currentIndex + 1);
               }}
               style={{
                 display: 'flex',
@@ -576,7 +576,7 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
               <button
                 onClick={() => {
                   playClickSound();
-                  onGoToText();
+                  onGoToText(currentQ.section_anchor || currentQ.section_reference, currentIndex + 1);
                 }}
                 style={{
                   display: 'flex',

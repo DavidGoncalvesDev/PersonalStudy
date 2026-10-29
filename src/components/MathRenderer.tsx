@@ -4,6 +4,8 @@ import 'katex/dist/katex.min.css';
 
 interface MathRendererProps {
   content: string;
+  highlightAnchor?: string | null;
+  activeQuestionNumber?: number | null;
 }
 
 /**
@@ -112,7 +114,10 @@ export const renderInlineMath = (text: string): React.ReactNode => {
  * MathRenderer parses structured study content containing headers, callouts, block equations,
  * and narrative paragraphs with KaTeX math rendering.
  */
-export const MathRenderer: React.FC<MathRendererProps> = ({ content }) => {
+const createSlug = (str: string) =>
+  str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+export const MathRenderer: React.FC<MathRendererProps> = ({ content, highlightAnchor, activeQuestionNumber }) => {
   if (!content) return null;
 
   // Split by block math $$...$$
@@ -237,12 +242,16 @@ export const MathRenderer: React.FC<MathRendererProps> = ({ content }) => {
           return;
         }
 
-        // Headers
+        // Headers with Automatic Slug Anchors & Active Question Highlighting
         if (trimmed.startsWith('# ')) {
+          const headingText = trimmed.replace(/^#\s+/, '');
+          const slug = createSlug(headingText);
           elements.push(
             <h1
+              id={slug}
               key={`h1-${bIdx}-${lIdx}`}
               style={{
+                scrollMarginTop: '110px',
                 fontSize: '1.65rem',
                 fontWeight: 800,
                 color: '#451a03',
@@ -253,45 +262,154 @@ export const MathRenderer: React.FC<MathRendererProps> = ({ content }) => {
                 paddingBottom: '0.5rem'
               }}
             >
-              {renderInlineMath(trimmed.replace(/^#\s+/, ''))}
+              {renderInlineMath(headingText)}
             </h1>
           );
         } else if (trimmed.startsWith('## ')) {
-          elements.push(
-            <h2
-              key={`h2-${bIdx}-${lIdx}`}
-              style={{
-                fontSize: '1.3rem',
-                fontWeight: 700,
-                color: '#78350f',
-                marginTop: '1.75rem',
-                marginBottom: '0.65rem',
-                letterSpacing: '-0.01em'
-              }}
-            >
-              {renderInlineMath(trimmed.replace(/^##\s+/, ''))}
-            </h2>
+          const headingText = trimmed.replace(/^##\s+/, '');
+          const slug = createSlug(headingText);
+          const isHighlighted = highlightAnchor && (
+            slug.includes(highlightAnchor.toLowerCase()) || highlightAnchor.toLowerCase().includes(slug)
           );
+
+          if (isHighlighted) {
+            elements.push(
+              <div
+                id={slug}
+                key={`h2-highlight-${bIdx}-${lIdx}`}
+                style={{
+                  scrollMarginTop: '110px',
+                  marginTop: '2rem',
+                  marginBottom: '1rem',
+                  padding: '1.15rem 1.35rem',
+                  backgroundColor: '#fffbeb',
+                  border: '2.5px solid #d97706',
+                  borderRadius: '12px',
+                  boxShadow: '0 4px 18px rgba(217, 119, 6, 0.18)'
+                }}
+              >
+                <div style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  padding: '0.22rem 0.65rem',
+                  borderRadius: '6px',
+                  backgroundColor: '#d97706',
+                  color: '#ffffff',
+                  fontSize: '0.74rem',
+                  fontWeight: 800,
+                  marginBottom: '0.5rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.04em'
+                }}>
+                  <span>📍 Active Question Reference {activeQuestionNumber ? `(Question ${activeQuestionNumber})` : ''}</span>
+                </div>
+                <h2 style={{
+                  margin: 0,
+                  fontSize: '1.35rem',
+                  fontWeight: 800,
+                  color: '#78350f',
+                  letterSpacing: '-0.01em'
+                }}>
+                  {renderInlineMath(headingText)}
+                </h2>
+              </div>
+            );
+          } else {
+            elements.push(
+              <h2
+                id={slug}
+                key={`h2-${bIdx}-${lIdx}`}
+                style={{
+                  scrollMarginTop: '110px',
+                  fontSize: '1.3rem',
+                  fontWeight: 700,
+                  color: '#78350f',
+                  marginTop: '1.75rem',
+                  marginBottom: '0.65rem',
+                  letterSpacing: '-0.01em'
+                }}
+              >
+                {renderInlineMath(headingText)}
+              </h2>
+            );
+          }
         } else if (trimmed.startsWith('### ')) {
-          elements.push(
-            <h3
-              key={`h3-${bIdx}-${lIdx}`}
-              style={{
-                fontSize: '1.08rem',
-                fontWeight: 700,
-                color: '#92400e',
-                marginTop: '1.4rem',
-                marginBottom: '0.5rem'
-              }}
-            >
-              {renderInlineMath(trimmed.replace(/^###\s+/, ''))}
-            </h3>
+          const headingText = trimmed.replace(/^###\s+/, '');
+          const slug = createSlug(headingText);
+          const isHighlighted = highlightAnchor && (
+            slug.includes(highlightAnchor.toLowerCase()) || highlightAnchor.toLowerCase().includes(slug)
           );
+
+          if (isHighlighted) {
+            elements.push(
+              <div
+                id={slug}
+                key={`h3-highlight-${bIdx}-${lIdx}`}
+                style={{
+                  scrollMarginTop: '110px',
+                  marginTop: '1.75rem',
+                  marginBottom: '1rem',
+                  padding: '1.15rem 1.35rem',
+                  backgroundColor: '#fffbeb',
+                  border: '2.5px solid #d97706',
+                  borderRadius: '12px',
+                  boxShadow: '0 4px 18px rgba(217, 119, 6, 0.18)'
+                }}
+              >
+                <div style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  padding: '0.22rem 0.65rem',
+                  borderRadius: '6px',
+                  backgroundColor: '#d97706',
+                  color: '#ffffff',
+                  fontSize: '0.74rem',
+                  fontWeight: 800,
+                  marginBottom: '0.5rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.04em'
+                }}>
+                  <span>📍 Active Question Reference {activeQuestionNumber ? `(Question ${activeQuestionNumber})` : ''}</span>
+                </div>
+                <h3 style={{
+                  margin: 0,
+                  fontSize: '1.18rem',
+                  fontWeight: 800,
+                  color: '#78350f'
+                }}>
+                  {renderInlineMath(headingText)}
+                </h3>
+              </div>
+            );
+          } else {
+            elements.push(
+              <h3
+                id={slug}
+                key={`h3-${bIdx}-${lIdx}`}
+                style={{
+                  scrollMarginTop: '110px',
+                  fontSize: '1.08rem',
+                  fontWeight: 700,
+                  color: '#92400e',
+                  marginTop: '1.4rem',
+                  marginBottom: '0.5rem'
+                }}
+              >
+                {renderInlineMath(headingText)}
+              </h3>
+            );
+          }
         } else if (trimmed.startsWith('#### ')) {
+          const headingText = trimmed.replace(/^####\s+/, '');
+          const slug = createSlug(headingText);
           elements.push(
             <h4
+              id={slug}
               key={`h4-${bIdx}-${lIdx}`}
               style={{
+                scrollMarginTop: '110px',
                 fontSize: '0.98rem',
                 fontWeight: 700,
                 color: '#78350f',
@@ -299,7 +417,7 @@ export const MathRenderer: React.FC<MathRendererProps> = ({ content }) => {
                 marginBottom: '0.4rem'
               }}
             >
-              {renderInlineMath(trimmed.replace(/^####\s+/, ''))}
+              {renderInlineMath(headingText)}
             </h4>
           );
         } else if (trimmed.startsWith('> ')) {
