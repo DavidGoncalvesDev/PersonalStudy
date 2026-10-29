@@ -593,30 +593,33 @@ export const App: React.FC = () => {
             {/* Active Workflow Component */}
             {currentSegment && (
               <>
-                {activePhase === 'text' && (
+                <div style={{ display: activePhase === 'text' ? 'block' : 'none' }}>
                   <TextSummaryPhase
                     segment={currentSegment}
                     isCompleted={!!currentSegmentProgress?.text_completed}
                     onProceedToQuiz={handleProceedToQuiz}
                   />
-                )}
+                </div>
 
-                {activePhase === 'quiz' && (
+                <div style={{ display: activePhase === 'quiz' ? 'block' : 'none' }}>
                   <QuizPhase
+                    key={`quiz-${currentSegment.id}`}
                     questions={questions}
                     segmentTitle={currentSegment.title}
                     isAlreadyPassed={!!currentSegmentProgress?.quiz_passed}
                     onPassQuiz={handlePassQuiz}
                     onProceedToFlashcards={handleProceedToFlashcards}
+                    onGoToText={() => setActivePhase('text')}
                     onOpenScratchpad={() => {
                       setScratchpadQuestion(questions[0] || null);
                       setIsScratchpadOpen(true);
                     }}
                   />
-                )}
+                </div>
 
                 {activePhase === 'flashcards' && (
                   <FlashcardsPhase
+                    key={`flashcards-${currentSegment.id}`}
                     flashcards={flashcards}
                     segmentTitle={currentSegment.title}
                     isAlreadyCompleted={!!currentSegmentProgress?.flashcards_passed}

@@ -96,7 +96,7 @@ export const TextSummaryPhase: React.FC<TextSummaryPhaseProps> = ({
           onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#582f10')}
           onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#78350f')}
         >
-          <span>Take Level Quiz (12 Qs)</span>
+          <span>{isCompleted ? 'Return to Level Quiz (12 Qs)' : 'Take Level Quiz (12 Qs)'}</span>
           <ArrowRight size={16} />
         </button>
       </div>

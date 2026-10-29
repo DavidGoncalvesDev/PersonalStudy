@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Question } from '../types';
 import confetti from 'canvas-confetti';
-import { Award, Edit3, ShieldAlert, RotateCcw, ArrowRight } from 'lucide-react';
-import { renderInlineMath } from './MathRenderer';
+import { Award, Edit3, ShieldAlert, RotateCcw, ArrowRight, BookOpen, Check, X, Lightbulb, Bookmark } from 'lucide-react';
+import { renderInlineMath, MathRenderer } from './MathRenderer';
 import { playCorrectSound, playWrongSound, playSuccessChime, playClickSound } from '../utils/soundEffects';
 
 interface QuizPhaseProps {
@@ -12,6 +12,7 @@ interface QuizPhaseProps {
   onPassQuiz: (score: number) => void;
   onProceedToFlashcards: () => void;
   onOpenScratchpad?: () => void;
+  onGoToText?: () => void;
 }
 
 export const QuizPhase: React.FC<QuizPhaseProps> = ({
@@ -20,7 +21,8 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
   isAlreadyPassed,
   onPassQuiz,
   onProceedToFlashcards,
-  onOpenScratchpad
+  onOpenScratchpad,
+  onGoToText
 }) => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -234,6 +236,8 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
   };
 
   const diffStyle = difficultyColors[currentQ.difficulty] || difficultyColors.easy;
+  const failedOptObj = currentQ.options.find(o => o.id === failedOption);
+  const correctOptObj = currentQ.options.find(o => o.id === currentQ.correct_option);
 
   return (
     <div style={{
@@ -277,35 +281,66 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
           </span>
         </div>
 
-        {/* Quick Scratchpad Button */}
-        {onOpenScratchpad && (
-          <button
-            onClick={onOpenScratchpad}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.35rem',
-              padding: '0.35rem 0.65rem',
-              borderRadius: '6px',
-              backgroundColor: '#fdfbf7',
-              border: '1px solid #e7e2d7',
-              color: '#78350f',
-              fontWeight: 700,
-              fontSize: '0.74rem',
-              cursor: 'pointer'
-            }}
-          >
-            <Edit3 size={13} color="#78350f" />
-            <span>Scratchpad / Calculations</span>
-          </button>
-        )}
+        {/* Quick Actions: Review in Text Guide (without quiz reset) + Scratchpad */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+          {onGoToText && (
+            <button
+              onClick={() => {
+                playClickSound();
+                onGoToText();
+              }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                padding: '0.35rem 0.65rem',
+                borderRadius: '6px',
+                backgroundColor: '#fffdfa',
+                border: '1px solid #d6cebf',
+                color: '#78350f',
+                fontWeight: 700,
+                fontSize: '0.74rem',
+                cursor: 'pointer'
+              }}
+              aria-label="Reference Text Guide without resetting quiz"
+            >
+              <BookOpen size={13} color="#78350f" />
+              <span>Reference Text Guide</span>
+            </button>
+          )}
+
+          {onOpenScratchpad && (
+            <button
+              onClick={() => {
+                playClickSound();
+                onOpenScratchpad();
+              }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                padding: '0.35rem 0.65rem',
+                borderRadius: '6px',
+                backgroundColor: '#fdfbf7',
+                border: '1px solid #e7e2d7',
+                color: '#78350f',
+                fontWeight: 700,
+                fontSize: '0.74rem',
+                cursor: 'pointer'
+              }}
+            >
+              <Edit3 size={13} color="#78350f" />
+              <span>Scratchpad / Calculations</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Progress Bar (12 Steps) */}
       <div style={{
         display: 'flex',
         gap: '0.3rem',
-        marginBottom: '1.5rem'
+        marginBottom: '1.25rem'
       }}>
         {questions.map((_, qIdx) => (
           <div
@@ -324,6 +359,26 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
           />
         ))}
       </div>
+
+      {/* Curriculum Point Anchor if available */}
+      {currentQ.section_reference && (
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '0.35rem',
+          padding: '0.22rem 0.6rem',
+          borderRadius: '6px',
+          backgroundColor: '#fffbeb',
+          border: '1px solid #fde68a',
+          color: '#92400e',
+          fontSize: '0.74rem',
+          fontWeight: 700,
+          marginBottom: '0.85rem'
+        }}>
+          <Bookmark size={12} color="#b45309" />
+          <span>Curriculum Point: {currentQ.section_reference}</span>
+        </div>
+      )}
 
       {/* Question Prompt */}
       <div style={{ marginBottom: '1.5rem' }}>
@@ -470,58 +525,218 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
         })}
       </div>
 
-      {/* Failure Screen: Only appears on Wrong Answers! Explains what is wrong and restarts */}
+      {/* Comprehensive Fundamental Failure Card: Appears only on Wrong Answers */}
       {isFailed && (
         <div style={{
-          backgroundColor: '#fef2f2',
-          border: '1.5px solid #fca5a5',
-          borderRadius: '10px',
-          padding: '1.15rem 1.25rem',
-          animation: 'fadeIn 0.2s ease'
+          marginTop: '1.75rem',
+          backgroundColor: '#ffffff',
+          border: '2px solid #ef4444',
+          borderRadius: '14px',
+          boxShadow: '0 10px 25px rgba(239, 68, 68, 0.08), 0 2px 8px rgba(120, 53, 15, 0.04)',
+          overflow: 'hidden',
+          animation: 'fadeIn 0.25s ease'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-            <ShieldAlert size={18} color="#b91c1c" />
-            <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#b91c1c' }}>
-              Incorrect Answer • Quiz Resets to Question 1
-            </span>
-          </div>
-          <p style={{ fontSize: '0.84rem', color: '#7f1d1d', margin: '0 0 0.75rem', lineHeight: 1.55 }}>
-            You selected <strong>Option {failedOption?.toUpperCase()}</strong>. Correct answer is <strong>Option {currentQ.correct_option.toUpperCase()}</strong>.
-          </p>
+          {/* Top Alert Header */}
           <div style={{
-            backgroundColor: '#ffffff',
-            border: '1px solid #fecaca',
-            borderRadius: '6px',
-            padding: '0.85rem',
-            marginBottom: '1rem',
-            fontSize: '0.86rem',
-            color: '#44403c',
-            lineHeight: 1.55
+            backgroundColor: '#fef2f2',
+            borderBottom: '1.5px solid #fecaca',
+            padding: '1.25rem 1.5rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '0.75rem'
           }}>
-            <strong style={{ color: '#78350f' }}>Explanation: </strong>
-            {renderInlineMath(currentQ.explanation)}
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <button
-              onClick={handleRestartQuiz}
-              style={{
-                padding: '0.65rem 1.5rem',
-                backgroundColor: '#dc2626',
-                color: '#ffffff',
-                border: 'none',
-                borderRadius: '8px',
-                fontWeight: 800,
-                fontSize: '0.85rem',
-                cursor: 'pointer',
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+              <div style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                backgroundColor: '#fee2e2',
+                border: '1.5px solid #fca5a5',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.4rem',
-                boxShadow: '0 2px 6px rgba(220, 38, 38, 0.2)'
-              }}
-            >
-              <RotateCcw size={15} />
-              <span>Restart Quiz from Question 1</span>
-            </button>
+                justifyContent: 'center',
+                flexShrink: 0
+              }}>
+                <ShieldAlert size={20} color="#dc2626" />
+              </div>
+              <div>
+                <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 800, color: '#991b1b' }}>
+                  Incorrect Answer • Fundamental Concept Breakdown
+                </h4>
+                <span style={{ fontSize: '0.8rem', color: '#b91c1c', fontWeight: 600 }}>
+                  Quiz resets to Question 1 (0/12) — study the theoretical derivation below before retrying
+                </span>
+              </div>
+            </div>
+
+            {/* Direct Link to section in text guide without losing quiz state */}
+            {onGoToText && (
+              <button
+                onClick={() => {
+                  playClickSound();
+                  onGoToText();
+                }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                  padding: '0.4rem 0.75rem',
+                  borderRadius: '6px',
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #fca5a5',
+                  color: '#991b1b',
+                  fontWeight: 700,
+                  fontSize: '0.78rem',
+                  cursor: 'pointer'
+                }}
+              >
+                <BookOpen size={13} />
+                <span>Review in Text Guide</span>
+              </button>
+            )}
+          </div>
+
+          <div style={{ padding: '1.5rem 1.5rem' }}>
+            {/* Visual Choice Comparison */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: '1rem',
+              marginBottom: '1.5rem'
+            }}>
+              {/* What You Selected (Red) */}
+              <div style={{
+                backgroundColor: '#fff5f5',
+                border: '1.5px solid #fecaca',
+                borderRadius: '10px',
+                padding: '1rem 1.15rem'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  marginBottom: '0.45rem',
+                  color: '#dc2626',
+                  fontWeight: 800,
+                  fontSize: '0.82rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.04em'
+                }}>
+                  <X size={15} />
+                  <span>You Selected: Option {failedOption?.toUpperCase()}</span>
+                </div>
+                <div style={{ fontSize: '0.92rem', color: '#7f1d1d', lineHeight: 1.55 }}>
+                  {failedOptObj ? renderInlineMath(failedOptObj.text) : 'None'}
+                </div>
+              </div>
+
+              {/* Correct Answer (Green) */}
+              <div style={{
+                backgroundColor: '#f0fdf4',
+                border: '1.5px solid #bbf7d0',
+                borderRadius: '10px',
+                padding: '1rem 1.15rem'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  marginBottom: '0.45rem',
+                  color: '#15803d',
+                  fontWeight: 800,
+                  fontSize: '0.82rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.04em'
+                }}>
+                  <Check size={15} />
+                  <span>Correct Answer: Option {currentQ.correct_option.toUpperCase()}</span>
+                </div>
+                <div style={{ fontSize: '0.92rem', color: '#14532d', lineHeight: 1.55, fontWeight: 600 }}>
+                  {correctOptObj ? renderInlineMath(correctOptObj.text) : ''}
+                </div>
+              </div>
+            </div>
+
+            {/* Deep Fundamental Theory Breakdown Card */}
+            <div style={{
+              backgroundColor: '#fffdfa',
+              border: '1.5px solid #e7e2d7',
+              borderRadius: '12px',
+              padding: '1.5rem',
+              marginBottom: '1.5rem',
+              boxShadow: '0 2px 8px rgba(120, 53, 15, 0.03)'
+            }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '0.5rem',
+                marginBottom: '1rem',
+                borderBottom: '1.5px solid #f2ede4',
+                paddingBottom: '0.65rem'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <Lightbulb size={18} color="#b45309" />
+                  <h5 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 800, color: '#78350f' }}>
+                    Fundamental Concept & Theory Breakdown
+                  </h5>
+                </div>
+
+                {currentQ.section_reference && (
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.35rem',
+                    padding: '0.2rem 0.55rem',
+                    borderRadius: '6px',
+                    backgroundColor: '#fef3c7',
+                    border: '1px solid #fde68a',
+                    color: '#92400e',
+                    fontSize: '0.74rem',
+                    fontWeight: 700
+                  }}>
+                    <Bookmark size={12} color="#b45309" />
+                    <span>Section Anchor: {currentQ.section_reference}</span>
+                  </div>
+                )}
+              </div>
+
+              <div style={{
+                fontSize: '0.98rem',
+                color: '#292524',
+                lineHeight: 1.75
+              }}>
+                <MathRenderer content={currentQ.explanation} />
+              </div>
+            </div>
+
+            {/* Large Restart Quiz Action Button */}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', alignItems: 'center' }}>
+              <button
+                onClick={handleRestartQuiz}
+                style={{
+                  padding: '0.85rem 1.85rem',
+                  backgroundColor: '#78350f',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '8px',
+                  fontWeight: 800,
+                  fontSize: '0.92rem',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  boxShadow: '0 4px 12px rgba(120, 53, 15, 0.25)',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                <RotateCcw size={16} />
+                <span>Understood • Restart Quiz from Question 1</span>
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -85,10 +85,26 @@ export const Header: React.FC<HeaderProps> = ({
       }}>
         {/* Left Side: Logo & Main Navigation Tabs */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
+          <button
+            type="button"
+            onClick={() => {
+              playClickSound();
+              onTabChange('curriculum');
+            }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.55rem',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              padding: 0
+            }}
+            aria-label="Return to Main Levels Overview"
+          >
             <img
               src="/logo.png"
-              alt="Logo"
+              alt="David Study Logo"
               style={{
                 width: '30px',
                 height: '30px',
@@ -103,9 +119,9 @@ export const Header: React.FC<HeaderProps> = ({
               letterSpacing: '-0.02em',
               display: 'inline-block'
             }}>
-              Personal Study
+              David Study
             </span>
-          </div>
+          </button>
 
           {/* Mode Switcher Tabs */}
           <div style={{

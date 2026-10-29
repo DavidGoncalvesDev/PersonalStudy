@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Question, Segment, SegmentProgress } from '../types';
 import { supabase } from '../supabaseClient';
-import { renderInlineMath } from './MathRenderer';
-import { Flame, Trophy, Shuffle, RotateCcw, ShieldAlert, Edit3 } from 'lucide-react';
+import { renderInlineMath, MathRenderer } from './MathRenderer';
+import { Flame, Trophy, Shuffle, RotateCcw, ShieldAlert, Edit3, Check, X, Lightbulb, Bookmark } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { playCorrectSound, playWrongSound, playSuccessChime, playClickSound } from '../utils/soundEffects';
 
@@ -388,6 +388,24 @@ export const ExerciseZone: React.FC<ExerciseZoneProps> = ({
 
           {/* Question Text */}
           <div style={{ marginBottom: '1.5rem' }}>
+            {currentQuestion.section_reference && (
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                padding: '0.22rem 0.6rem',
+                borderRadius: '6px',
+                backgroundColor: '#fffbeb',
+                border: '1px solid #fde68a',
+                color: '#92400e',
+                fontSize: '0.74rem',
+                fontWeight: 700,
+                marginBottom: '0.75rem'
+              }}>
+                <Bookmark size={12} color="#b45309" />
+                <span>Curriculum Point: {currentQuestion.section_reference}</span>
+              </div>
+            )}
             <h3 style={{
               fontSize: '1.05rem',
               fontWeight: 700,

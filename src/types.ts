@@ -30,6 +30,8 @@ export interface Question {
   options: QuestionOption[];
   correct_option: string;
   explanation: string;
+  section_reference?: string;
+  pool_type?: 'quiz' | 'practice';
 }
 
 export interface Flashcard {
