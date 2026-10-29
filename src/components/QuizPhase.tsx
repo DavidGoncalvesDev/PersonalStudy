@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Question } from '../types';
 import confetti from 'canvas-confetti';
-import { Award, Edit3, ShieldAlert, RotateCcw, ArrowRight, BookOpen, Check, X, Lightbulb, Bookmark } from 'lucide-react';
+import { Award, Edit3, ShieldAlert, RotateCcw, ArrowRight, BookOpen, Check, X, Lightbulb, Bookmark, Copy } from 'lucide-react';
 import { renderInlineMath, MathRenderer } from './MathRenderer';
 import { playCorrectSound, playWrongSound, playSuccessChime, playClickSound } from '../utils/soundEffects';
 
@@ -31,6 +31,7 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
   const [isAllCompleted, setIsAllCompleted] = useState<boolean>(false);
   // "What am I inclined" helper state (No -> Maybe -> Yes -> unselected)
   const [inclinations, setInclinations] = useState<Record<string, 'no' | 'maybe' | 'yes'>>({});
+  const [copiedQuiz, setCopiedQuiz] = useState<boolean>(false);
 
   useEffect(() => {
     setInclinations({});
@@ -54,6 +55,50 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
       delete next[optId];
       return next;
     });
+  };
+
+  const handleCopyQuizExercise = () => {
+    const currentQuestion = questions[currentIndex];
+    if (!currentQuestion) return;
+    playClickSound();
+
+    const metaParts = [];
+    if (segmentTitle) {
+      metaParts.push(segmentTitle);
+    }
+    metaParts.push(`Question ${currentIndex + 1} of ${questions.length}`);
+    if (currentQuestion.section_reference) {
+      metaParts.push(`Curriculum Point: ${currentQuestion.section_reference}`);
+    }
+    if (currentQuestion.difficulty) {
+      metaParts.push(`Difficulty: ${currentQuestion.difficulty}`);
+    }
+
+    const optionsList = currentQuestion.options
+      .map(opt => `- [${opt.id.toUpperCase()}] ${opt.text}`)
+      .join('\n');
+
+    let textToCopy = `### Multivariate Data Analysis Quiz Question\n`;
+    if (metaParts.length > 0) {
+      textToCopy += `*${metaParts.join(' | ')}*\n\n`;
+    }
+    textToCopy += `**Question:**\n${currentQuestion.question}\n\n`;
+    textToCopy += `**Choices:**\n${optionsList}\n\n`;
+
+    if (isFailed) {
+      const correctOpt = currentQuestion.options.find(o => o.id === currentQuestion.correct_option);
+      textToCopy += `---\n**Official Solution:**\n`;
+      textToCopy += `**Correct Answer:** [${currentQuestion.correct_option.toUpperCase()}] ${correctOpt ? correctOpt.text : ''}\n\n`;
+      if (currentQuestion.explanation) {
+        textToCopy += `**Theoretical Derivation & Breakdown:**\n${currentQuestion.explanation}\n`;
+      }
+    } else {
+      textToCopy += `Please solve this step by step, formulate the underlying mathematical derivation, determine the correct choice, and explain why the other options are incorrect.`;
+    }
+
+    navigator.clipboard.writeText(textToCopy);
+    setCopiedQuiz(true);
+    setTimeout(() => setCopiedQuiz(false), 2200);
   };
 
   const getInclinationStyle = (inc?: 'no' | 'maybe' | 'yes') => {
@@ -281,8 +326,30 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
           </span>
         </div>
 
-        {/* Quick Actions: Review in Text Guide (without quiz reset) + Scratchpad */}
+        {/* Quick Actions: Review in Text Guide (without quiz reset) + Copy for AI + Scratchpad */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+          <button
+            onClick={handleCopyQuizExercise}
+            title="Copy formatted exercise for AI prompt"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              padding: '0.35rem 0.65rem',
+              borderRadius: '6px',
+              backgroundColor: copiedQuiz ? '#dcfce7' : '#fffdfa',
+              border: copiedQuiz ? '1px solid #86efac' : '1px solid #d6cebf',
+              color: copiedQuiz ? '#15803d' : '#78350f',
+              fontWeight: 700,
+              fontSize: '0.74rem',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            {copiedQuiz ? <Check size={13} strokeWidth={3} /> : <Copy size={13} />}
+            <span>{copiedQuiz ? 'Copied for AI!' : 'Copy for AI'}</span>
+          </button>
+
           {onGoToText && (
             <button
               onClick={() => {
@@ -713,8 +780,28 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
               </div>
             </div>
 
-            {/* Large Restart Quiz Action Button */}
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', alignItems: 'center' }}>
+            {/* Action Buttons: Copy Solution for AI + Restart Quiz */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+              <button
+                onClick={handleCopyQuizExercise}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                  padding: '0.65rem 1rem',
+                  backgroundColor: copiedQuiz ? '#dcfce7' : '#ffffff',
+                  color: copiedQuiz ? '#15803d' : '#78350f',
+                  border: copiedQuiz ? '1px solid #86efac' : '1px solid #d6cebf',
+                  borderRadius: '8px',
+                  fontWeight: 700,
+                  fontSize: '0.82rem',
+                  cursor: 'pointer'
+                }}
+              >
+                {copiedQuiz ? <Check size={14} strokeWidth={3} /> : <Copy size={14} />}
+                <span>{copiedQuiz ? 'Copied Full Solution!' : 'Copy Question & Solution for AI'}</span>
+              </button>
+
               <button
                 onClick={handleRestartQuiz}
                 style={{

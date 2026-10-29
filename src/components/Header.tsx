@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Discipline } from '../types';
-import { ChevronDown, Plus, Trash2, Check, ShieldAlert, BookOpen, Flame, Edit3 } from 'lucide-react';
+import { ChevronDown, Plus, Trash2, Check, ShieldAlert, BookOpen, Flame, Edit3, User } from 'lucide-react';
 import { playClickSound } from '../utils/soundEffects';
 
 interface HeaderProps {
@@ -16,6 +16,8 @@ interface HeaderProps {
   activeTab: 'curriculum' | 'exercise_zone';
   onTabChange: (tab: 'curriculum' | 'exercise_zone') => void;
   onOpenScratchpad: () => void;
+  currentUser: string | null;
+  onOpenUserModal: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -30,7 +32,9 @@ export const Header: React.FC<HeaderProps> = ({
   totalSegments,
   activeTab,
   onTabChange,
-  onOpenScratchpad
+  onOpenScratchpad,
+  currentUser,
+  onOpenUserModal
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -342,6 +346,32 @@ export const Header: React.FC<HeaderProps> = ({
               Prep: {preparationScore}%
             </span>
           </div>
+
+          {/* User Profile Pill (Per-Device & Per-Person Data Isolation) */}
+          <button
+            onClick={() => {
+              playClickSound();
+              onOpenUserModal();
+            }}
+            title="Switch student profile"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              padding: '0.32rem 0.65rem',
+              borderRadius: '8px',
+              backgroundColor: '#fffbeb',
+              border: '1.5px solid #d6cebf',
+              color: '#78350f',
+              fontWeight: 800,
+              fontSize: '0.78rem',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            <User size={13} color="#b45309" />
+            <span>{currentUser || 'Login'}</span>
+          </button>
         </div>
       </div>
 

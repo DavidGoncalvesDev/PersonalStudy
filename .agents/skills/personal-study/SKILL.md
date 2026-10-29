@@ -7,8 +7,10 @@ description: >-
   segments, quizzes, and flashcards. Defines the architecture, Supabase schema,
   granular 4-5 segment-per-chapter division, clear brown theme, 3-phase mastery
   progression (rich text -> 1-by-1 quiz with reset -> flashcards), non-resetting quiz state,
-  text guide anchoring with amber highlights, large fundamental explanations, scratchpad canvas
-  with palm rejection & pinch/wheel zoom, Exercise Zone (Random practice & Sudden Death with 18 extra questions/LU),
+  per-device & per-person user login data isolation, text guide anchoring with amber highlights,
+  large fundamental explanations, scratchpad canvas with palm rejection, Apple Pencil priority,
+  faded graph paper grid & pinch/wheel zoom, "Copy for AI" formatted exercise clipboard feature,
+  Exercise Zone (Random practice, Sudden Death & 50-Minute Comprehensive Exam),
   Preparation Score formulation, and self-updating guidelines.
 ---
 
@@ -44,7 +46,22 @@ This skill defines the operational specifications, system architecture, database
 
 ---
 
-## 2. Text Formatting, Math Rendering & Pedagogy
+## 2. Per-Device & Per-Person User Login (Isolated Data Architecture)
+
+- **Device Login & Profile Key**:
+  - Each person logs in with their student name (e.g. `David`, `Sarah`, `Guest`).
+  - The name is persisted locally on that device in `localStorage.getItem('david_study_user')`.
+  - Normalized database key: `username = name.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '')`.
+- **Database Partitioning**:
+  - `study_progress`: Stores `username` column, unique composite index on `(username, discipline_id, segment_id)`, and `id = 'prog_' || username || '_' || discipline_id || '_' || segment_id`.
+  - `study_user_settings`: Primary key `id = username` and column `username`.
+  - Different users on the same device or different devices have 100% separate curriculum completion, quiz attempts, flashcards, sudden death streaks, and 50-minute exam scores.
+- **Header Profile Pill & Switcher**:
+  - Header displays `[ 👤 David ]`. Clicking opens the profile modal with quick-select chips of recent profiles on that device and allows switching students at any time.
+
+---
+
+## 3. Text Formatting, Math Rendering & Pedagogy
 
 1. **Full Narrative Prose (No Fragmented Bullet Outlines)**:
    - Deliver rich, readable paragraphs that build intuition from the ground up.
@@ -60,7 +77,7 @@ This skill defines the operational specifications, system architecture, database
 
 ---
 
-## 3. Curriculum Architecture & Granular Segmentation
+## 4. Curriculum Architecture & Granular Segmentation
 
 - Each slide deck must be divided into **granular, bite-sized segments (~4 to 5 segments per chapter deck)**. For example, Data Analysis Chapters 1–3 are segmented into 8 distinct learning units (LUs):
   1. `ch1-scales-methods`: Measurement Scales & Multivariate Methods Classification
@@ -74,7 +91,7 @@ This skill defines the operational specifications, system architecture, database
 
 ---
 
-## 4. 3-Phase Mastery Progression per Learning Unit
+## 5. 3-Phase Mastery Progression per Learning Unit
 
 Progress through each segment moves sequentially:
 
@@ -91,12 +108,9 @@ Progress through each segment moves sequentially:
 - **Question Format**: Exactly **12 substantive questions** (4 elemental, 4 conceptual, 4 advanced) with **6 choices each (A–F)**.
 - **Strict Content Alignment**:
   - Every single question must be directly grounded in the concepts, definitions, and formulas taught in that specific Learning Unit's text guide.
-  - No disconnected questions or extraneous scenarios (e.g. Level 1 Q6 strictly tests predicting loan default via Discriminant Analysis matching Chapter 1 Section 3 text, avoiding unrelated e-commerce logistic regression).
   - Each question stores `section_reference` (e.g. `Section 3: Classification of Methods`) and `section_anchor` (e.g. `#section-3-classification-of-multivariate-methods`).
 - **Non-Resetting Quiz Navigation**:
   - When the user clicks `"📖 Reference Text Guide"` during a quiz, the quiz state **is preserved and does NOT reset** (retains question index $i$ of 12, chosen options, and inclination tags).
-  - The student can read the highlighted text guide section and return directly to question $i$ via the sticky banner or bottom action button.
-- **One Question at a Time**: The user is presented with one question at a time (Question $i$ of 12).
 - **Strict Reset on Failure**:
   - The user must score **12/12 in a single consecutive run**!
   - If the user selects an incorrect answer on ANY question, the quiz is reset back to Question 1 (0/12).
@@ -104,16 +118,8 @@ Progress through each segment moves sequentially:
   - Failure cards display a comprehensive theoretical breakdown explaining the underlying mathematical principles, analytical derivations, why the correct answer holds, and why each distractor is invalid.
   - Side-by-side visual comparison displays `"You Selected (Option X)"` in soft red and `"Correct Answer (Option Y)"` in soft green.
 - **"What am I inclined" Helper Feature (Elimination & Pre-decision Tag)**:
-  - Appears on the right side of every multiple choice option (A–F) in both the Level Quiz and the Exercise Zone.
-  - **Purely a Helper Feature**: Clicking the tag does NOT submit or select an answer; it allows the student to reason through choices and cross off options.
-  - **Cycling Sequence**:
-    - *Unclicked (Default)*: Displays a faded-out `No` badge (`opacity: 0.35`).
-    - *First Click*: Highlights as active `No` (solid crimson, marking an eliminated option).
-    - *Second Click*: Highlights as active `Maybe` (warm amber, marking an unsure candidate).
-    - *Third Click*: Highlights as active `Yes` (vibrant green, marking a probable answer).
-    - *Fourth Click*: Cycles back to unclicked faded-out `No`.
-  - **Fixed-Width Layout Stability**: The button maintains a constant fixed width (`width: 62px`, centered) sized to comfortably accommodate the widest `"Maybe"` text, preventing any layout shifting or text reflow during state changes.
-  - Clicking the option card itself submits the answer, whereas clicking the helper tag stops event propagation (`e.stopPropagation()`).
+  - Appears on the right side of every multiple choice option (A–F) in both the Level Quiz, Exercise Zone, and 50-Min Exam.
+  - Fixed-width button (`width: 62px`, centered) cycling: Faded No -> Active No (Red) -> Maybe (Amber) -> Yes (Green) -> Unclicked.
 
 ### Phase 3: Flashcards
 - Fast-recall cards with question on front, answer/insight on back.
@@ -122,77 +128,90 @@ Progress through each segment moves sequentially:
 
 ---
 
-## 5. Exercise Zone (Random Practice & Sudden Death Minigame)
+## 6. Exercise Zone & 50-Minute Comprehensive Exam
 
-The Exercise Zone provides dedicated practice outside the sequential curriculum:
-
-### Question Bank Architecture (18 Extra Questions per LU)
-- In addition to the base 12 quiz questions per segment, every learning unit has **18 additional practice questions** (`pool_type = 'practice'`).
-- For 8 learning units, this provides **144 extra questions** (total question bank = 240 questions with 6 choices each).
-- These extra questions appear exclusively in the Exercise Zone and Sudden Death.
-- **Isolated Practice Environment**: The Text Guide is never accessible inside the Exercise Zone to ensure true closed-book recall and test conditions.
+The Exercise Zone provides three specialized training modes:
 
 ### Mode A: Random Practice
-- Draws random questions from topics the user has already completed (or from Level 1 if none completed yet).
+- Draws random questions from topics the user has unlocked.
 - Immediate feedback with large fundamental explanation on every question.
 
 ### Mode B: Sudden Death Minigame
-- High-stakes consecutive streak challenge!
-- The user must answer questions in a row.
-- **One mistake = Sudden Death**: Streak immediately resets to 0!
-- Tracks and displays **Current Streak (🔥)** and all-time **Best Streak (🏆)**.
-- Saves streaks to Supabase `study_user_settings`.
+- High-stakes consecutive streak challenge: 1 mistake resets streak to 0!
+- Tracks Current Streak (🔥) and all-time Best Streak (🏆).
+
+### Mode C: 50-Minute Comprehensive Exam Paper Simulation
+- **Full Course Coverage**: Proportional sampling across all 8 learning units (25 substantive questions).
+- **Continuous Paper Format**: All 25 questions are presented in a row on a single paper. Students can answer in any order, scroll through the paper, and change answers before submission.
+- **50-Minute Countdown Clock**: Prominent timer with yellow and red alerts for the final 5 minutes; auto-submits on expiration.
+- **Sticky Jump Navigator**: Horizontal bar (1..25) highlighting answered, unanswered, and flagged questions.
+- **Flag for Review**: Allows bookmarking challenging questions to revisit before final submission.
+- **Comprehensive Grading & Review**:
+  - Generates final score percentage, letter grade / tier (Distinction 85%+, Merit 75%+, Pass 50%+).
+  - Question-by-question review showing selected answer vs correct answer, with deep theoretical KaTeX derivations.
+  - Filterable by All, Incorrect, or Correct.
+  - Direct impact on Preparation Score: Contributes up to 20 full points!
+
+### "Copy for AI" Formatted Exercise Clipboard Feature
+- Available on every question in the **Level Quiz**, **Exercise Zone**, **50-Min Exam**, and **Scratchpad HUD**.
+- Automatically formats the exercise for prompt engineering (Topic metadata, Question text, markdown choices `[A]` through `[F]`).
+- Appends prompt guidance or full analytical solution based on state.
 
 ---
 
-## 6. The Preparation Score Algorithm (0% to 100%)
+## 7. The Preparation Score Algorithm (0% to 100%)
 
-The Preparation Score is a weighted index reflecting the student's exam readiness. It is calibrated to be challenging to reach 100%:
+The Preparation Score is a weighted index reflecting the student's exam readiness:
 
-$$\text{Preparation Score} = \min(100, \text{round}(C + A + P + D))$$
+$$\text{Preparation Score} = \min(100, \text{round}(C + A + E + P + D))$$
 
-1. **Curriculum Completion ($C$, up to 50 points)**:
+1. **Curriculum Completion ($C$, up to 40 points)**:
    - Evaluates completed learning units (Text read + Quiz 12/12 passed + Flashcards completed).
-   - $C = 50 \times \frac{\text{completed\_segments}}{\text{total\_segments}}$.
-2. **Quiz First-Time Efficiency ($A$, up to 25 points)**:
+   - $C = 40 \times \frac{\text{completed\_segments}}{\text{total\_segments}}$.
+2. **Quiz First-Time Efficiency ($A$, up to 20 points)**:
    - Rewards passing quizzes on the first attempt; penalizes repeated restarts.
    - For each passed segment:
-     - 1st attempt: 100% credit ($\approx 3.125$ pts per segment for 8 segments).
+     - 1st attempt: 100% credit ($\approx 2.5$ pts per segment for 8 segments).
      - 2nd attempt: 75% credit.
      - 3rd attempt: 50% credit.
      - 4+ attempts: 25% credit.
-3. **Random Practice Volume ($P$, up to 15 points)**:
-   - Rewards answering questions in the Exercise Zone.
-   - $P = \min(15, \text{random\_exercises\_completed} \times 0.5)$ (30 correct random exercises needed for full 15 pts).
-4. **Sudden Death Streak ($D$, up to 10 points)**:
-   - Rewards high performance under pressure based on all-time best streak:
-     - $D = \min(10, \text{best\_streak} \times 0.5)$ (a streak of 20+ consecutive correct answers needed for full 10 pts).
+3. **50-Minute Comprehensive Exam ($E$, up to 20 points)**:
+   - Directly rewards mock exam mastery: $E = \min(20, \frac{\text{exam\_best\_score}}{100} \times 20)$.
+4. **Random Practice Volume ($P$, up to 10 points)**:
+   - Rewards answering questions in the Exercise Zone: $P = \min(10, \text{random\_exercises\_completed} \times 0.5)$.
+5. **Sudden Death Streak ($D$, up to 10 points)**:
+   - Rewards high performance under pressure: $D = \min(10, \text{best\_streak} \times 0.5)$.
+
+Total maximum score: $40 + 20 + 20 + 10 + 10 = 100\%$.
 
 ---
 
-## 7. Global Scratchpad / Calculation Canvas
+## 8. Global Scratchpad / Calculation Canvas
 
-- **Openable Everywhere**: Available across all screens via a floating action button (FAB) at the bottom-right and top-bar button.
-- **Apple Pencil & Stylus Support**: Uses `PointerEvent` with `touch-action: none` to support Apple Pencil on iPad without triggering screen gestures or accidental scrolling.
+- **Openable Everywhere**: Available across all screens via a floating action button (FAB) at the bottom-right, top bar, and inside question cards.
+- **Apple Pencil & Stylus Priority**:
+  - Uses `PointerEvent` with strict pen prioritization: when an Apple Pencil touches down (`e.pointerType === 'pen'`), it preempts any resting hand or touch contact and locks active drawing to the stylus.
+  - Stylus touches (`touch.touchType === 'stylus'`) are bypassed by pinch-zoom listeners so resting palm contacts never trigger zoom or cancel active pen strokes.
+  - Avoids calling `setPointerCapture` on mobile WebKit to prevent premature `pointercancel` aborts.
+  - Single tap immediately generates an initial round dot (`ctx.arc` / `ctx.fill`) so periods, decimal points, and dots render instantly.
 - **Palm Rejection & Text Selection Suppression**:
   - Global suppression of text selection (`user-select: none`, `-webkit-user-select: none`, `-webkit-touch-callout: none`).
-  - Traps and prevents `selectstart` and `contextmenu` events while the scratchpad is active, preventing text selection boxes or iOS magnifier balloons when resting a palm on the screen.
-  - Pointer capture with `activePointerIdRef` ensures secondary touches created by resting palm contacts are rejected during pen strokes.
+  - Traps and prevents `selectstart` and `contextmenu` events while the scratchpad is active.
+- **Faded Warm Graph Paper Grid**:
+  - Rendered on a warm cream notepad sheet (`#fffdfa`) resting on a subtle desk surface (`#ece6dc`) with an authentic drop shadow.
+  - Very subtle faded grid: 24px minor squares (`rgba(120, 53, 15, 0.04)`) and 120px major squares (`rgba(120, 53, 15, 0.12)`).
+  - The grid scales dynamically with zoom and pan, giving immediate visual cues of zoom scale and spatial orientation.
+  - Canvas bitmap is transparent (`ctx.clearRect`), allowing the grid to shine through.
+  - Eraser uses `ctx.globalCompositeOperation = 'destination-out'` so erasing removes ink back to transparent without ever erasing the grid lines.
 - **Two-Finger Pinch Zoom & Rolling Wheel Pan**:
-  - **Pinch-to-Zoom**: Two fingers dynamically scale the canvas (0.4x to 4.0x) around the touch midpoint.
-  - **Mouse Wheel Movement**: Rolling the mouse wheel pans vertically and horizontally through notes; Ctrl+Wheel zooms centered on the mouse pointer.
-  - **Floating Zoom Controls**: Includes `[-]`, `zoom %` (click to reset view to 100%), `[+]`, and `RotateCcw` reset buttons in the top toolbar.
-  - **Exact Coordinate Mapping**: Drawing coordinates are calculated using `(e.clientX - rect.left) / scale` and `(e.clientY - rect.top) / scale`, guaranteeing exact pixel alignment at any zoom level or pan offset without drift.
-- **Tools**:
-  - Pen (crisp black ink with fine 2px, medium 4px, broad 8px thickness).
-  - Eraser (erases strokes back to clean paper background).
-  - Clear All (clears the canvas).
-  - Close / Done (one-tap return to the study interface; notes persist across modal toggles).
-- **Corner HUD**: When opened during a quiz or exercise, shows a collapsible floating card with the current question and 6 choices for easy reference during calculations.
+  - Two fingers dynamically scale the canvas (0.4x to 3.5x).
+  - Mouse wheel pans vertically and horizontally; Ctrl+Wheel zooms.
+  - Floating zoom controls: `[-]`, `zoom %` (click to reset view to 100%), `[+]`, and `RotateCcw` reset buttons in the top toolbar.
+- **Corner HUD**: Collapsible floating card with the current question, 6 choices, and a `"Copy for AI"` one-click button.
 
 ---
 
-## 8. Database Architecture (Supabase `tracker` Project)
+## 9. Database Architecture (Supabase `tracker` Project)
 
 - **Target Project**: `https://eurqqiebokwcrrhfbihg.supabase.co` (`tracker`).
 - **Strict Prohibition**: Completely avoid `supabase_novae` / Nova UI. Never touch calorie tracker tables (`food_items`, `weight_logs`).
@@ -201,17 +220,17 @@ $$\text{Preparation Score} = \min(100, \text{round}(C + A + P + D))$$
   - `study_segments`: `id, discipline_id, order_index, title, subtitle, summary_markdown, created_at`
   - `study_questions`: `id, segment_id, order_index, difficulty, question, options (jsonb), correct_option, explanation, pool_type, section_reference, section_anchor, created_at`
   - `study_flashcards`: `id, segment_id, order_index, category, front, back, created_at`
-  - `study_progress`: `id, discipline_id, segment_id, text_completed, quiz_passed, quiz_score, quiz_attempts, flashcards_passed, completed, manually_unlocked, updated_at`
-  - `study_user_settings`: `id, unlock_all, active_discipline_id, preparation_score, sudden_death_best_streak, sudden_death_current_streak, random_exercises_completed, total_correct_answers, total_wrong_answers, updated_at`
+  - `study_progress`: `id, username, discipline_id, segment_id, text_completed, quiz_passed, quiz_score, quiz_attempts, flashcards_passed, completed, manually_unlocked, updated_at`
+  - `study_user_settings`: `id (username), username, unlock_all, active_discipline_id, preparation_score, sudden_death_best_streak, sudden_death_current_streak, random_exercises_completed, total_correct_answers, total_wrong_answers, exam_best_score, exam_last_score, exam_attempts, updated_at`
 - **Double-Click Unlocking**: Double-clicking any level pill unlocks it directly, toggling `manually_unlocked = true` in `study_progress`.
 
 ---
 
-## 9. Web Audio Sound Effects
+## 10. Web Audio Sound Effects
 
-- **Zero-Dependency Procedural Audio**: Uses the Web Audio API (`AudioContext`) to synthesize instant, crisp acoustic feedback without needing external MP3/WAV files (fully compatible with iPad Safari, iPhone, and desktop browsers).
+- **Zero-Dependency Procedural Audio**: Uses the Web Audio API (`AudioContext`) to synthesize instant, crisp acoustic feedback without needing external MP3/WAV files.
 - **Audio Palette**:
   - `playCorrectSound()`: Pleasant, ascending sine-wave chime (E5 -> A5) played immediately upon selecting a correct answer.
   - `playWrongSound()`: Low, subdued downward triangle-wave tone played when an incorrect answer triggers a quiz/sudden death reset.
-  - `playSuccessChime()`: Triumphant 4-note ascending major arpeggio (C5 -> E5 -> G5 -> C6) for passing 12/12 quiz questions, mastering all flashcards, or hitting 5-question milestones.
+  - `playSuccessChime()`: Triumphant 4-note ascending major arpeggio (C5 -> E5 -> G5 -> C6) for passing 12/12 quiz questions, mastering all flashcards, or hitting exam milestones.
   - `playClickSound()`: Subtle, crisp 900 Hz acoustic tick for card flips, tab changes, and UI buttons.

@@ -1,7 +1,8 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { Edit2, Eraser, Trash2, Maximize2, Minimize2, Check, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
+import { Edit2, Eraser, Trash2, Maximize2, Minimize2, Check, ZoomIn, ZoomOut, RotateCcw, Copy } from 'lucide-react';
 import { renderInlineMath } from './MathRenderer';
 import { Question } from '../types';
+import { playClickSound } from '../utils/soundEffects';
 
 interface ScratchpadModalProps {
   isOpen: boolean;
@@ -17,11 +18,15 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const activePointerIdRef = useRef<number | null>(null);
+  const isPenActiveRef = useRef<boolean>(false);
+  const lastPointRef = useRef<{ x: number; y: number } | null>(null);
+
   const [tool, setTool] = useState<'pen' | 'eraser'>('pen');
   const [lineWidth, setLineWidth] = useState<number>(3);
   const [isDrawing, setIsDrawing] = useState<boolean>(false);
   const [isQuestionVisible, setIsQuestionVisible] = useState<boolean>(true);
   const [savedDataUrl, setSavedDataUrl] = useState<string | null>(null);
+  const [copiedQuestion, setCopiedQuestion] = useState<boolean>(false);
 
   // Zoom & Pan Canvas States (supports pinch-to-zoom & mouse wheel zoom/pan)
   const [scale, setScale] = useState<number>(1);
@@ -32,6 +37,12 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
     initialMidpoint: { x: number; y: number };
     initialOffset: { x: number; y: number };
   } | null>(null);
+
+  // Generous Sheet Dimensions for ample calculation space
+  const [sheetDimensions, setSheetDimensions] = useState<{ width: number; height: number }>({
+    width: 2000,
+    height: 2600
+  });
 
   // Global Text Selection & Palm Rest Protection:
   // Completely prevents iOS Safari / desktop browsers from selecting text or popping magnifier when resting a palm
@@ -60,9 +71,13 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
     };
   }, [isOpen]);
 
-  // Resize canvas to window dimensions on open
+  // Set up high-res transparent canvas sheet on open
   useEffect(() => {
     if (!isOpen) return;
+
+    const width = Math.min(Math.max(window.innerWidth, 1800), 2200);
+    const height = Math.min(Math.max(window.innerHeight * 1.5, 2400), 3000);
+    setSheetDimensions({ width, height });
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -70,10 +85,8 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Handle high DPI (Retina / iPad displays)
-    const dpr = window.devicePixelRatio || 1;
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+    // Handle device pixel ratio safely within GPU memory bounds (max 2 for high DPI)
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
     canvas.width = width * dpr;
     canvas.height = height * dpr;
@@ -84,6 +97,9 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
+    // Clear canvas to transparent so the faded paper grid shines through
+    ctx.clearRect(0, 0, width, height);
+
     // Restore saved drawing if available
     if (savedDataUrl) {
       const img = new Image();
@@ -91,10 +107,6 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
       img.onload = () => {
         ctx.drawImage(img, 0, 0, width, height);
       };
-    } else {
-      // Warm subtle cream background
-      ctx.fillStyle = '#fffdfa';
-      ctx.fillRect(0, 0, width, height);
     }
   }, [isOpen]);
 
@@ -105,7 +117,7 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
     }
   }, []);
 
-  // Wheel zoom (with Ctrl or pinch) and wheel pan (moving through notes)
+  // Wheel zoom (with Ctrl) and wheel pan (moving through notes)
   useEffect(() => {
     if (!isOpen) return;
     const container = containerRef.current;
@@ -118,7 +130,7 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
         // Zoom in / out centered around cursor position
         const zoomFactor = e.deltaY < 0 ? 1.08 : 0.92;
         setScale((prevScale) => {
-          const newScale = Math.min(Math.max(prevScale * zoomFactor, 0.4), 4);
+          const newScale = Math.min(Math.max(prevScale * zoomFactor, 0.4), 3.5);
           const mouseX = e.clientX;
           const mouseY = e.clientY;
           setOffset((prevOffset) => ({
@@ -142,18 +154,28 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
     };
   }, [isOpen]);
 
-  // Touch pinch-to-zoom and two-finger pan
+  // Touch pinch-to-zoom and two-finger pan:
+  // Strictly activates ONLY when both touches are fingers.
+  // NEVER triggers or interrupts when Apple Pencil / stylus is touching!
   useEffect(() => {
     if (!isOpen) return;
     const container = containerRef.current;
     if (!container) return;
 
     const onTouchStart = (e: TouchEvent) => {
+      // Check if Apple Pencil is present
+      const hasStylus = Array.from(e.touches).some((t: any) => t.touchType === 'stylus');
+      if (hasStylus || isPenActiveRef.current) {
+        // Stylus is active! Do NOT call preventDefault, do NOT pinch-zoom, do NOT interrupt pen!
+        return;
+      }
+
       if (e.touches.length === 2) {
         e.preventDefault();
-        // Cancel active drawing if two fingers touch down
+        // Cancel any active finger drawing
         setIsDrawing(false);
         activePointerIdRef.current = null;
+        lastPointRef.current = null;
 
         const t1 = e.touches[0];
         const t2 = e.touches[1];
@@ -170,6 +192,11 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
     };
 
     const onTouchMove = (e: TouchEvent) => {
+      const hasStylus = Array.from(e.touches).some((t: any) => t.touchType === 'stylus');
+      if (hasStylus || isPenActiveRef.current) {
+        return;
+      }
+
       if (e.touches.length === 2 && pinchRef.current) {
         e.preventDefault();
         const t1 = e.touches[0];
@@ -178,7 +205,7 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
         const mid = { x: (t1.clientX + t2.clientX) / 2, y: (t1.clientY + t2.clientY) / 2 };
 
         const scaleFactor = dist / pinchRef.current.initialDist;
-        const newScale = Math.min(Math.max(pinchRef.current.initialScale * scaleFactor, 0.4), 4);
+        const newScale = Math.min(Math.max(pinchRef.current.initialScale * scaleFactor, 0.4), 3.5);
 
         const deltaMidX = mid.x - pinchRef.current.initialMidpoint.x;
         const deltaMidY = mid.y - pinchRef.current.initialMidpoint.y;
@@ -216,32 +243,39 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
   }, [isOpen, scale, offset]);
 
   // Coordinate mapping respecting transform matrix (scale & pan offset)
-  const getCoordinates = (e: React.PointerEvent<HTMLCanvasElement>) => {
+  const getCoordinates = (clientX: number, clientY: number) => {
     const canvas = canvasRef.current;
     if (!canvas) return { x: 0, y: 0 };
     const rect = canvas.getBoundingClientRect();
-    // rect.left and rect.width already account for CSS transform and pan offset
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const scaleX = (canvas.width / dpr) / rect.width;
+    const scaleY = (canvas.height / dpr) / rect.height;
     return {
-      x: (e.clientX - rect.left) / scale,
-      y: (e.clientY - rect.top) / scale
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY
     };
   };
 
   const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
     e.preventDefault();
 
-    // Palm Rejection: If already drawing with a pointer (e.g. Apple Pencil or stylus),
-    // ignore secondary touch contacts created by resting the palm on the screen
-    if (activePointerIdRef.current !== null && activePointerIdRef.current !== e.pointerId) {
-      return;
-    }
+    const isPen = e.pointerType === 'pen';
 
-    activePointerIdRef.current = e.pointerId;
-
-    try {
-      e.currentTarget.setPointerCapture(e.pointerId);
-    } catch {
-      // Ignore if pointer capture is not supported
+    // Apple Pencil / Stylus ALWAYS takes absolute priority!
+    // If a palm was touching the screen right before, the pen overrides it immediately:
+    if (isPen) {
+      activePointerIdRef.current = e.pointerId;
+      isPenActiveRef.current = true;
+    } else {
+      // Finger or touch:
+      // If Apple Pencil is currently writing, completely reject secondary touch contacts (Palm Rejection!)
+      if (isPenActiveRef.current) {
+        return;
+      }
+      if (activePointerIdRef.current !== null && activePointerIdRef.current !== e.pointerId) {
+        return;
+      }
+      activePointerIdRef.current = e.pointerId;
     }
 
     const canvas = canvasRef.current;
@@ -249,49 +283,82 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const { x, y } = getCoordinates(e);
-    ctx.beginPath();
-    ctx.moveTo(x, y);
+    const pt = getCoordinates(e.clientX, e.clientY);
+    lastPointRef.current = pt;
 
     if (tool === 'pen') {
-      ctx.strokeStyle = '#1c1917'; // Deep black ink
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.strokeStyle = '#1c1917'; // Deep crisp black ink
+      ctx.fillStyle = '#1c1917';
       ctx.lineWidth = lineWidth;
     } else {
-      // Eraser: erase back to clean background color
-      ctx.strokeStyle = '#fffdfa';
-      ctx.lineWidth = lineWidth * 5; // broader eraser
+      // Eraser clears ink back to transparent, preserving the faded paper grid perfectly!
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.strokeStyle = 'rgba(0,0,0,1)';
+      ctx.fillStyle = 'rgba(0,0,0,1)';
+      ctx.lineWidth = lineWidth * 5;
     }
+
+    // Draw initial dot for single tap / period / decimal point
+    ctx.beginPath();
+    const radius = (tool === 'pen' ? lineWidth : lineWidth * 5) / 2;
+    ctx.arc(pt.x, pt.y, radius, 0, Math.PI * 2);
+    ctx.fill();
 
     setIsDrawing(true);
   };
 
   const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
-    // Only follow the active drawing pointer (Apple Pencil / Stylus)
-    if (!isDrawing || activePointerIdRef.current !== e.pointerId) return;
+    if (!isDrawing) return;
+
+    // Palm Rejection: If Apple Pencil is active, ignore non-pen pointer movements
+    if (isPenActiveRef.current && e.pointerType !== 'pen') {
+      return;
+    }
+
+    if (activePointerIdRef.current !== e.pointerId) {
+      return;
+    }
+
     e.preventDefault();
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const { x, y } = getCoordinates(e);
-    ctx.lineTo(x, y);
-    ctx.stroke();
+    const pt = getCoordinates(e.clientX, e.clientY);
+
+    if (lastPointRef.current) {
+      ctx.beginPath();
+      ctx.moveTo(lastPointRef.current.x, lastPointRef.current.y);
+      ctx.lineTo(pt.x, pt.y);
+      ctx.stroke();
+    }
+
+    lastPointRef.current = pt;
   };
 
   const handlePointerUp = (e: React.PointerEvent<HTMLCanvasElement>) => {
-    if (activePointerIdRef.current !== e.pointerId) return;
-    e.preventDefault();
-
-    try {
-      e.currentTarget.releasePointerCapture(e.pointerId);
-    } catch {
-      // Ignore
+    if (activePointerIdRef.current === e.pointerId) {
+      activePointerIdRef.current = null;
+      if (e.pointerType === 'pen') {
+        isPenActiveRef.current = false;
+      }
+      lastPointRef.current = null;
+      setIsDrawing(false);
+      saveCanvasState();
     }
+  };
 
-    activePointerIdRef.current = null;
-    setIsDrawing(false);
-    saveCanvasState();
+  const handlePointerCancel = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (activePointerIdRef.current === e.pointerId) {
+      activePointerIdRef.current = null;
+      if (e.pointerType === 'pen') {
+        isPenActiveRef.current = false;
+      }
+      lastPointRef.current = null;
+      setIsDrawing(false);
+    }
   };
 
   const handleClearAll = () => {
@@ -300,15 +367,14 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    ctx.fillStyle = '#fffdfa';
-    ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+    // Clear transparent ink, keeping the faded paper grid intact!
+    ctx.clearRect(0, 0, sheetDimensions.width, sheetDimensions.height);
     setSavedDataUrl(null);
   };
 
   const handleManualZoom = (delta: number) => {
     setScale((prev) => {
-      const next = Math.min(Math.max(prev + delta, 0.4), 4);
-      // Center zoom around center of viewport
+      const next = Math.min(Math.max(prev + delta, 0.4), 3.5);
       const cx = window.innerWidth / 2;
       const cy = window.innerHeight / 2;
       setOffset((prevOffset) => ({
@@ -322,6 +388,24 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
   const handleResetView = () => {
     setScale(1);
     setOffset({ x: 0, y: 0 });
+  };
+
+  const handleCopyQuestionForAI = () => {
+    if (!activeQuestion) return;
+    playClickSound();
+
+    const optionsList = activeQuestion.options.map(opt => `- [${opt.id.toUpperCase()}] ${opt.text}`).join('\n');
+    let textToCopy = `### Multivariate Data Analysis Exercise\n`;
+    if (activeQuestion.section_reference) {
+      textToCopy += `*Curriculum Point: ${activeQuestion.section_reference}*\n\n`;
+    }
+    textToCopy += `**Question:**\n${activeQuestion.question}\n\n`;
+    textToCopy += `**Choices:**\n${optionsList}\n\n`;
+    textToCopy += `Please solve this step by step, explain the theoretical principles, determine the correct answer, and explain why each distractor is incorrect.`;
+
+    navigator.clipboard.writeText(textToCopy);
+    setCopiedQuestion(true);
+    setTimeout(() => setCopiedQuestion(false), 2200);
   };
 
   const handleClose = () => {
@@ -339,7 +423,7 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
         position: 'fixed',
         inset: 0,
         zIndex: 200,
-        backgroundColor: '#fffdfa',
+        backgroundColor: '#ece6dc', // Subtle warm desk surface background
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
@@ -586,35 +670,51 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
         </button>
       </div>
 
-      {/* Pannable and Scalable Canvas Container */}
+      {/* Pannable and Scalable Viewport */}
       <div
         style={{
           width: '100vw',
           height: '100vh',
           overflow: 'hidden',
-          position: 'relative'
+          position: 'relative',
+          touchAction: 'none'
         }}
       >
+        {/* The Paper Sheet with Faded Warm Engineering Grid */}
         <div
           style={{
             transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`,
             transformOrigin: '0 0',
-            width: '100%',
-            height: '100%',
-            transition: pinchRef.current ? 'none' : 'transform 0.05s ease-out'
+            width: `${sheetDimensions.width}px`,
+            height: `${sheetDimensions.height}px`,
+            backgroundColor: '#fffdfa',
+            backgroundImage: `
+              linear-gradient(to right, rgba(120, 53, 15, 0.12) 1.2px, transparent 1.2px),
+              linear-gradient(to bottom, rgba(120, 53, 15, 0.12) 1.2px, transparent 1.2px),
+              linear-gradient(to right, rgba(120, 53, 15, 0.04) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(120, 53, 15, 0.04) 1px, transparent 1px)
+            `,
+            backgroundSize: '120px 120px, 120px 120px, 24px 24px, 24px 24px',
+            boxShadow: '0 10px 30px rgba(69, 26, 3, 0.14)',
+            borderRadius: '4px',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            transition: pinchRef.current ? 'none' : 'transform 0.04s ease-out'
           }}
         >
+          {/* Drawing Canvas */}
           <canvas
             ref={canvasRef}
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
-            onPointerCancel={handlePointerUp}
+            onPointerCancel={handlePointerCancel}
             style={{
-              touchAction: 'none', // Prevents iPad gesture panning while writing with stylus
+              touchAction: 'none', // Prevents default gestures while writing
               cursor: tool === 'pen' ? 'crosshair' : 'cell',
-              width: '100vw',
-              height: '100vh',
+              width: `${sheetDimensions.width}px`,
+              height: `${sheetDimensions.height}px`,
               display: 'block'
             }}
           />
@@ -627,36 +727,57 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
           position: 'absolute',
           bottom: '16px',
           right: '16px',
-          maxWidth: '360px',
+          maxWidth: '380px',
           width: 'calc(100vw - 32px)',
           backgroundColor: '#ffffff',
           border: '1.5px solid #d6cebf',
           borderRadius: '10px',
           padding: '0.85rem',
-          boxShadow: '0 6px 16px rgba(0,0,0,0.08)',
+          boxShadow: '0 6px 18px rgba(0,0,0,0.1)',
           zIndex: 210,
           pointerEvents: 'auto',
           userSelect: 'none',
           WebkitUserSelect: 'none',
           WebkitTouchCallout: 'none'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.45rem' }}>
             <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#78350f', textTransform: 'uppercase' }}>
               Reference Question
             </span>
-            <button
-              onClick={() => setIsQuestionVisible(!isQuestionVisible)}
-              style={{
-                border: 'none',
-                background: 'transparent',
-                color: '#78716c',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center'
-              }}
-            >
-              {isQuestionVisible ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <button
+                onClick={handleCopyQuestionForAI}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.25rem',
+                  padding: '0.2rem 0.45rem',
+                  borderRadius: '5px',
+                  border: '1px solid #d6cebf',
+                  backgroundColor: copiedQuestion ? '#dcfce7' : '#fdfbf7',
+                  color: copiedQuestion ? '#15803d' : '#78350f',
+                  fontSize: '0.68rem',
+                  fontWeight: 700,
+                  cursor: 'pointer'
+                }}
+              >
+                {copiedQuestion ? <Check size={11} strokeWidth={3} /> : <Copy size={11} />}
+                <span>{copiedQuestion ? 'Copied for AI!' : 'Copy for AI'}</span>
+              </button>
+              <button
+                onClick={() => setIsQuestionVisible(!isQuestionVisible)}
+                style={{
+                  border: 'none',
+                  background: 'transparent',
+                  color: '#78716c',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}
+              >
+                {isQuestionVisible ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
+              </button>
+            </div>
           </div>
 
           {isQuestionVisible && (

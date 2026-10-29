@@ -8,6 +8,7 @@ import { QuizPhase } from './components/QuizPhase';
 import { FlashcardsPhase } from './components/FlashcardsPhase';
 import { ExerciseZone } from './components/ExerciseZone';
 import { ScratchpadModal } from './components/ScratchpadModal';
+import { UserLoginModal } from './components/UserLoginModal';
 import { calculatePreparationScore } from './utils/scoreCalculator';
 import { BookOpen, HelpCircle, Layers, CheckCircle2, ChevronRight, Loader2, Edit3 } from 'lucide-react';
 
@@ -33,6 +34,11 @@ export const App: React.FC = () => {
   const [totalCorrect, setTotalCorrect] = useState<number>(0);
   const [totalWrong, setTotalWrong] = useState<number>(0);
 
+  // 50-Minute Comprehensive Exam Stats
+  const [examBestScore, setExamBestScore] = useState<number>(0);
+  const [examLastScore, setExamLastScore] = useState<number>(0);
+  const [examAttempts, setExamAttempts] = useState<number>(0);
+
   // Global Scratchpad Modal
   const [isScratchpadOpen, setIsScratchpadOpen] = useState<boolean>(false);
   const [scratchpadQuestion, setScratchpadQuestion] = useState<Question | null>(null);
@@ -41,39 +47,79 @@ export const App: React.FC = () => {
   const [highlightedAnchor, setHighlightedAnchor] = useState<string | null>(null);
   const [activeQuizQuestionNumber, setActiveQuizQuestionNumber] = useState<number | null>(null);
 
-  // 1. Load disciplines & user settings on mount
+  // Per-Device & Per-Person User Login State
+  const [currentUser, setCurrentUser] = useState<string | null>(() => {
+    return localStorage.getItem('david_study_user') || 'David';
+  });
+  const [isUserModalOpen, setIsUserModalOpen] = useState<boolean>(false);
+
+  const normalizeUserKey = (name: string | null) => {
+    if (!name) return 'david';
+    return name.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '') || 'david';
+  };
+
+  // 1. Load disciplines on mount
   useEffect(() => {
     fetchDisciplines();
-    fetchUserSettings();
   }, []);
 
-  const fetchUserSettings = async () => {
+  // Reload user settings and progress whenever currentUser changes
+  useEffect(() => {
+    if (currentUser) {
+      const uKey = normalizeUserKey(currentUser);
+      fetchUserSettings(uKey);
+      if (currentDiscipline) {
+        fetchSegmentsAndProgress(currentDiscipline.id, currentUser);
+      }
+    }
+  }, [currentUser]);
+
+  const fetchUserSettings = async (uKey: string) => {
     try {
       const { data, error } = await supabase
         .from('study_user_settings')
         .select('*')
-        .eq('id', 'default')
+        .eq('id', uKey)
         .maybeSingle();
 
       if (data) {
-        if (typeof data.unlock_all === 'boolean') {
-          setUnlockAll(data.unlock_all);
-        }
-        if (typeof data.sudden_death_best_streak === 'number') {
-          setBestStreak(data.sudden_death_best_streak);
-        }
-        if (typeof data.sudden_death_current_streak === 'number') {
-          setCurrentStreak(data.sudden_death_current_streak);
-        }
-        if (typeof data.random_exercises_completed === 'number') {
-          setRandomExercisesCount(data.random_exercises_completed);
-        }
-        if (typeof data.total_correct_answers === 'number') {
-          setTotalCorrect(data.total_correct_answers);
-        }
-        if (typeof data.total_wrong_answers === 'number') {
-          setTotalWrong(data.total_wrong_answers);
-        }
+        setUnlockAll(typeof data.unlock_all === 'boolean' ? data.unlock_all : false);
+        setBestStreak(typeof data.sudden_death_best_streak === 'number' ? data.sudden_death_best_streak : 0);
+        setCurrentStreak(typeof data.sudden_death_current_streak === 'number' ? data.sudden_death_current_streak : 0);
+        setRandomExercisesCount(typeof data.random_exercises_completed === 'number' ? data.random_exercises_completed : 0);
+        setTotalCorrect(typeof data.total_correct_answers === 'number' ? data.total_correct_answers : 0);
+        setTotalWrong(typeof data.total_wrong_answers === 'number' ? data.total_wrong_answers : 0);
+        setExamBestScore(typeof data.exam_best_score === 'number' ? Number(data.exam_best_score) : 0);
+        setExamLastScore(typeof data.exam_last_score === 'number' ? Number(data.exam_last_score) : 0);
+        setExamAttempts(typeof data.exam_attempts === 'number' ? data.exam_attempts : 0);
+      } else {
+        // Initialize default row for new user profile
+        const newSettings = {
+          id: uKey,
+          username: uKey,
+          unlock_all: false,
+          active_discipline_id: currentDiscipline?.id || 'data-analysis',
+          preparation_score: 0,
+          sudden_death_best_streak: 0,
+          sudden_death_current_streak: 0,
+          random_exercises_completed: 0,
+          total_correct_answers: 0,
+          total_wrong_answers: 0,
+          exam_best_score: 0,
+          exam_last_score: 0,
+          exam_attempts: 0,
+          updated_at: new Date().toISOString()
+        };
+        setUnlockAll(false);
+        setBestStreak(0);
+        setCurrentStreak(0);
+        setRandomExercisesCount(0);
+        setTotalCorrect(0);
+        setTotalWrong(0);
+        setExamBestScore(0);
+        setExamLastScore(0);
+        setExamAttempts(0);
+        await supabase.from('study_user_settings').upsert(newSettings);
       }
     } catch (err) {
       console.error('Error fetching user settings:', err);
@@ -106,11 +152,12 @@ export const App: React.FC = () => {
   // 2. Load segments and progress when currentDiscipline changes
   useEffect(() => {
     if (!currentDiscipline) return;
-    fetchSegmentsAndProgress(currentDiscipline.id);
+    fetchSegmentsAndProgress(currentDiscipline.id, currentUser);
   }, [currentDiscipline]);
 
-  const fetchSegmentsAndProgress = async (disciplineId: string) => {
+  const fetchSegmentsAndProgress = async (disciplineId: string, uName?: string | null) => {
     setLoading(true);
+    const uKey = normalizeUserKey(uName !== undefined ? uName : currentUser);
     try {
       const { data: segData, error: segError } = await supabase
         .from('study_segments')
@@ -133,6 +180,7 @@ export const App: React.FC = () => {
       const { data: progData, error: progError } = await supabase
         .from('study_progress')
         .select('*')
+        .eq('username', uKey)
         .eq('discipline_id', disciplineId);
 
       if (progError) {
@@ -200,10 +248,12 @@ export const App: React.FC = () => {
   // Progress Update in Supabase
   const updateProgress = async (updates: Partial<SegmentProgress>) => {
     if (!currentDiscipline || !currentSegment) return;
+    const uKey = normalizeUserKey(currentUser);
 
-    const progressId = `prog_${currentDiscipline.id}_${currentSegment.id}`;
+    const progressId = `prog_${uKey}_${currentDiscipline.id}_${currentSegment.id}`;
     const existing = progressMap[currentSegment.id] || {
       id: progressId,
+      username: uKey,
       discipline_id: currentDiscipline.id,
       segment_id: currentSegment.id,
       text_completed: false,
@@ -217,6 +267,7 @@ export const App: React.FC = () => {
     const newProgress: SegmentProgress = {
       ...existing,
       ...updates,
+      username: uKey,
       updated_at: new Date().toISOString()
     };
 
@@ -236,12 +287,14 @@ export const App: React.FC = () => {
 
   const handleToggleUnlockAll = async () => {
     const nextVal = !unlockAll;
+    const uKey = normalizeUserKey(currentUser);
     setUnlockAll(nextVal);
     try {
       await supabase
         .from('study_user_settings')
         .upsert({
-          id: 'default',
+          id: uKey,
+          username: uKey,
           unlock_all: nextVal,
           updated_at: new Date().toISOString()
         });
@@ -252,8 +305,11 @@ export const App: React.FC = () => {
 
   const handleDoubleClickSegment = async (seg: Segment) => {
     if (!currentDiscipline) return;
+    const uKey = normalizeUserKey(currentUser);
+    const progressId = `prog_${uKey}_${currentDiscipline.id}_${seg.id}`;
     const currentProg = progressMap[seg.id] || {
-      id: `prog_${currentDiscipline.id}_${seg.id}`,
+      id: progressId,
+      username: uKey,
       discipline_id: currentDiscipline.id,
       segment_id: seg.id,
       text_completed: false,
@@ -268,6 +324,7 @@ export const App: React.FC = () => {
     const nextManualState = !currentProg.manually_unlocked;
     const updatedProg: SegmentProgress = {
       ...currentProg,
+      username: uKey,
       manually_unlocked: nextManualState,
       updated_at: new Date().toISOString()
     };
@@ -373,6 +430,7 @@ export const App: React.FC = () => {
 
   // Exercise Zone Stats Handler
   const handleUpdateExerciseStats = async (correct: boolean, isSuddenDeath: boolean, streak: number) => {
+    const uKey = normalizeUserKey(currentUser);
     const nextTotalCorrect = correct ? totalCorrect + 1 : totalCorrect;
     const nextTotalWrong = !correct ? totalWrong + 1 : totalWrong;
     const nextRandomCount = !isSuddenDeath && correct ? randomExercisesCount + 1 : randomExercisesCount;
@@ -394,12 +452,14 @@ export const App: React.FC = () => {
       totalSegments: segments.length,
       progressMap,
       randomExercisesCount: nextRandomCount,
-      bestStreak: nextBestStreak
+      bestStreak: nextBestStreak,
+      examBestScore
     });
 
     try {
       await supabase.from('study_user_settings').upsert({
-        id: 'default',
+        id: uKey,
+        username: uKey,
         preparation_score: nextPrepScore,
         sudden_death_best_streak: nextBestStreak,
         sudden_death_current_streak: streak,
@@ -413,12 +473,59 @@ export const App: React.FC = () => {
     }
   };
 
+  // 50-Minute Comprehensive Exam Score Handler
+  const handleUpdateExamScore = async (scorePercent: number, correctCount: number, totalCount: number) => {
+    const uKey = normalizeUserKey(currentUser);
+    const nextBest = Math.max(examBestScore, scorePercent);
+    const nextAttempts = examAttempts + 1;
+    const nextTotalCorrect = totalCorrect + correctCount;
+    const nextTotalWrong = totalWrong + (totalCount - correctCount);
+
+    setExamBestScore(nextBest);
+    setExamLastScore(scorePercent);
+    setExamAttempts(nextAttempts);
+    setTotalCorrect(nextTotalCorrect);
+    setTotalWrong(nextTotalWrong);
+
+    const nextPrepScore = calculatePreparationScore({
+      totalSegments: segments.length,
+      progressMap,
+      randomExercisesCount,
+      bestStreak,
+      examBestScore: nextBest
+    });
+
+    try {
+      await supabase.from('study_user_settings').upsert({
+        id: uKey,
+        username: uKey,
+        preparation_score: nextPrepScore,
+        exam_best_score: nextBest,
+        exam_last_score: scorePercent,
+        exam_attempts: nextAttempts,
+        total_correct_answers: nextTotalCorrect,
+        total_wrong_answers: nextTotalWrong,
+        updated_at: new Date().toISOString()
+      });
+    } catch (err) {
+      console.error('Failed to sync exam stats:', err);
+    }
+  };
+
+  const handleLoginUser = (name: string) => {
+    const trimmed = name.trim();
+    localStorage.setItem('david_study_user', trimmed);
+    setCurrentUser(trimmed);
+    setIsUserModalOpen(false);
+  };
+
   // Preparation Score Calculation
   const preparationScore = calculatePreparationScore({
     totalSegments: segments.length,
     progressMap,
     randomExercisesCount,
-    bestStreak
+    bestStreak,
+    examBestScore
   });
 
   const completedSegmentsCount = segments.filter(s => progressMap[s.id]?.completed).length;
@@ -449,6 +556,8 @@ export const App: React.FC = () => {
           setScratchpadQuestion(null);
           setIsScratchpadOpen(true);
         }}
+        currentUser={currentUser}
+        onOpenUserModal={() => setIsUserModalOpen(true)}
       />
 
       {/* Main Content Area */}
@@ -475,9 +584,13 @@ export const App: React.FC = () => {
             currentStreak={currentStreak}
             onUpdateStats={handleUpdateExerciseStats}
             onOpenScratchpad={(q) => {
-              setScratchpadQuestion(q);
+              setScratchpadQuestion(q || null);
               setIsScratchpadOpen(true);
             }}
+            bestExamScore={examBestScore}
+            lastExamScore={examLastScore}
+            examAttempts={examAttempts}
+            onCompleteExam={handleUpdateExamScore}
           />
         ) : (
           /* Curriculum / Levels Mode */
@@ -689,6 +802,15 @@ export const App: React.FC = () => {
         isOpen={isScratchpadOpen}
         onClose={() => setIsScratchpadOpen(false)}
         activeQuestion={scratchpadQuestion}
+      />
+
+      {/* User Login & Profile Switcher Modal (Per-Device & Per-Person Isolated Data) */}
+      <UserLoginModal
+        isOpen={!currentUser || isUserModalOpen}
+        currentUser={currentUser}
+        canClose={Boolean(currentUser)}
+        onClose={() => setIsUserModalOpen(false)}
+        onLogin={handleLoginUser}
       />
     </div>
   );

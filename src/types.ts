@@ -46,6 +46,7 @@ export interface Flashcard {
 
 export interface SegmentProgress {
   id: string;
+  username?: string;
   discipline_id: string;
   segment_id: string;
   text_completed: boolean;
@@ -60,7 +61,17 @@ export interface SegmentProgress {
 
 export interface UserSettings {
   id: string;
+  username?: string;
   unlock_all: boolean;
   active_discipline_id?: string;
+  preparation_score?: number;
+  sudden_death_best_streak?: number;
+  sudden_death_current_streak?: number;
+  random_exercises_completed?: number;
+  total_correct_answers?: number;
+  total_wrong_answers?: number;
+  exam_best_score?: number;
+  exam_last_score?: number;
+  exam_attempts?: number;
   updated_at?: string;
 }

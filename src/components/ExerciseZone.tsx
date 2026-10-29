@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Question, Segment, SegmentProgress } from '../types';
 import { supabase } from '../supabaseClient';
 import { renderInlineMath, MathRenderer } from './MathRenderer';
-import { Flame, Trophy, Shuffle, RotateCcw, ShieldAlert, Edit3, Check, X, Lightbulb, Bookmark } from 'lucide-react';
+import { Flame, Trophy, Shuffle, RotateCcw, ShieldAlert, Edit3, Check, X, Lightbulb, Bookmark, Copy, GraduationCap } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { playCorrectSound, playWrongSound, playSuccessChime, playClickSound } from '../utils/soundEffects';
+import { ExamSimulation } from './ExamSimulation';
 
 interface ExerciseZoneProps {
   segments: Segment[];
@@ -12,7 +13,11 @@ interface ExerciseZoneProps {
   bestStreak: number;
   currentStreak: number;
   onUpdateStats: (correct: boolean, isSuddenDeath: boolean, streak: number) => void;
-  onOpenScratchpad: (activeQ: Question) => void;
+  onOpenScratchpad: (activeQ?: Question) => void;
+  bestExamScore?: number;
+  lastExamScore?: number;
+  examAttempts?: number;
+  onCompleteExam?: (scorePercent: number, correctCount: number, totalCount: number) => void;
 }
 
 export const ExerciseZone: React.FC<ExerciseZoneProps> = ({
@@ -21,10 +26,15 @@ export const ExerciseZone: React.FC<ExerciseZoneProps> = ({
   bestStreak,
   currentStreak,
   onUpdateStats,
-  onOpenScratchpad
+  onOpenScratchpad,
+  bestExamScore = 0,
+  lastExamScore = 0,
+  examAttempts = 0,
+  onCompleteExam
 }) => {
-  const [zoneMode, setZoneMode] = useState<'random' | 'suddendeath'>('random');
+  const [zoneMode, setZoneMode] = useState<'random' | 'suddendeath' | 'exam'>('random');
   const [questionsPool, setQuestionsPool] = useState<Question[]>([]);
+  const [allCourseQuestions, setAllCourseQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -34,6 +44,7 @@ export const ExerciseZone: React.FC<ExerciseZoneProps> = ({
   const [localBestStreak, setLocalBestStreak] = useState<number>(bestStreak);
   // "What am I inclined" helper state (No -> Maybe -> Yes -> unselected)
   const [inclinations, setInclinations] = useState<Record<string, 'no' | 'maybe' | 'yes'>>({});
+  const [copiedExercise, setCopiedExercise] = useState<boolean>(false);
 
   useEffect(() => {
     setLocalBestStreak(bestStreak);
@@ -54,19 +65,22 @@ export const ExerciseZone: React.FC<ExerciseZoneProps> = ({
   }, [eligibleSegmentIds.join(',')]);
 
   const fetchPoolQuestions = async () => {
-    if (eligibleSegmentIds.length === 0) return;
     setLoading(true);
     try {
       const { data, error } = await supabase
         .from('study_questions')
-        .select('*')
-        .in('segment_id', eligibleSegmentIds);
+        .select('*');
 
       if (error) {
         console.error('Error fetching exercise pool:', error);
       } else if (data && data.length > 0) {
-        setQuestionsPool(data);
-        pickRandomQuestion(data);
+        setAllCourseQuestions(data);
+        const eligible = data.filter(q => eligibleSegmentIds.includes(q.segment_id));
+        const activePool = eligible.length > 0 ? eligible : data;
+        setQuestionsPool(activePool);
+        if (!currentQuestion) {
+          pickRandomQuestion(activePool);
+        }
       }
     } finally {
       setLoading(false);
@@ -90,6 +104,49 @@ export const ExerciseZone: React.FC<ExerciseZoneProps> = ({
       delete next[optId];
       return next;
     });
+  };
+
+  const handleCopyExercise = () => {
+    if (!currentQuestion) return;
+    playClickSound();
+
+    const currentSeg = segments.find(s => s.id === currentQuestion.segment_id);
+    const metaParts = [];
+    if (currentSeg) {
+      metaParts.push(`Level ${currentSeg.order_index}: ${currentSeg.title}`);
+    }
+    if (currentQuestion.section_reference) {
+      metaParts.push(`Curriculum Point: ${currentQuestion.section_reference}`);
+    }
+    if (currentQuestion.difficulty) {
+      metaParts.push(`Difficulty: ${currentQuestion.difficulty}`);
+    }
+
+    const optionsList = currentQuestion.options
+      .map(opt => `- [${opt.id.toUpperCase()}] ${opt.text}`)
+      .join('\n');
+
+    let textToCopy = `### Multivariate Data Analysis Exercise\n`;
+    if (metaParts.length > 0) {
+      textToCopy += `*${metaParts.join(' | ')}*\n\n`;
+    }
+    textToCopy += `**Question:**\n${currentQuestion.question}\n\n`;
+    textToCopy += `**Choices:**\n${optionsList}\n\n`;
+
+    if (isFailed) {
+      const correctOpt = currentQuestion.options.find(o => o.id === currentQuestion.correct_option);
+      textToCopy += `---\n**Official Solution:**\n`;
+      textToCopy += `**Correct Answer:** [${currentQuestion.correct_option.toUpperCase()}] ${correctOpt ? correctOpt.text : ''}\n\n`;
+      if (currentQuestion.explanation) {
+        textToCopy += `**Theoretical Explanation:**\n${currentQuestion.explanation}\n`;
+      }
+    } else {
+      textToCopy += `Please solve this step by step, formulate the underlying mathematical derivation, determine the correct option, and explain in detail why every other option is invalid.`;
+    }
+
+    navigator.clipboard.writeText(textToCopy);
+    setCopiedExercise(true);
+    setTimeout(() => setCopiedExercise(false), 2200);
   };
 
   const getInclinationStyle = (inc?: 'no' | 'maybe' | 'yes') => {
@@ -271,9 +328,58 @@ export const ExerciseZone: React.FC<ExerciseZoneProps> = ({
             <Flame size={14} />
             <span>Sudden Death</span>
           </button>
+
+          <button
+            onClick={() => {
+              playClickSound();
+              setZoneMode('exam');
+            }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              padding: '0.45rem 0.85rem',
+              borderRadius: '6px',
+              border: 'none',
+              backgroundColor: zoneMode === 'exam' ? '#b45309' : 'transparent',
+              color: zoneMode === 'exam' ? '#ffffff' : '#78716c',
+              fontWeight: 700,
+              fontSize: '0.82rem',
+              cursor: 'pointer',
+              transition: 'all 0.12s ease'
+            }}
+          >
+            <GraduationCap size={15} />
+            <span>50-Min Exam</span>
+          </button>
         </div>
 
-        {/* Streak Badges in Sudden Death */}
+        {/* Badges in Modes */}
+        {zoneMode === 'exam' && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              padding: '0.35rem 0.65rem',
+              borderRadius: '6px',
+              backgroundColor: '#fffbeb',
+              border: '1px solid #fde68a',
+              color: '#b45309',
+              fontSize: '0.8rem',
+              fontWeight: 800
+            }}>
+              <Trophy size={14} />
+              <span>Exam Best: {bestExamScore}%</span>
+            </div>
+            {examAttempts > 0 && (
+              <span style={{ fontSize: '0.74rem', color: '#78716c', fontWeight: 600 }}>
+                {examAttempts} taken
+              </span>
+            )}
+          </div>
+        )}
+
         {zoneMode === 'suddendeath' && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
             <div style={{
@@ -317,8 +423,20 @@ export const ExerciseZone: React.FC<ExerciseZoneProps> = ({
         )}
       </div>
 
-      {/* Main Question Card */}
-      {loading ? (
+      {/* Mode View */}
+      {zoneMode === 'exam' ? (
+        <ExamSimulation
+          segments={segments}
+          allQuestions={allCourseQuestions.length > 0 ? allCourseQuestions : questionsPool}
+          bestExamScore={bestExamScore}
+          lastExamScore={lastExamScore}
+          examAttempts={examAttempts}
+          onCompleteExam={(scorePercent, correct, total) => {
+            if (onCompleteExam) onCompleteExam(scorePercent, correct, total);
+          }}
+          onOpenScratchpad={onOpenScratchpad}
+        />
+      ) : loading ? (
         <div style={{ textAlign: 'center', padding: '3rem', backgroundColor: '#ffffff', borderRadius: '12px', border: '1px solid #e7e2d7' }}>
           <p style={{ color: '#78716c', fontWeight: 600 }}>Loading exercises pool...</p>
         </div>
@@ -364,26 +482,50 @@ export const ExerciseZone: React.FC<ExerciseZoneProps> = ({
               </span>
             </div>
 
-            {/* Calculations Button */}
-            <button
-              onClick={() => onOpenScratchpad(currentQuestion)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.35rem',
-                padding: '0.35rem 0.65rem',
-                borderRadius: '6px',
-                backgroundColor: '#fdfbf7',
-                border: '1px solid #e7e2d7',
-                color: '#78350f',
-                fontWeight: 700,
-                fontSize: '0.74rem',
-                cursor: 'pointer'
-              }}
-            >
-              <Edit3 size={13} color="#78350f" />
-              <span>Scratchpad / Calculations</span>
-            </button>
+            {/* Action Buttons: Copy for AI + Calculations */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+              <button
+                onClick={handleCopyExercise}
+                title="Copy formatted exercise for AI prompt"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                  padding: '0.35rem 0.65rem',
+                  borderRadius: '6px',
+                  backgroundColor: copiedExercise ? '#dcfce7' : '#fffdfa',
+                  border: copiedExercise ? '1px solid #86efac' : '1px solid #d6cebf',
+                  color: copiedExercise ? '#15803d' : '#78350f',
+                  fontWeight: 700,
+                  fontSize: '0.74rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                {copiedExercise ? <Check size={13} strokeWidth={3} /> : <Copy size={13} />}
+                <span>{copiedExercise ? 'Copied for AI!' : 'Copy for AI'}</span>
+              </button>
+
+              <button
+                onClick={() => onOpenScratchpad(currentQuestion)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                  padding: '0.35rem 0.65rem',
+                  borderRadius: '6px',
+                  backgroundColor: '#fdfbf7',
+                  border: '1px solid #e7e2d7',
+                  color: '#78350f',
+                  fontWeight: 700,
+                  fontSize: '0.74rem',
+                  cursor: 'pointer'
+                }}
+              >
+                <Edit3 size={13} color="#78350f" />
+                <span>Scratchpad / Calculations</span>
+              </button>
+            </div>
           </div>
 
           {/* Question Text */}
@@ -581,7 +723,27 @@ export const ExerciseZone: React.FC<ExerciseZoneProps> = ({
                 <strong style={{ color: '#78350f' }}>Explanation: </strong>
                 {renderInlineMath(currentQuestion.explanation)}
               </div>
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+                <button
+                  onClick={handleCopyExercise}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.35rem',
+                    padding: '0.55rem 0.85rem',
+                    backgroundColor: copiedExercise ? '#dcfce7' : '#ffffff',
+                    color: copiedExercise ? '#15803d' : '#78350f',
+                    border: copiedExercise ? '1px solid #86efac' : '1px solid #d6cebf',
+                    borderRadius: '8px',
+                    fontWeight: 700,
+                    fontSize: '0.8rem',
+                    cursor: 'pointer'
+                  }}
+                >
+                  {copiedExercise ? <Check size={14} strokeWidth={3} /> : <Copy size={14} />}
+                  <span>{copiedExercise ? 'Copied Full Solution!' : 'Copy Question & Solution for AI'}</span>
+                </button>
+
                 <button
                   onClick={handleRestart}
                   style={{
