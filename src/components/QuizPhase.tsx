@@ -441,8 +441,10 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
                 }}
                 style={{
                   flexShrink: 0,
+                  width: '62px',
+                  boxSizing: 'border-box',
                   marginTop: '0.05rem',
-                  padding: '0.22rem 0.65rem',
+                  padding: '0.22rem 0',
                   borderRadius: '999px',
                   fontSize: '0.72rem',
                   fontWeight: 700,
@@ -456,6 +458,7 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  textAlign: 'center',
                   userSelect: 'none'
                 }}
                 aria-label="Inclination helper: click to cycle No, Maybe, Yes"

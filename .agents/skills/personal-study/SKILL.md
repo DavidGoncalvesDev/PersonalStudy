@@ -96,6 +96,7 @@ Progress through each segment moves sequentially:
     - *Second Click*: Highlights as active `Maybe` (warm amber, marking an unsure candidate).
     - *Third Click*: Highlights as active `Yes` (vibrant green, marking a probable answer).
     - *Fourth Click*: Cycles back to unclicked faded-out `No`.
+  - **Fixed-Width Layout Stability**: The button maintains a constant fixed width (`width: 62px`, centered) sized to comfortably accommodate the widest `"Maybe"` text, preventing any layout shifting or text reflow during state changes.
   - Clicking the option card itself submits the answer, whereas clicking the helper tag stops event propagation (`e.stopPropagation()`).
 
 ### Phase 3: Flashcards
