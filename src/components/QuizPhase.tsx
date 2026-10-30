@@ -11,6 +11,7 @@ interface QuizPhaseProps {
   isAlreadyPassed: boolean;
   onPassQuiz: (score: number) => void;
   onProceedToFlashcards: () => void;
+  proceedButtonLabel?: string;
   onOpenScratchpad?: (question?: Question) => void;
   onGoToText?: (anchor?: string, qNum?: number) => void;
 }
@@ -21,6 +22,7 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
   isAlreadyPassed,
   onPassQuiz,
   onProceedToFlashcards,
+  proceedButtonLabel = 'Proceed to Phase 3: Workbook',
   onOpenScratchpad,
   onGoToText
 }) => {
@@ -266,7 +268,7 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
               boxShadow: '0 2px 6px rgba(21, 128, 61, 0.25)'
             }}
           >
-            <span>Proceed to Phase 3: Flashcards</span>
+            <span>{proceedButtonLabel}</span>
             <ArrowRight size={16} />
           </button>
         </div>

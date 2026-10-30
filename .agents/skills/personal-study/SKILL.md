@@ -4,9 +4,9 @@ description: >-
   Comprehensive guide and operational rules for the David Study (Personal Study) system.
   Use whenever the user mentions 'personal study' or 'David Study', provides slides, exercises,
   or course materials, asks to update or adapt the study app, or modifies disciplines,
-  segments, quizzes, and flashcards. Defines the architecture, Supabase schema,
-  granular 4-5 segment-per-chapter division, clear brown theme, 3-phase mastery
-  progression (rich text -> 1-by-1 quiz with reset -> flashcards), non-resetting quiz state,
+  segments, quizzes, workbook exercises, and flashcards. Defines the architecture, Supabase schema,
+  granular 4-5 segment-per-chapter division, clear brown theme, 4-phase mastery
+  progression (rich text -> 1-by-1 quiz with reset -> practical workbook exercises with writing zone & self-assessment -> flashcards), non-resetting quiz state,
   per-device & per-person user login data isolation, text guide anchoring with amber highlights,
   large fundamental explanations, elimination of longest-option bias, uniform A-F option distribution,
   live scratchpad question synchronization, iOS Apple Pencil callout suppression, scratchpad canvas with palm rejection,
@@ -39,9 +39,9 @@ This skill defines the operational specifications, system architecture, database
   - **Backgrounds**: Soft Warm Cream / Sand (`#fdfbf7`, `#f8f6f0`, `#fffbeb`).
   - **Borders & Dividers**: Warm Tan / Stone (`#e7e2d7`, `#d6cebf`).
   - **Card Surfaces**: Pure White (`#ffffff`) with subtle warm shadows.
-  - **Flashcard Buttons**:
-    - **Yes (Knew It)**: Tactile Vibrant Green (`#16a34a` / `#15803d`).
-    - **No (Didn't Know)**: Tactile Crimson Red (`#dc2626` / `#b91c1c`).
+  - **Assessment & Flashcard Buttons**:
+    - **Yes (Knew It / Got It Right)**: Tactile Vibrant Green (`#16a34a` / `#15803d`).
+    - **No (Didn't Know / Made Mistakes)**: Tactile Crimson Red (`#dc2626` / `#b91c1c`).
 - **No Native Browser Tooltips**: Never use native HTML `title="..."` attributes on buttons or pills. All hover information must be displayed via custom in-app React floating cards to avoid ugly, redundant browser popup balloons.
 - **Level Selector Hover & Hold Delay (Anti-Instant Popup)**:
   - Hover preview cards for level pills must NEVER pop up instantly on mouse movement or on touch click.
@@ -61,8 +61,9 @@ This skill defines the operational specifications, system architecture, database
   - Normalized database key: `username = name.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '')`.
 - **Database Partitioning**:
   - `study_progress`: Stores `username` column, unique composite index on `(username, discipline_id, segment_id)`, and `id = 'prog_' || username || '_' || discipline_id || '_' || segment_id`.
+  - `study_workbook_submissions`: Stores student workbook responses and self-evaluations partitioned by `(username, exercise_id)`.
   - `study_user_settings`: Primary key `id = username` and column `username`.
-  - Different users on the same device or different devices have 100% separate curriculum completion, quiz attempts, flashcards, sudden death streaks, and 50-minute exam scores.
+  - Different users on the same device or different devices have 100% separate curriculum completion, quiz attempts, workbook submissions, flashcards, sudden death streaks, and 50-minute exam scores.
 - **Header Profile Pill & Switcher**:
   - Header displays `[ 👤 Username ]` (or `[ 👤 Login ]` if unauthenticated). Clicking opens the profile modal with quick-select chips of recent profiles on that device, a student name input, and a **Sign Out** button to log out and clear the active session.
 
@@ -98,24 +99,29 @@ Divide university courses (like Multivariate Data Analysis) into **granular 4–
   - **L6**: Component Extraction Criteria (Kaiser Criterion, Scree Plot, Variance Explained).
   - **L7**: Component Scores, Loadings & Geometric Variable Representation.
   - **L8**: PCA Diagnostic Evaluation & Practical Business Interpretations.
+- **Chapter 3: Factor Analysis (FA)**:
+  - **L9**: Latent Variable Theory & Common Factor Model ($X_i = \sum \lambda_{ij} F_j + e_i$).
+  - **L10**: Variance Decomposition: Communalities ($h_i^2$), Specific Variance ($u_i^2$), and Error.
+  - **L11**: Factor Extraction: Principal Axis Factoring (PAF) vs Maximum Likelihood (ML) vs PCA.
+  - **L12**: Factor Rotations (Orthogonal Varimax vs Oblique Promax) & Reproduced Correlation Matrix ($\hat{\mathbf{R}} = \mathbf{\Lambda} \mathbf{\Phi} \mathbf{\Lambda}^T$).
 
 ---
 
-## 5. Three-Phase Mastery Progression per Segment
+## 5. Four-Phase Mastery Progression per Segment
 
-Each learning unit contains 3 distinct progressive phases:
+Each learning unit follows a rigorous 4-phase mastery progression:
 
 ### Phase 1: Comprehensive Text Guide
 - Exhaustive foundational prose with worked examples and formula walkthroughs.
 - Auto-generates clean URL/anchor slugs on all `##` and `###` headers.
-- **Universal Reference Anchoring & Highlighting (All Levels 1–8, Quizzes & Flashcards)**:
-  - Every single question (all 96 across L1–L8) and every single flashcard (all 64 across L1–L8) has dedicated `section_reference` and `section_anchor` populated in Supabase.
-  - When jumped to from a live quiz question or flashcard, the target section is highlighted with an amber callout border (`border: 2.5px solid #d97706`, `#fffbeb`) and a dynamic badge:
-    `"📍 Active Question Reference (Question X)"` or `"📍 Active Concept Reference (Flashcard X)"`.
+- **Universal Reference Anchoring & Highlighting (All Levels 1–8, Quizzes, Workbook & Flashcards)**:
+  - Every single question (all 96 across L1–L8), workbook exercise (all 8 across L1–L8), and flashcard (all 64 across L1–L8) has dedicated `section_reference` and `section_anchor` populated in Supabase.
+  - When jumped to from a live quiz question, workbook exercise, or flashcard, the target section is highlighted with an amber callout border (`border: 2.5px solid #d97706`, `#fffbeb`) and a dynamic badge:
+    `"📍 Active Question Reference (Question X)"`, `"📍 Active Exercise Reference (Exercise X)"`, or `"📍 Active Concept Reference (Flashcard X)"`.
   - Automatically smooth-scrolls the highlighted section into view (`scrollMarginTop: 110px`).
   - Displays a sticky top banner with bidirectional return:
-    `[← Return to Question X]` (if from Quiz) or `[← Return to Flashcards]` (if from Flashcards).
-  - All quiz progress (question index, selections, inclinations) and flashcard progress (mastered cards, queue) are maintained with zero resets.
+    `[← Return to Question X]`, `[← Return to Workbook Exercise X]`, or `[← Return to Flashcards]`.
+  - All quiz progress (question index, selections, inclinations), workbook drafts/submissions, and flashcard progress (mastered cards, queue) are maintained with zero resets.
 - Clicking **"Mark Text as Understood & Take Quiz"** (or `"Return to Level Quiz (12 Qs)"`) navigates to Phase 2.
 
 ### Phase 2: Level Quiz (1 Question at a Time • Immediate Reset on Error)
@@ -141,8 +147,28 @@ Each learning unit contains 3 distinct progressive phases:
 - **"What am I inclined" Helper Feature (Elimination & Pre-decision Tag)**:
   - Appears on the right side of every multiple choice option (A–F) in both the Level Quiz, Exercise Zone, and 50-Min Exam.
   - Fixed-width button cycling: Faded No -> Active No (Red) -> Maybe (Amber) -> Yes (Green) -> Unclicked.
+- Upon scoring 12/12, the user unlocks Phase 3 (Workbook Exercises) and sees a direct button: `"Proceed to Phase 3: Workbook"`.
 
-### Phase 3: Flashcards
+### Phase 3: Practical Workbook Exercises (In-Depth Course Problem Sets)
+- **Pedagogical Purpose**: Moves beyond multiple-choice recognition into active, open-ended problem solving directly reflecting university course workbooks (e.g. NOVA IMS Chapter 2 and Chapter 3 Exercise Workbooks).
+- **Curriculum Calibration (When, Where, and How Many)**:
+  - **Calculation-Heavy & Analytical Topics**: Topics involving formal matrix derivations, eigenvalue optimization, Mahalanobis distances, factor loading rotations, or reproduced correlations require substantive, multi-part workbook exercises with concrete numbers and datasets.
+  - **Conceptual & Taxonomic Topics**: Focus on scale invariance proofs, dummy variable matrix singularities, and comparative methodological trade-offs (e.g. PCA vs PAF vs ML factor analysis).
+  - The agent determines the number of exercises per segment based on topic depth (typically 1–2 exhaustive multi-part challenge exercises per learning unit).
+- **Interactive Writing Zone & Scratchpad**:
+  - Large expandable text area below the prompt allowing the student to write formulas, derivations, matrix values, and conclusions.
+  - Live draft autosaving in `localStorage` (`david_study_wb_draft_${username}_${exerciseId}`) so work is never lost on refresh or navigation.
+  - Live character counter.
+  - **1-Click Apple Pencil Canvas Integration**: Features a `"✏️ Apple Pencil Canvas"` button that opens the full-screen stylus scratchpad with the exercise problem statement cleanly rendered in the corner HUD card.
+- **Turn-In & Self-Assessment Workflow**:
+  1. **"Turn In Exercise & Check Solution"**: Commits the student's written response to Supabase table `study_workbook_submissions`.
+  2. **Authoritative Worked Solution**: Immediately unrolls the complete step-by-step mathematical proof, matrix transformations, and numerical answers rendered via KaTeX.
+  3. **Self-Assessment Feedback Bar**: The student compares their response against the authoritative worked solution and self-evaluates with two tactile buttons:
+     - `[ ✕ No, I made mistakes ]` (Crimson red): Plays subdued wrong tone, marks submission as needing improvement, and encourages reviewing the text guide or re-attempting.
+     - `[ ✓ Yes, I got it right! ]` (Vibrant green): Plays correct chime, bursts confetti, records success in `study_workbook_submissions`, marks `workbook_passed = true` in `study_progress`, and unlocks Phase 4 (Flashcards).
+  4. **"Edit / Re-attempt" Action**: Allows resetting the exercise state and refining the response at any time.
+
+### Phase 4: High-Yield Flashcards
 - Fast-recall cards with question on front, answer/insight on back.
 - **Universal Reference Text Guide Link**:
   - Every flashcard across all 8 levels features a `"📖 Reference Text Guide"` button on the active card deck.
@@ -150,7 +176,7 @@ Each learning unit contains 3 distinct progressive phases:
 - Self-assessment: **Yes (Green)** vs **No (Red)**.
 - **100% Mastery Rule**: All cards must be answered "Yes" to complete the deck.
 - **Non-Resetting Mastery Persistence**:
-  - Maintained in the DOM with `display: activePhase === 'flashcards' ? 'block' : 'none'`, so navigating back to Phase 1 (Text Guide) or Phase 2 (Quiz) **never resets** the flashcard queue or active card position.
+  - Maintained in the DOM with `display: activePhase === 'flashcards' ? 'block' : 'none'`, so navigating back to Phase 1 (Text Guide), Phase 2 (Quiz), or Phase 3 (Workbook) **never resets** the flashcard queue or active card position.
   - Persisted in `localStorage` under `david_study_fc_${username}_${segmentId}` so even reloads and profile switches preserve mastered card progress for that segment.
   - "Review Again" explicitly restarts and resets the queue for fresh practice.
 - **Segment-Isolated Queue Synchronization & Fingerprinting**:
@@ -186,7 +212,7 @@ The Exercise Zone provides three specialized training modes:
 
 ### "Copy for AI" Formatted Exercise Clipboard Feature
 - Available on every question in the **Level Quiz**, **Exercise Zone**, **50-Min Exam**, and **Scratchpad HUD**.
-- Automatically formats the exercise for prompt engineering (Topic metadata, Question text, markdown choices `[A]` through `[F]`).
+- Automatically formats the exercise for prompt engineering (Topic metadata, Question text, markdown choices `[A]` through `[F]`, or open-ended derivation prompt).
 - Appends prompt guidance or full analytical solution based on state.
 
 ---
@@ -198,7 +224,7 @@ The Preparation Score is a weighted index reflecting the student's exam readines
 $$\text{Preparation Score} = \min(100, \text{round}(C + A + E + P + D))$$
 
 1. **Curriculum Completion ($C$, up to 40 points)**:
-   - Evaluates completed learning units (Text read + Quiz 12/12 passed + Flashcards completed).
+   - Evaluates completed learning units (Text read + Quiz 12/12 passed + Workbook completed + Flashcards completed).
    - $C = 40 \times \frac{\text{completed\_segments}}{\text{total\_segments}}$.
 2. **Quiz First-Time Efficiency ($A$, up to 20 points)**:
    - Rewards passing quizzes on the first attempt; penalizes repeated restarts.
@@ -221,8 +247,8 @@ Total maximum score: $40 + 20 + 20 + 10 + 10 = 100\%$.
 ## 8. Global Scratchpad / Calculation Canvas
 
 - **Openable Everywhere & Live Question Sync**:
-  - Available across all screens via a floating action button (FAB) at the bottom-right, top bar, and inside question cards.
-  - Clicking "Scratchpad / Notes" on ANY quiz question, exercise question, or exam question dynamically passes the currently active question (`onOpenScratchpad(currentQ)`), ensuring the corner HUD reference card matches the exact live question being solved rather than defaulting to Question 1.
+  - Available across all screens via a floating action button (FAB) at the bottom-right, top bar, and inside question/workbook cards.
+  - Clicking "Scratchpad / Notes" on ANY quiz question, workbook exercise, or exam question dynamically passes the currently active question (`onOpenScratchpad(currentQ)`), ensuring the corner HUD reference card matches the exact live problem being solved rather than defaulting to Question 1.
 - **Apple Pencil & Stylus Priority**:
   - Uses `PointerEvent` with strict pen prioritization: when an Apple Pencil touches down (`e.pointerType === 'pen'`), it preempts any resting hand or touch contact and locks active drawing to the stylus.
   - Stylus touches (`touch.touchType === 'stylus'`) are bypassed by pinch-zoom listeners so resting palm contacts never trigger zoom or cancel active pen strokes.
@@ -242,7 +268,7 @@ Total maximum score: $40 + 20 + 20 + 10 + 10 = 100\%$.
   - Two fingers dynamically scale the canvas (0.4x to 3.5x).
   - Mouse wheel pans vertically and horizontally; Ctrl+Wheel zooms.
   - Floating zoom controls: `[-]`, `zoom %` (click to reset view to 100%), `[+]`, and `RotateCcw` reset buttons in the top toolbar.
-- **Corner HUD**: Collapsible floating card with the current question, 6 choices, and a `"Copy for AI"` one-click button.
+- **Corner HUD**: Collapsible floating card with the current question/exercise, options (if multiple choice), and a `"Copy for AI"` one-click button.
 
 ---
 
@@ -254,12 +280,12 @@ Total maximum score: $40 + 20 + 20 + 10 + 10 = 100\%$.
 - **Phase Navigation Stepper**:
   - Segmented control format using `flex: 1` per tab.
   - Chevrons hidden on mobile (`.hide-on-mobile`).
-  - Responsive labels: `1. Text`, `2. Quiz`, `3. Cards` on mobile viewports so all 3 phases fit cleanly on 1 line without wrapping.
+  - Responsive labels: `1. Text`, `2. Quiz`, `3. Work`, `4. Cards` on mobile viewports so all 4 phases fit cleanly on 1 line without wrapping.
 - **Continuous Exam Header**:
   - Compact sticky top bar (`top: clamp(58px, 12vw, 88px)`).
   - Horizontal swipeable jump bar (`.mobile-scroll-x`) prevents 25 buttons from wrapping into 3–4 tall rows, preserving screen space for the exam questions.
 - **Safe Area & Tap Targets**:
-  - Minimum 38–48px touch targets for all multiple-choice cards and action buttons.
+  - Minimum 38–48px touch targets for all multiple-choice cards, workbook buttons, and action pills.
   - FAB positioned with safe area padding: `bottom: max(16px, env(safe-area-inset-bottom, 16px))`.
   - Global `-webkit-tap-highlight-color: transparent` and `touch-action: manipulation`.
 
@@ -273,8 +299,10 @@ Total maximum score: $40 + 20 + 20 + 10 + 10 = 100\%$.
   - `study_disciplines`: `id, name, code, description, created_at`
   - `study_segments`: `id, discipline_id, order_index, title, subtitle, summary_markdown, created_at`
   - `study_questions`: `id, segment_id, order_index, difficulty, question, options (jsonb), correct_option, explanation, pool_type, section_reference, section_anchor, created_at`
+  - `study_workbook_exercises`: `id, segment_id, order_index, title, difficulty, prompt_markdown, solution_markdown, section_reference, section_anchor, created_at`
+  - `study_workbook_submissions`: `id, username, exercise_id, segment_id, user_response, self_evaluated_correct, submitted_at, updated_at`
   - `study_flashcards`: `id, segment_id, order_index, category, front, back, created_at`
-  - `study_progress`: `id, username, discipline_id, segment_id, text_completed, quiz_passed, quiz_score, quiz_attempts, flashcards_passed, completed, manually_unlocked, updated_at`
+  - `study_progress`: `id, username, discipline_id, segment_id, text_completed, quiz_passed, quiz_score, quiz_attempts, workbook_passed, flashcards_passed, completed, manually_unlocked, updated_at`
   - `study_user_settings`: `id (username), username, unlock_all, active_discipline_id, preparation_score, sudden_death_best_streak, sudden_death_current_streak, random_exercises_completed, total_correct_answers, total_wrong_answers, exam_best_score, exam_last_score, exam_attempts, updated_at`
 - **Double-Click Unlocking**: Double-clicking any level pill unlocks it directly, toggling `manually_unlocked = true` in `study_progress`.
 
@@ -284,9 +312,9 @@ Total maximum score: $40 + 20 + 20 + 10 + 10 = 100\%$.
 
 - **Zero-Dependency Procedural Audio**: Uses the Web Audio API (`AudioContext`) to synthesize instant, crisp acoustic feedback without needing external MP3/WAV files.
 - **Audio Palette**:
-  - `playCorrectSound()`: Pleasant, ascending sine-wave chime (E5 -> A5) played immediately upon selecting a correct answer.
-  - `playWrongSound()`: Low, subdued downward triangle-wave tone played when an incorrect answer triggers a quiz/sudden death reset.
-  - `playSuccessChime()`: Triumphant 4-note ascending major arpeggio (C5 -> E5 -> G5 -> C6) for passing 12/12 quiz questions, mastering all flashcards, or hitting exam milestones.
+  - `playCorrectSound()`: Pleasant, ascending sine-wave chime (E5 -> A5) played immediately upon selecting a correct answer or self-evaluating workbook "Yes".
+  - `playWrongSound()`: Low, subdued downward triangle-wave tone played when an incorrect answer triggers a quiz/sudden death reset, or when self-evaluating workbook "No".
+  - `playSuccessChime()`: Triumphant 4-note ascending major arpeggio (C5 -> E5 -> G5 -> C6) for passing 12/12 quiz questions, submitting workbook exercises, mastering all flashcards, or hitting exam milestones.
   - `playClickSound()`: Subtle, crisp 900 Hz acoustic tick for card flips, tab changes, and UI buttons.
 
 ---
@@ -311,7 +339,7 @@ When the user uploads course files (slides, syllabi, lecture notes, textbook cha
    - Write exhaustive narrative prose building deep mathematical and practical intuition from the ground up (no superficial bullet lists, no visible raw asterisks `*`, true `##` and `###` section headings).
    - Render all mathematical equations in KaTeX (`$...$` inline, `$$...$$` display) strictly configured with `output: 'html'`.
    - Incorporate concrete numerical walkthroughs and step-by-step formula derivations.
-   - Ensure all concept headings generate clean anchor slugs (e.g. `### Autoregressive Models` -> `#autoregressive-models`) for bidirectional question/flashcard linking.
+   - Ensure all concept headings generate clean anchor slugs (e.g. `### Autoregressive Models` -> `#autoregressive-models`) for bidirectional question/workbook/flashcard linking.
 
 5. **Phase 2: 12-Question Substantive Quiz Formulation (Per Segment)**:
    - Construct exactly **12 substantive questions** per segment (4 elemental, 4 conceptual, 4 advanced).
@@ -322,21 +350,28 @@ When the user uploads course files (slides, syllabi, lecture notes, textbook cha
    - Author comprehensive failure explanations with deep theoretical and mathematical derivations.
    - Insert into `study_questions` (`pool_type = 'quiz'`).
 
-6. **Phase 3: High-Yield Flashcard Deck Formulation (Per Segment)**:
+6. **Phase 3: Practical Workbook Exercises Formulation (Per Segment)**:
+   - Extract or formulate deep open-ended problem sets directly reflecting course workbook problem sets and exam-style assignments.
+   - Author multi-part problem statements with authentic datasets, tables, and analytical derivations.
+   - Write authoritative, step-by-step worked solutions formatted in KaTeX with complete proofs and numerical verifications.
+   - Populate `section_reference` and `section_anchor` on every exercise.
+   - Insert into `study_workbook_exercises`.
+
+7. **Phase 4: High-Yield Flashcard Deck Formulation (Per Segment)**:
    - Formulate exactly **8 high-recall flashcards** per segment focusing on core definitions, formula interpretation, and critical decision rules.
    - Populate `section_reference` and `section_anchor` on each card for 1-click text guide jumps.
    - Insert into `study_flashcards`.
 
-7. **Database Seeding & Migration**:
+8. **Database Seeding & Migration**:
    - Execute insertions directly into the Supabase `tracker` project (`https://eurqqiebokwcrrhfbihg.supabase.co`).
    - Never touch calorie tracker tables (`food_items`, `weight_logs`) or `supabase_novae`.
 
-8. **Automated Verification & Integrity Audit**:
-   - Verify question count (exactly 12 per segment) and flashcard count (exactly 8 per segment).
+9. **Automated Verification & Integrity Audit**:
+   - Verify question count (exactly 12 per segment), workbook exercise presence, and flashcard count (exactly 8 per segment).
    - Verify exact uniform distribution (2 A's, 2 B's, 2 C's, 2 D's, 2 E's, 2 F's per 12-question quiz).
    - Verify that the correct option is not consistently the longest.
    - Verify all `section_anchor` tags exist in the text guide.
    - Run `npm run build` to ensure zero TypeScript, JSX, or bundling errors.
 
-9. **Self-Updating Skill Persistence**:
-   - Immediately update Section 4 of `SKILL.md` across all 5 mirror paths to document the new discipline, chapter structure, and segment mappings.
+10. **Self-Updating Skill Persistence**:
+    - Immediately update Section 4 of `SKILL.md` across all 5 mirror paths to document the new discipline, chapter structure, and segment mappings.

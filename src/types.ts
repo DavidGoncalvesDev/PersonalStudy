@@ -46,6 +46,30 @@ export interface Flashcard {
   section_anchor?: string;
 }
 
+export interface WorkbookExercise {
+  id: string;
+  segment_id: string;
+  order_index: number;
+  title: string;
+  difficulty: 'intermediate' | 'hard' | 'exam';
+  prompt_markdown: string;
+  solution_markdown: string;
+  section_reference?: string;
+  section_anchor?: string;
+  created_at?: string;
+}
+
+export interface WorkbookSubmission {
+  id: string;
+  username: string;
+  exercise_id: string;
+  segment_id: string;
+  user_response: string;
+  self_evaluated_correct: boolean | null;
+  submitted_at?: string;
+  updated_at?: string;
+}
+
 export interface SegmentProgress {
   id: string;
   username?: string;
@@ -55,6 +79,7 @@ export interface SegmentProgress {
   quiz_passed: boolean;
   quiz_score: number;
   quiz_attempts: number;
+  workbook_passed?: boolean;
   flashcards_passed: boolean;
   completed: boolean;
   manually_unlocked?: boolean;

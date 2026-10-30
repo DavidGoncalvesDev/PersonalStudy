@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { supabase } from './supabaseClient';
-import { Discipline, Segment, Question, Flashcard, SegmentProgress } from './types';
+import { Discipline, Segment, Question, Flashcard, SegmentProgress, WorkbookExercise } from './types';
 import { Header } from './components/Header';
 import { SegmentSelector } from './components/SegmentSelector';
 import { TextSummaryPhase } from './components/TextSummaryPhase';
 import { QuizPhase } from './components/QuizPhase';
+import { WorkbookPhase } from './components/WorkbookPhase';
 import { FlashcardsPhase } from './components/FlashcardsPhase';
 import { ExerciseZone } from './components/ExerciseZone';
 import { ScratchpadModal } from './components/ScratchpadModal';
@@ -21,7 +22,8 @@ export const App: React.FC = () => {
   const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
   const [progressMap, setProgressMap] = useState<Record<string, SegmentProgress>>({});
   const [unlockAll, setUnlockAll] = useState<boolean>(false);
-  const [activePhase, setActivePhase] = useState<'text' | 'quiz' | 'flashcards'>('text');
+  const [activePhase, setActivePhase] = useState<'text' | 'quiz' | 'workbook' | 'flashcards'>('text');
+  const [workbookExercises, setWorkbookExercises] = useState<WorkbookExercise[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   // Top navigation mode: Curriculum vs Exercise Zone
@@ -45,7 +47,7 @@ export const App: React.FC = () => {
 
   // Active Question/Flashcard Reference Navigation (Text Guide highlighting & smooth bidirectional return)
   const [highlightedAnchor, setHighlightedAnchor] = useState<string | null>(null);
-  const [activeReferenceSource, setActiveReferenceSource] = useState<'quiz' | 'flashcards' | null>(null);
+  const [activeReferenceSource, setActiveReferenceSource] = useState<'quiz' | 'workbook' | 'flashcards' | null>(null);
   const [activeReferenceItemNumber, setActiveReferenceItemNumber] = useState<number | null>(null);
 
   // Per-Device & Per-Person User Login State (Prompt user first, DO NOT auto-login as David!)
@@ -200,7 +202,7 @@ export const App: React.FC = () => {
     }
   };
 
-  // 3. Load segment quiz questions (pool_type = 'quiz') and flashcards
+  // 3. Load segment quiz questions (pool_type = 'quiz'), flashcards, and workbook exercises
   useEffect(() => {
     if (!currentSegment) return;
     fetchSegmentDetails(currentSegment.id);
@@ -208,8 +210,10 @@ export const App: React.FC = () => {
     const prog = progressMap[currentSegment.id];
     if (prog?.completed) {
       setActivePhase('text');
-    } else if (prog?.quiz_passed) {
+    } else if (prog?.workbook_passed) {
       setActivePhase('flashcards');
+    } else if (prog?.quiz_passed) {
+      setActivePhase('workbook');
     } else if (prog?.text_completed) {
       setActivePhase('quiz');
     } else {
@@ -219,7 +223,11 @@ export const App: React.FC = () => {
 
   const fetchSegmentDetails = async (segmentId: string) => {
     try {
-      const [{ data: qData, error: qError }, { data: fcData, error: fcError }] = await Promise.all([
+      const [
+        { data: qData, error: qError },
+        { data: fcData, error: fcError },
+        { data: wbData, error: wbError }
+      ] = await Promise.all([
         supabase
           .from('study_questions')
           .select('*')
@@ -228,6 +236,11 @@ export const App: React.FC = () => {
           .order('order_index', { ascending: true }),
         supabase
           .from('study_flashcards')
+          .select('*')
+          .eq('segment_id', segmentId)
+          .order('order_index', { ascending: true }),
+        supabase
+          .from('study_workbook_exercises')
           .select('*')
           .eq('segment_id', segmentId)
           .order('order_index', { ascending: true })
@@ -244,12 +257,18 @@ export const App: React.FC = () => {
       } else {
         setFlashcards(fcData || []);
       }
+
+      if (wbError) {
+        console.error('Error fetching workbook exercises:', wbError);
+      } else {
+        setWorkbookExercises(wbData || []);
+      }
     } catch (err) {
       console.error('Error loading segment details:', err);
     }
   };
 
-  // Strictly filter questions and flashcards for the currently selected segment
+  // Strictly filter questions, flashcards, and workbook exercises for the currently selected segment
   // to prevent stale data bleed-through when transitioning between levels
   const currentSegmentQuestions = useMemo(() => {
     if (!currentSegment) return [];
@@ -260,6 +279,11 @@ export const App: React.FC = () => {
     if (!currentSegment) return [];
     return flashcards.filter(f => f.segment_id === currentSegment.id);
   }, [flashcards, currentSegment?.id]);
+
+  const currentSegmentWorkbookExercises = useMemo(() => {
+    if (!currentSegment) return [];
+    return workbookExercises.filter(wb => wb.segment_id === currentSegment.id);
+  }, [workbookExercises, currentSegment?.id]);
 
   // Progress Update in Supabase
   const updateProgress = async (updates: Partial<SegmentProgress>) => {
@@ -385,6 +409,13 @@ export const App: React.FC = () => {
     setActivePhase('text');
   };
 
+  const handleGoToTextFromWorkbook = (anchor?: string, exerciseNum?: number) => {
+    setHighlightedAnchor(anchor || null);
+    setActiveReferenceSource('workbook');
+    setActiveReferenceItemNumber(exerciseNum || null);
+    setActivePhase('text');
+  };
+
   const handleReturnFromText = () => {
     const returnTarget = activeReferenceSource || 'quiz';
     setHighlightedAnchor(null);
@@ -399,6 +430,17 @@ export const App: React.FC = () => {
       quiz_passed: true,
       quiz_score: score,
       quiz_attempts: existingAttempts + 1
+    });
+  };
+
+  const handleProceedToWorkbook = () => {
+    setActivePhase('workbook');
+    window.scrollTo({ top: 80, behavior: 'smooth' });
+  };
+
+  const handlePassWorkbook = async () => {
+    await updateProgress({
+      workbook_passed: true
     });
   };
 
@@ -705,9 +747,47 @@ export const App: React.FC = () => {
                   <button
                     onClick={() => {
                       if (currentSegmentProgress?.quiz_passed || unlockAll) {
+                        setActivePhase('workbook');
+                      } else {
+                        alert('Mastery rule: Score 12/12 on the Quiz to unlock Workbook Exercises.');
+                      }
+                    }}
+                    style={{
+                      flex: 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.35rem',
+                      padding: '0.48rem 0.4rem',
+                      borderRadius: '8px',
+                      border: 'none',
+                      backgroundColor: activePhase === 'workbook' ? '#fef3c7' : 'transparent',
+                      color: activePhase === 'workbook'
+                        ? '#78350f'
+                        : (currentSegmentProgress?.quiz_passed || unlockAll)
+                        ? '#78716c'
+                        : '#c7c2b6',
+                      fontWeight: activePhase === 'workbook' ? 800 : 600,
+                      fontSize: '0.8rem',
+                      cursor: (currentSegmentProgress?.quiz_passed || unlockAll) ? 'pointer' : 'not-allowed',
+                      transition: 'all 0.12s ease'
+                    }}
+                  >
+                    <Edit3 size={14} />
+                    <span className="desktop-only">3. Workbook</span>
+                    <span className="mobile-only">3. Work</span>
+                    {currentSegmentProgress?.workbook_passed && <CheckCircle2 size={13} color="#15803d" />}
+                  </button>
+
+                  <ChevronRight size={14} color="#d6cebf" className="hide-on-mobile" />
+
+                  {/* Phase 4 Tab */}
+                  <button
+                    onClick={() => {
+                      if (currentSegmentProgress?.workbook_passed || (currentSegmentProgress?.quiz_passed && currentSegmentWorkbookExercises.length === 0) || unlockAll) {
                         setActivePhase('flashcards');
                       } else {
-                        alert('Mastery rule: Score 12/12 on the Quiz to unlock Flashcards.');
+                        alert('Mastery rule: Complete Workbook Exercises (or Quiz) to unlock Flashcards.');
                       }
                     }}
                     style={{
@@ -722,18 +802,18 @@ export const App: React.FC = () => {
                       backgroundColor: activePhase === 'flashcards' ? '#fef3c7' : 'transparent',
                       color: activePhase === 'flashcards'
                         ? '#78350f'
-                        : (currentSegmentProgress?.quiz_passed || unlockAll)
+                        : (currentSegmentProgress?.workbook_passed || (currentSegmentProgress?.quiz_passed && currentSegmentWorkbookExercises.length === 0) || unlockAll)
                         ? '#78716c'
                         : '#c7c2b6',
                       fontWeight: activePhase === 'flashcards' ? 800 : 600,
                       fontSize: '0.8rem',
-                      cursor: (currentSegmentProgress?.quiz_passed || unlockAll) ? 'pointer' : 'not-allowed',
+                      cursor: (currentSegmentProgress?.workbook_passed || (currentSegmentProgress?.quiz_passed && currentSegmentWorkbookExercises.length === 0) || unlockAll) ? 'pointer' : 'not-allowed',
                       transition: 'all 0.12s ease'
                     }}
                   >
                     <Layers size={14} />
-                    <span className="desktop-only">3. Flashcards</span>
-                    <span className="mobile-only">3. Cards</span>
+                    <span className="desktop-only">4. Flashcards</span>
+                    <span className="mobile-only">4. Cards</span>
                     {currentSegmentProgress?.completed && <CheckCircle2 size={13} color="#15803d" />}
                   </button>
                 </div>
@@ -764,10 +844,46 @@ export const App: React.FC = () => {
                     segmentTitle={currentSegment.title}
                     isAlreadyPassed={!!currentSegmentProgress?.quiz_passed}
                     onPassQuiz={handlePassQuiz}
-                    onProceedToFlashcards={handleProceedToFlashcards}
+                    proceedButtonLabel={currentSegmentWorkbookExercises.length > 0 ? 'Proceed to Phase 3: Workbook' : 'Proceed to Phase 4: Flashcards'}
+                    onProceedToFlashcards={() => {
+                      if (currentSegmentWorkbookExercises.length > 0) {
+                        setActivePhase('workbook');
+                      } else {
+                        setActivePhase('flashcards');
+                      }
+                      window.scrollTo({ top: 80, behavior: 'smooth' });
+                    }}
                     onGoToText={handleGoToTextFromQuiz}
                     onOpenScratchpad={(q) => {
                       setScratchpadQuestion(q || currentSegmentQuestions[0] || null);
+                      setIsScratchpadOpen(true);
+                    }}
+                  />
+                </div>
+
+                <div style={{ display: activePhase === 'workbook' ? 'block' : 'none' }}>
+                  <WorkbookPhase
+                    key={`workbook-${currentSegment.id}`}
+                    exercises={currentSegmentWorkbookExercises}
+                    segmentId={currentSegment.id}
+                    currentUser={currentUser}
+                    segmentTitle={currentSegment.title}
+                    isAlreadyPassed={!!currentSegmentProgress?.workbook_passed}
+                    onPassWorkbook={handlePassWorkbook}
+                    onProceedToFlashcards={handleProceedToFlashcards}
+                    onGoToText={handleGoToTextFromWorkbook}
+                    onOpenScratchpad={(prompt) => {
+                      const pseudoQ: Question = {
+                        id: `wb_${currentSegment.id}`,
+                        segment_id: currentSegment.id,
+                        order_index: 1,
+                        question: prompt || 'Workbook Exercise',
+                        options: [],
+                        correct_option_id: '',
+                        explanation: '',
+                        section_reference: currentSegment.title
+                      };
+                      setScratchpadQuestion(pseudoQ);
                       setIsScratchpadOpen(true);
                     }}
                   />

@@ -457,14 +457,19 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
     if (!activeQuestion) return;
     playClickSound();
 
-    const optionsList = activeQuestion.options.map(opt => `- [${opt.id.toUpperCase()}] ${opt.text}`).join('\n');
+    const hasOptions = Array.isArray(activeQuestion.options) && activeQuestion.options.length > 0;
     let textToCopy = `### Multivariate Data Analysis Exercise\n`;
     if (activeQuestion.section_reference) {
       textToCopy += `*Curriculum Point: ${activeQuestion.section_reference}*\n\n`;
     }
-    textToCopy += `**Question:**\n${activeQuestion.question}\n\n`;
-    textToCopy += `**Choices:**\n${optionsList}\n\n`;
-    textToCopy += `Please solve this step by step, explain the theoretical principles, determine the correct answer, and explain why each distractor is incorrect.`;
+    textToCopy += `**Problem / Question:**\n${activeQuestion.question}\n\n`;
+    if (hasOptions) {
+      const optionsList = activeQuestion.options.map(opt => `- [${opt.id.toUpperCase()}] ${opt.text}`).join('\n');
+      textToCopy += `**Choices:**\n${optionsList}\n\n`;
+      textToCopy += `Please solve this step by step, explain the theoretical principles, determine the correct answer, and explain why each distractor is incorrect.`;
+    } else {
+      textToCopy += `Please solve this step by step, formulate the underlying mathematical derivation, provide the authoritative numerical and theoretical answer, and explain the key principles.`;
+    }
 
     navigator.clipboard.writeText(textToCopy);
     setCopiedQuestion(true);
@@ -858,14 +863,16 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
               <p style={{ margin: '0 0 0.5rem', fontWeight: 600, lineHeight: 1.45 }}>
                 {renderInlineMath(activeQuestion.question)}
               </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                {activeQuestion.options.map((opt) => (
-                  <div key={opt.id} style={{ display: 'flex', gap: '0.35rem', fontSize: '0.78rem', color: '#57534e' }}>
-                    <span style={{ fontWeight: 800, color: '#78350f' }}>{opt.id.toUpperCase()}:</span>
-                    <span>{renderInlineMath(opt.text)}</span>
-                  </div>
-                ))}
-              </div>
+              {Array.isArray(activeQuestion.options) && activeQuestion.options.length > 0 && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                  {activeQuestion.options.map((opt) => (
+                    <div key={opt.id} style={{ display: 'flex', gap: '0.35rem', fontSize: '0.78rem', color: '#57534e' }}>
+                      <span style={{ fontWeight: 800, color: '#78350f' }}>{opt.id.toUpperCase()}:</span>
+                      <span>{renderInlineMath(opt.text)}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>
