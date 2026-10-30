@@ -31,6 +31,7 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
   const [isFailed, setIsFailed] = useState<boolean>(false);
   const [failedOption, setFailedOption] = useState<string | null>(null);
   const [isAllCompleted, setIsAllCompleted] = useState<boolean>(false);
+  const [isRetaking, setIsRetaking] = useState<boolean>(false);
   // "What am I inclined" helper state (No -> Maybe -> Yes -> unselected)
   const [inclinations, setInclinations] = useState<Record<string, 'no' | 'maybe' | 'yes'>>({});
   const [copiedQuiz, setCopiedQuiz] = useState<boolean>(false);
@@ -201,8 +202,13 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
     setIsAllCompleted(false);
   };
 
-  // If already passed and user visits to review
-  if (isAllCompleted || (isAlreadyPassed && !selectedOption && currentIndex === 0 && !isFailed)) {
+  const handleRetakeQuiz = () => {
+    setIsRetaking(true);
+    handleRestartQuiz();
+  };
+
+  // If already passed and user visits to review (and not actively retaking)
+  if (isAllCompleted || (!isRetaking && isAlreadyPassed && !selectedOption && currentIndex === 0 && !isFailed)) {
     return (
       <div style={{
         backgroundColor: '#ffffff',
@@ -233,7 +239,7 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
         </p>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
           <button
-            onClick={handleRestartQuiz}
+            onClick={handleRetakeQuiz}
             style={{
               padding: '0.65rem 1.25rem',
               backgroundColor: '#ffffff',

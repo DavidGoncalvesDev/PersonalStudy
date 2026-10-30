@@ -14,7 +14,8 @@ import {
   ArrowRight, 
   Sparkles,
   HelpCircle,
-  FileText
+  FileText,
+  Copy
 } from 'lucide-react';
 import { playCorrectSound, playWrongSound, playSuccessChime, playClickSound } from '../utils/soundEffects';
 
@@ -47,6 +48,7 @@ export const WorkbookPhase: React.FC<WorkbookPhaseProps> = ({
   const [isTurnedIn, setIsTurnedIn] = useState<boolean>(false);
   const [selfEvaluated, setSelfEvaluated] = useState<boolean | null>(null);
   const [submissionsMap, setSubmissionsMap] = useState<Record<string, WorkbookSubmission>>({});
+  const [copied, setCopied] = useState<boolean>(false);
 
   const currentExercise = exercises[currentIndex];
   const draftKey = currentExercise ? `david_study_wb_draft_${uKey}_${currentExercise.id}` : '';
@@ -102,6 +104,48 @@ export const WorkbookPhase: React.FC<WorkbookPhaseProps> = ({
         // ignore
       }
     }
+  };
+
+  // Copy Exercise / Solution for AI
+  const handleCopyExercise = () => {
+    if (!currentExercise) return;
+    playClickSound();
+
+    const metaParts = [];
+    if (segmentTitle) {
+      metaParts.push(segmentTitle);
+    }
+    metaParts.push(`Workbook Exercise ${currentIndex + 1} of ${exercises.length}`);
+    if (currentExercise.section_reference) {
+      metaParts.push(`Curriculum Point: ${currentExercise.section_reference}`);
+    }
+    if (currentExercise.difficulty) {
+      metaParts.push(`Difficulty: ${currentExercise.difficulty}`);
+    }
+
+    let textToCopy = `### Multivariate Data Analysis Workbook Exercise\n`;
+    if (metaParts.length > 0) {
+      textToCopy += `*${metaParts.join(' | ')}*\n\n`;
+    }
+    textToCopy += `**Exercise Title:**\n${currentExercise.title}\n\n`;
+    textToCopy += `**Problem Statement / Task Specifications:**\n${currentExercise.prompt_markdown}\n\n`;
+
+    if (isTurnedIn && currentExercise.solution_markdown) {
+      if (userResponse.trim()) {
+        textToCopy += `**My Submitted Response / Calculations:**\n${userResponse}\n\n`;
+      }
+      textToCopy += `**Authoritative Worked Solution:**\n${currentExercise.solution_markdown}\n\n`;
+      textToCopy += `Please review my response, explain the underlying mathematical and theoretical reasoning step by step, verify calculations, and point out key insights or corrections.`;
+    } else {
+      if (userResponse.trim()) {
+        textToCopy += `**My Draft Working:**\n${userResponse}\n\n`;
+      }
+      textToCopy += `Please solve this step by step, formulate the underlying mathematical derivation, provide the authoritative numerical and theoretical answer, and explain the key principles.`;
+    }
+
+    navigator.clipboard.writeText(textToCopy);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2200);
   };
 
   // Turn in response
@@ -291,49 +335,82 @@ export const WorkbookPhase: React.FC<WorkbookPhaseProps> = ({
         </div>
 
         {/* Action Controls */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
+          {/* Copy for AI Button */}
+          <button
+            onClick={handleCopyExercise}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.3rem',
+              padding: '0.35rem 0.65rem',
+              borderRadius: '6px',
+              backgroundColor: copied ? '#dcfce7' : '#fffdfa',
+              border: copied ? '1px solid #86efac' : '1px solid #d6cebf',
+              color: copied ? '#15803d' : '#78350f',
+              fontWeight: 700,
+              fontSize: '0.74rem',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            {copied ? <Check size={12} strokeWidth={3} /> : <Copy size={12} />}
+            <span className="desktop-only">{copied ? 'Copied for AI!' : 'Copy for AI'}</span>
+            <span className="mobile-only">{copied ? 'Copied!' : 'AI'}</span>
+          </button>
+
+          {/* Reference Text Guide */}
           {onGoToText && (
             <button
-              onClick={() => onGoToText(currentExercise.section_anchor, currentIndex + 1)}
+              onClick={() => {
+                playClickSound();
+                onGoToText(currentExercise.section_anchor || currentExercise.section_reference, currentIndex + 1);
+              }}
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.35rem',
-                padding: '0.4rem 0.8rem',
+                gap: '0.3rem',
+                padding: '0.35rem 0.65rem',
                 borderRadius: '6px',
-                border: '1px solid #d97706',
-                backgroundColor: '#fffbeb',
-                color: '#b45309',
-                fontSize: '0.78rem',
+                backgroundColor: '#fffdfa',
+                border: '1px solid #d6cebf',
+                color: '#78350f',
                 fontWeight: 700,
+                fontSize: '0.74rem',
                 cursor: 'pointer',
                 transition: 'all 0.15s ease'
               }}
             >
-              <BookOpen size={14} />
-              <span>📖 Reference Text Guide</span>
+              <BookOpen size={12} color="#78350f" />
+              <span className="desktop-only">Reference Text Guide</span>
+              <span className="mobile-only">Text Guide</span>
             </button>
           )}
 
+          {/* Scratchpad / Notes */}
           {onOpenScratchpad && (
             <button
-              onClick={() => onOpenScratchpad(currentExercise.prompt_markdown)}
+              onClick={() => {
+                playClickSound();
+                onOpenScratchpad(currentExercise.prompt_markdown);
+              }}
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.35rem',
-                padding: '0.4rem 0.8rem',
+                gap: '0.3rem',
+                padding: '0.35rem 0.65rem',
                 borderRadius: '6px',
-                border: '1px solid #78350f',
-                backgroundColor: '#fef3c7',
+                backgroundColor: '#fdfbf7',
+                border: '1px solid #e7e2d7',
                 color: '#78350f',
-                fontSize: '0.78rem',
                 fontWeight: 700,
+                fontSize: '0.74rem',
                 cursor: 'pointer'
               }}
             >
-              <Edit3 size={14} />
-              <span>✏️ Apple Pencil Canvas</span>
+              <Edit3 size={12} color="#78350f" />
+              <span className="desktop-only">Scratchpad / Notes</span>
+              <span className="mobile-only">Notes</span>
             </button>
           )}
         </div>
@@ -458,7 +535,9 @@ export const WorkbookPhase: React.FC<WorkbookPhaseProps> = ({
             justifyContent: 'space-between',
             marginBottom: '0.85rem',
             borderBottom: '1px solid #bbf7d0',
-            paddingBottom: '0.5rem'
+            paddingBottom: '0.5rem',
+            flexWrap: 'wrap',
+            gap: '0.5rem'
           }}>
             <span style={{
               fontSize: '0.78rem',
@@ -473,25 +552,46 @@ export const WorkbookPhase: React.FC<WorkbookPhaseProps> = ({
               <CheckCircle2 size={16} />
               <span>Authoritative Step-by-Step Worked Solution:</span>
             </span>
-            <button
-              onClick={handleResetExercise}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.3rem',
-                padding: '0.25rem 0.55rem',
-                fontSize: '0.72rem',
-                fontWeight: 700,
-                color: '#15803d',
-                backgroundColor: '#ffffff',
-                border: '1px solid #86efac',
-                borderRadius: '6px',
-                cursor: 'pointer'
-              }}
-            >
-              <RotateCw size={12} />
-              <span>Edit / Re-attempt</span>
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <button
+                onClick={handleCopyExercise}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.3rem',
+                  padding: '0.25rem 0.6rem',
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  color: copied ? '#15803d' : '#14532d',
+                  backgroundColor: copied ? '#dcfce7' : '#ffffff',
+                  border: copied ? '1px solid #86efac' : '1px solid #bbf7d0',
+                  borderRadius: '6px',
+                  cursor: 'pointer'
+                }}
+              >
+                {copied ? <Check size={12} strokeWidth={3} /> : <Copy size={12} />}
+                <span>{copied ? 'Copied Solution!' : 'Copy Solution for AI'}</span>
+              </button>
+              <button
+                onClick={handleResetExercise}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.3rem',
+                  padding: '0.25rem 0.55rem',
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  color: '#15803d',
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #86efac',
+                  borderRadius: '6px',
+                  cursor: 'pointer'
+                }}
+              >
+                <RotateCw size={12} />
+                <span>Edit / Re-attempt</span>
+              </button>
+            </div>
           </div>
 
           <div style={{ fontSize: '0.92rem', color: '#14532d', lineHeight: 1.6 }}>

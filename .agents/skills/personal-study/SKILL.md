@@ -147,6 +147,8 @@ Each learning unit follows a rigorous 4-phase mastery progression:
 - **"What am I inclined" Helper Feature (Elimination & Pre-decision Tag)**:
   - Appears on the right side of every multiple choice option (A–F) in both the Level Quiz, Exercise Zone, and 50-Min Exam.
   - Fixed-width button cycling: Faded No -> Active No (Red) -> Maybe (Amber) -> Yes (Green) -> Unclicked.
+- **Immediate Retake for Practice**:
+  - When a student who has already completed or mastered a quiz clicks **"Retake Quiz for Practice"**, the quiz must immediately enter active retake mode and present Question 1 of 12. It must **never** loop back to or trap the student on the completion screen.
 - Upon scoring 12/12, the user unlocks Phase 3 (Workbook Exercises) and sees a direct button: `"Proceed to Phase 3: Workbook"`.
 
 ### Phase 3: Practical Workbook Exercises (In-Depth Course Problem Sets)
@@ -159,7 +161,9 @@ Each learning unit follows a rigorous 4-phase mastery progression:
   - Large expandable text area below the prompt allowing the student to write formulas, derivations, matrix values, and conclusions.
   - Live draft autosaving in `localStorage` (`david_study_wb_draft_${username}_${exerciseId}`) so work is never lost on refresh or navigation.
   - Live character counter.
-  - **1-Click Apple Pencil Canvas Integration**: Features a `"✏️ Apple Pencil Canvas"` button that opens the full-screen stylus scratchpad with the exercise problem statement cleanly rendered in the corner HUD card.
+- **Copy for AI & Consistent Tooling Naming**:
+  - **"Copy for AI" on All Exercises & Solutions**: Every workbook exercise features a standard **"Copy for AI"** button on the problem card, plus a **"Copy Solution for AI"** button on the revealed solution card. Clicking copies the problem statement, curriculum references, draft responses, and worked mathematical solutions formatted for immediate AI prompting.
+  - **Strict Terminology Consistency**: The notes and drawing tool is **strictly named "Scratchpad / Notes"** (desktop) and **"Notes"** (mobile) everywhere across the application. The agent must **NEVER invent new, one-off, or arbitrary names** (e.g. "Apple Pencil Canvas") for existing app features. All navigation pills and action buttons must maintain unified names across Text Guides, Quizzes, Workbook, and Flashcards.
 - **Turn-In & Self-Assessment Workflow**:
   1. **"Turn In Exercise & Check Solution"**: Commits the student's written response to Supabase table `study_workbook_submissions`.
   2. **Authoritative Worked Solution**: Immediately unrolls the complete step-by-step mathematical proof, matrix transformations, and numerical answers rendered via KaTeX.
