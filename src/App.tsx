@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { supabase } from './supabaseClient';
 import { Discipline, Segment, Question, Flashcard, SegmentProgress } from './types';
 import { Header } from './components/Header';
@@ -215,28 +215,29 @@ export const App: React.FC = () => {
     } else {
       setActivePhase('text');
     }
-  }, [currentSegment]);
+  }, [currentSegment?.id]);
 
   const fetchSegmentDetails = async (segmentId: string) => {
     try {
-      const { data: qData, error: qError } = await supabase
-        .from('study_questions')
-        .select('*')
-        .eq('segment_id', segmentId)
-        .eq('pool_type', 'quiz')
-        .order('order_index', { ascending: true });
+      const [{ data: qData, error: qError }, { data: fcData, error: fcError }] = await Promise.all([
+        supabase
+          .from('study_questions')
+          .select('*')
+          .eq('segment_id', segmentId)
+          .eq('pool_type', 'quiz')
+          .order('order_index', { ascending: true }),
+        supabase
+          .from('study_flashcards')
+          .select('*')
+          .eq('segment_id', segmentId)
+          .order('order_index', { ascending: true })
+      ]);
 
       if (qError) {
         console.error('Error fetching quiz questions:', qError);
       } else {
         setQuestions(qData || []);
       }
-
-      const { data: fcData, error: fcError } = await supabase
-        .from('study_flashcards')
-        .select('*')
-        .eq('segment_id', segmentId)
-        .order('order_index', { ascending: true });
 
       if (fcError) {
         console.error('Error fetching flashcards:', fcError);
@@ -247,6 +248,18 @@ export const App: React.FC = () => {
       console.error('Error loading segment details:', err);
     }
   };
+
+  // Strictly filter questions and flashcards for the currently selected segment
+  // to prevent stale data bleed-through when transitioning between levels
+  const currentSegmentQuestions = useMemo(() => {
+    if (!currentSegment) return [];
+    return questions.filter(q => q.segment_id === currentSegment.id);
+  }, [questions, currentSegment?.id]);
+
+  const currentSegmentFlashcards = useMemo(() => {
+    if (!currentSegment) return [];
+    return flashcards.filter(f => f.segment_id === currentSegment.id);
+  }, [flashcards, currentSegment?.id]);
 
   // Progress Update in Supabase
   const updateProgress = async (updates: Partial<SegmentProgress>) => {
@@ -747,14 +760,14 @@ export const App: React.FC = () => {
                 <div style={{ display: activePhase === 'quiz' ? 'block' : 'none' }}>
                   <QuizPhase
                     key={`quiz-${currentSegment.id}`}
-                    questions={questions}
+                    questions={currentSegmentQuestions}
                     segmentTitle={currentSegment.title}
                     isAlreadyPassed={!!currentSegmentProgress?.quiz_passed}
                     onPassQuiz={handlePassQuiz}
                     onProceedToFlashcards={handleProceedToFlashcards}
                     onGoToText={handleGoToTextFromQuiz}
                     onOpenScratchpad={(q) => {
-                      setScratchpadQuestion(q || questions[0] || null);
+                      setScratchpadQuestion(q || currentSegmentQuestions[0] || null);
                       setIsScratchpadOpen(true);
                     }}
                   />
@@ -763,7 +776,7 @@ export const App: React.FC = () => {
                 <div style={{ display: activePhase === 'flashcards' ? 'block' : 'none' }}>
                   <FlashcardsPhase
                     key={`flashcards-${currentSegment.id}`}
-                    flashcards={flashcards}
+                    flashcards={currentSegmentFlashcards}
                     segmentId={currentSegment.id}
                     currentUser={currentUser}
                     segmentTitle={currentSegment.title}

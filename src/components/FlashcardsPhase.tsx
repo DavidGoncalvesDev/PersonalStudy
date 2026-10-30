@@ -31,9 +31,16 @@ export const FlashcardsPhase: React.FC<FlashcardsPhaseProps> = ({
   const uKey = (currentUser || 'guest').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '') || 'guest';
   const storageKey = `david_study_fc_${uKey}_${segmentId}`;
 
+  // Only accept flashcards that strictly belong to this segment
+  const segmentFlashcards = React.useMemo(() => {
+    return (flashcards || []).filter(f => f.segment_id === segmentId);
+  }, [flashcards, segmentId]);
+
+  const cardsFingerprint = segmentFlashcards.map(f => f.id).sort().join(',');
+
   // Helper to load mastered cards and queue from storage or defaults
   const loadInitialState = () => {
-    if (flashcards.length === 0) {
+    if (segmentFlashcards.length === 0) {
       return {
         mastered: new Set<string>(),
         queue: [] as Flashcard[],
@@ -48,10 +55,10 @@ export const FlashcardsPhase: React.FC<FlashcardsPhaseProps> = ({
         if (stored) {
           const parsed = JSON.parse(stored);
           if (parsed && parsed.reviewing) {
-            const validMastered = new Set(
-              (parsed.masteredIds || []).filter((id: string) => flashcards.some(f => f.id === id))
+            const validMastered = new Set<string>(
+              (parsed.masteredIds || []).filter((id: string) => segmentFlashcards.some(f => f.id === id))
             );
-            const remaining = flashcards.filter(f => !validMastered.has(f.id));
+            const remaining = segmentFlashcards.filter(f => !validMastered.has(f.id));
             if (remaining.length > 0) {
               return {
                 mastered: validMastered,
@@ -65,7 +72,7 @@ export const FlashcardsPhase: React.FC<FlashcardsPhaseProps> = ({
         // fallback to completed
       }
       return {
-        mastered: new Set(flashcards.map(f => f.id)),
+        mastered: new Set<string>(segmentFlashcards.map(f => f.id)),
         queue: [] as Flashcard[],
         completed: true
       };
@@ -77,8 +84,8 @@ export const FlashcardsPhase: React.FC<FlashcardsPhaseProps> = ({
       if (stored) {
         const parsed = JSON.parse(stored);
         const idsArray: string[] = Array.isArray(parsed) ? parsed : (parsed?.masteredIds || []);
-        const validMastered = new Set(idsArray.filter(id => flashcards.some(f => f.id === id)));
-        const remaining = flashcards.filter(f => !validMastered.has(f.id));
+        const validMastered = new Set<string>(idsArray.filter(id => segmentFlashcards.some(f => f.id === id)));
+        const remaining = segmentFlashcards.filter(f => !validMastered.has(f.id));
 
         if (validMastered.size > 0 && remaining.length > 0) {
           return {
@@ -86,7 +93,7 @@ export const FlashcardsPhase: React.FC<FlashcardsPhaseProps> = ({
             queue: remaining,
             completed: false
           };
-        } else if (validMastered.size === flashcards.length && flashcards.length > 0) {
+        } else if (validMastered.size === segmentFlashcards.length && segmentFlashcards.length > 0) {
           return {
             mastered: validMastered,
             queue: [],
@@ -100,7 +107,7 @@ export const FlashcardsPhase: React.FC<FlashcardsPhaseProps> = ({
 
     return {
       mastered: new Set<string>(),
-      queue: [...flashcards],
+      queue: [...segmentFlashcards],
       completed: false
     };
   };
@@ -112,7 +119,7 @@ export const FlashcardsPhase: React.FC<FlashcardsPhaseProps> = ({
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [sessionCompleted, setSessionCompleted] = useState<boolean>(initial.completed);
 
-  // Sync state if segmentId or user or flashcards list changes
+  // Sync state if segmentId, user, or flashcards list changes
   useEffect(() => {
     const nextInit = loadInitialState();
     setQueue(nextInit.queue);
@@ -120,10 +127,10 @@ export const FlashcardsPhase: React.FC<FlashcardsPhaseProps> = ({
     setSessionCompleted(nextInit.completed);
     setCurrentIndex(0);
     setIsFlipped(false);
-  }, [segmentId, uKey, flashcards.length, isAlreadyCompleted]);
+  }, [segmentId, uKey, cardsFingerprint, isAlreadyCompleted]);
 
   const currentCard = queue[currentIndex];
-  const totalCards = flashcards.length;
+  const totalCards = segmentFlashcards.length;
   const masteredCount = masteredIds.size;
 
   const handleFlip = () => {
@@ -180,7 +187,7 @@ export const FlashcardsPhase: React.FC<FlashcardsPhaseProps> = ({
 
   const handleResetSession = () => {
     playClickSound();
-    setQueue([...flashcards]);
+    setQueue([...segmentFlashcards]);
     setMasteredIds(new Set());
     setIsFlipped(false);
     setCurrentIndex(0);
@@ -195,6 +202,39 @@ export const FlashcardsPhase: React.FC<FlashcardsPhaseProps> = ({
       // ignore
     }
   };
+
+  if (segmentFlashcards.length === 0) {
+    return (
+      <div style={{
+        backgroundColor: '#ffffff',
+        borderRadius: '12px',
+        border: '1px solid #e7e2d7',
+        padding: '2.5rem 1.5rem',
+        textAlign: 'center',
+        boxShadow: '0 1px 3px rgba(120, 53, 15, 0.03)'
+      }}>
+        <div style={{
+          width: '42px',
+          height: '42px',
+          borderRadius: '50%',
+          backgroundColor: '#fef3c7',
+          color: '#d97706',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          margin: '0 auto 0.75rem'
+        }}>
+          <RotateCw size={18} style={{ animation: 'spin 1.5s linear infinite' }} />
+        </div>
+        <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#78350f', margin: '0 0 0.35rem' }}>
+          Loading Level Flashcards...
+        </h3>
+        <p style={{ fontSize: '0.8rem', color: '#78716c', margin: 0 }}>
+          Retrieving flashcards for {segmentTitle}.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div style={{

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Segment, SegmentProgress } from '../types';
 import { Check, Lock, Unlock, Sparkles, BookOpen, HelpCircle } from 'lucide-react';
 
@@ -23,6 +23,20 @@ export const SegmentSelector: React.FC<SegmentSelectorProps> = ({
 }) => {
   const [hoveredSegment, setHoveredSegment] = useState<Segment | null>(null);
   const [hoverPosition, setHoverPosition] = useState<{ x: number; y: number } | null>(null);
+  const hoverTimerRef = useRef<NodeJS.Timeout | number | null>(null);
+
+  const clearHoverTimer = () => {
+    if (hoverTimerRef.current) {
+      clearTimeout(hoverTimerRef.current as number);
+      hoverTimerRef.current = null;
+    }
+  };
+
+  const dismissHover = () => {
+    clearHoverTimer();
+    setHoveredSegment(null);
+    setHoverPosition(null);
+  };
 
   const isAccessible = (index: number, segId: string) => {
     if (unlockAll) return true;
@@ -32,19 +46,68 @@ export const SegmentSelector: React.FC<SegmentSelectorProps> = ({
     return !!progressMap[prev.id]?.completed;
   };
 
+  // Only show preview after sustained hover (550ms)
   const handleMouseEnter = (seg: Segment, e: React.MouseEvent<HTMLButtonElement>) => {
+    clearHoverTimer();
     const rect = e.currentTarget.getBoundingClientRect();
-    setHoverPosition({
+    const pos = {
       x: Math.max(16, rect.left + rect.width / 2),
       y: rect.bottom + window.scrollY + 8
-    });
-    setHoveredSegment(seg);
+    };
+
+    hoverTimerRef.current = setTimeout(() => {
+      setHoverPosition(pos);
+      setHoveredSegment(seg);
+    }, 550);
   };
 
   const handleMouseLeave = () => {
-    setHoveredSegment(null);
-    setHoverPosition(null);
+    dismissHover();
   };
+
+  // On touch screens (e.g. iPad / iPhone), require holding for 600ms to preview
+  const handleTouchStart = (seg: Segment, e: React.TouchEvent<HTMLButtonElement>) => {
+    clearHoverTimer();
+    const target = e.currentTarget;
+    const rect = target.getBoundingClientRect();
+    const pos = {
+      x: Math.max(16, rect.left + rect.width / 2),
+      y: rect.bottom + window.scrollY + 8
+    };
+
+    hoverTimerRef.current = setTimeout(() => {
+      setHoverPosition(pos);
+      setHoveredSegment(seg);
+    }, 600);
+  };
+
+  const handleTouchEnd = () => {
+    clearHoverTimer();
+  };
+
+  // When clicking or double clicking to change levels, immediately dismiss the hover info
+  const handleClick = (seg: Segment, accessible: boolean) => {
+    dismissHover();
+    if (accessible) {
+      onSelectSegment(seg);
+    }
+  };
+
+  const handleDoubleClick = (seg: Segment) => {
+    dismissHover();
+    onDoubleClickSegment(seg);
+  };
+
+  useEffect(() => {
+    const handleScrollOrDoc = () => {
+      dismissHover();
+    };
+    window.addEventListener('scroll', handleScrollOrDoc, { passive: true });
+    return () => {
+      clearHoverTimer();
+      window.removeEventListener('scroll', handleScrollOrDoc);
+    };
+  }, []);
 
   return (
     <div style={{ marginBottom: '1.25rem', position: 'relative' }}>
@@ -114,14 +177,13 @@ export const SegmentSelector: React.FC<SegmentSelectorProps> = ({
           return (
             <button
               key={seg.id}
-              onClick={() => {
-                if (accessible) {
-                  onSelectSegment(seg);
-                }
-              }}
-              onDoubleClick={() => onDoubleClickSegment(seg)}
+              onClick={() => handleClick(seg, accessible)}
+              onDoubleClick={() => handleDoubleClick(seg)}
               onMouseEnter={(e) => handleMouseEnter(seg, e)}
               onMouseLeave={handleMouseLeave}
+              onTouchStart={(e) => handleTouchStart(seg, e)}
+              onTouchEnd={handleTouchEnd}
+              onTouchCancel={dismissHover}
               style={{
                 flexShrink: 0,
                 display: 'flex',

@@ -43,6 +43,11 @@ This skill defines the operational specifications, system architecture, database
     - **Yes (Knew It)**: Tactile Vibrant Green (`#16a34a` / `#15803d`).
     - **No (Didn't Know)**: Tactile Crimson Red (`#dc2626` / `#b91c1c`).
 - **No Native Browser Tooltips**: Never use native HTML `title="..."` attributes on buttons or pills. All hover information must be displayed via custom in-app React floating cards to avoid ugly, redundant browser popup balloons.
+- **Level Selector Hover & Hold Delay (Anti-Instant Popup)**:
+  - Hover preview cards for level pills must NEVER pop up instantly on mouse movement or on touch click.
+  - Desktop hover requires a sustained **550ms hover delay** before the floating info card appears.
+  - Mobile/tablet touch requires a sustained **600ms touch-and-hold** gesture.
+  - Clicking or double-clicking any level pill immediately dismisses and cancels any active hover timers, ensuring clean, instant level switching without intrusive popups.
 - **Strict Negative Constraint**: Avoid generic blues. Use warm, sophisticated leather brown and cream tones matching the book logo.
 - **Discipline Deletion Prohibited**: Delete discipline buttons, trash icons, and deletion modals are strictly prohibited from the student user interface. Disciplines are curated academic curricula managed server-side.
 
@@ -148,6 +153,10 @@ Each learning unit contains 3 distinct progressive phases:
   - Maintained in the DOM with `display: activePhase === 'flashcards' ? 'block' : 'none'`, so navigating back to Phase 1 (Text Guide) or Phase 2 (Quiz) **never resets** the flashcard queue or active card position.
   - Persisted in `localStorage` under `david_study_fc_${username}_${segmentId}` so even reloads and profile switches preserve mastered card progress for that segment.
   - "Review Again" explicitly restarts and resets the queue for fresh practice.
+- **Segment-Isolated Queue Synchronization & Fingerprinting**:
+  - Flashcards must strictly be filtered by `segment_id === currentSegment.id` before initializing or evaluating the flashcard deck.
+  - Tracks a unique card ID fingerprint (`cardsFingerprint`) so that when the user advances to a new level, the component immediately initializes that specific level's flashcard deck rather than retaining or leaking cards from earlier levels.
+  - Displays a clean inline loading state if flashcards for a newly selected segment are still in flight.
 
 ---
 
@@ -279,3 +288,55 @@ Total maximum score: $40 + 20 + 20 + 10 + 10 = 100\%$.
   - `playWrongSound()`: Low, subdued downward triangle-wave tone played when an incorrect answer triggers a quiz/sudden death reset.
   - `playSuccessChime()`: Triumphant 4-note ascending major arpeggio (C5 -> E5 -> G5 -> C6) for passing 12/12 quiz questions, mastering all flashcards, or hitting exam milestones.
   - `playClickSound()`: Subtle, crisp 900 Hz acoustic tick for card flips, tab changes, and UI buttons.
+
+---
+
+## 12. Turnkey Ingestion Protocol for New Disciplines (Uploaded Files Setup)
+
+When the user uploads course files (slides, syllabi, lecture notes, textbook chapters, or exercises) to create or populate a new discipline, the agent executes the following turnkey pipeline from start to finish:
+
+1. **File Ingestion & Syllabus Parsing**:
+   - Inspect and extract content from all uploaded files (PDFs, PPTX, DOCX, TXT) in the conversation or artifacts directory.
+   - Map out the academic scope: course title, standard abbreviation/code (e.g. `MDA`, `ECON`, `FIN`, `ML`), foundational chapters, formal mathematical definitions, notation systems, core formulas, and worked exercises.
+
+2. **Discipline Registration**:
+   - Derive a clean URL-friendly slug `id` (e.g. `econometrics-finance`).
+   - Insert the new discipline record into `study_disciplines` (`id`, `name`, `code`, `description`).
+
+3. **Granular 4–5 Segment Subdivision per Chapter**:
+   - Deconstruct each chapter into **granular 4–5 segment learning units per chapter** (e.g. Chapter 1 -> L1 to L4; Chapter 2 -> L5 to L8).
+   - Insert rows into `study_segments` (`discipline_id`, `order_index`, `title`, `subtitle`, `summary_markdown`).
+
+4. **Phase 1: Comprehensive Text Guide Authoring**:
+   - Write exhaustive narrative prose building deep mathematical and practical intuition from the ground up (no superficial bullet lists, no visible raw asterisks `*`, true `##` and `###` section headings).
+   - Render all mathematical equations in KaTeX (`$...$` inline, `$$...$$` display) strictly configured with `output: 'html'`.
+   - Incorporate concrete numerical walkthroughs and step-by-step formula derivations.
+   - Ensure all concept headings generate clean anchor slugs (e.g. `### Autoregressive Models` -> `#autoregressive-models`) for bidirectional question/flashcard linking.
+
+5. **Phase 2: 12-Question Substantive Quiz Formulation (Per Segment)**:
+   - Construct exactly **12 substantive questions** per segment (4 elemental, 4 conceptual, 4 advanced).
+   - Provide **6 choices each (A–F)**.
+   - **Enforce Anti-Verbosity Bias Prohibition**: Correct answers must NEVER be predictably longer or more descriptive than distractors. Distractors must match the correct option in academic depth, grammar, and length (length variance strictly within 15–25%). Across any question pool, the correct option must be the longest option in at most ~10–16.7% of questions.
+   - **Enforce Uniform Option Distribution**: Distribute correct answers equally across choices (exactly 2 of each letter A, B, C, D, E, F per 12-question quiz; 16.67% across aggregate banks).
+   - Populate `section_reference` and `section_anchor` on every single question.
+   - Author comprehensive failure explanations with deep theoretical and mathematical derivations.
+   - Insert into `study_questions` (`pool_type = 'quiz'`).
+
+6. **Phase 3: High-Yield Flashcard Deck Formulation (Per Segment)**:
+   - Formulate exactly **8 high-recall flashcards** per segment focusing on core definitions, formula interpretation, and critical decision rules.
+   - Populate `section_reference` and `section_anchor` on each card for 1-click text guide jumps.
+   - Insert into `study_flashcards`.
+
+7. **Database Seeding & Migration**:
+   - Execute insertions directly into the Supabase `tracker` project (`https://eurqqiebokwcrrhfbihg.supabase.co`).
+   - Never touch calorie tracker tables (`food_items`, `weight_logs`) or `supabase_novae`.
+
+8. **Automated Verification & Integrity Audit**:
+   - Verify question count (exactly 12 per segment) and flashcard count (exactly 8 per segment).
+   - Verify exact uniform distribution (2 A's, 2 B's, 2 C's, 2 D's, 2 E's, 2 F's per 12-question quiz).
+   - Verify that the correct option is not consistently the longest.
+   - Verify all `section_anchor` tags exist in the text guide.
+   - Run `npm run build` to ensure zero TypeScript, JSX, or bundling errors.
+
+9. **Self-Updating Skill Persistence**:
+   - Immediately update Section 4 of `SKILL.md` across all 5 mirror paths to document the new discipline, chapter structure, and segment mappings.
