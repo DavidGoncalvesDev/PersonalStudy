@@ -497,15 +497,15 @@ export const practicePart4 = [
     pool_type: 'practice',
     question: 'How does Confirmatory Factor Analysis (CFA) differ fundamentally from Exploratory Factor Analysis (EFA)?',
     options: [
-      { id: 'a', text: 'CFA is only for ordinal scales, while EFA is for metric scales' },
-      { id: 'b', text: 'In EFA, all variables load on all factors; in CFA, the researcher pre-specifies which variables load on which factors based on theory and tests model fit via structural equation modeling' },
-      { id: 'c', text: 'EFA does not compute loadings' },
-      { id: 'd', text: 'CFA does not compute error variances' },
-      { id: 'e', text: 'CFA cannot evaluate fit indices' },
-      { id: 'f', text: 'EFA requires sample sizes over 10,000' }
+      { id: 'a', text: 'CFA is designed strictly for ordinal rankings, whereas EFA requires metric ratio continuous measurements' },
+      { id: 'b', text: 'In EFA, factors emerge from data correlations; in CFA, the researcher pre-specifies which variables load on which factors to test theoretical fit' },
+      { id: 'c', text: 'EFA extracts unrotated components only, whereas CFA performs mandatory orthogonal Varimax rotations to maximize column loading variances' },
+      { id: 'd', text: 'CFA eliminates unique indicator error variances, while EFA preserves both common variance and individual measurement noise' },
+      { id: 'e', text: 'CFA requires unstandardized covariance matrices, whereas EFA can only be computed on standardized correlation matrices' },
+      { id: 'f', text: 'EFA requires massive census samples ($n > 10,000$), whereas CFA is formulated exclusively for small laboratory cohorts ($n < 30$)' }
     ],
     correct_option: 'b',
-    explanation: 'EFA is data-driven; all cross-loadings are freely estimated. CFA is theory-driven; non-hypothesized loadings are fixed to zero, and model fit is tested via SEM indices (RMSEA, CFI).'
+    explanation: 'As explained on slides 16 and 76 of Chapter 3: EFA explores data correlations without prior theoretical restrictions, letting factors emerge freely. CFA tests explicit, theory-driven hypotheses specifying beforehand which variables load on which latent factors.'
   },
   {
     id: 'pq_s8_11',

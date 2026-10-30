@@ -139,7 +139,7 @@ export const practicePart1 = [
       { id: 'b', text: 'Correspondence Analysis' },
       { id: 'c', text: 'Conjoint Analysis' },
       { id: 'd', text: 'Logistic Regression' },
-      { id: 'e', text: 'Structural Equation Modeling' },
+      { id: 'e', text: 'Multidimensional Scaling' },
       { id: 'f', text: 'Repeated Measures ANOVA' }
     ],
     correct_option: 'b',

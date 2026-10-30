@@ -4,7 +4,6 @@ import { level1Balanced, level2Balanced } from './balance-level-1-2.js';
 import { level3Balanced, level4Balanced } from './balance-level-3-4.js';
 import { level5Balanced, level6Balanced } from './balance-level-5-6.js';
 import { level7Balanced, level8Balanced } from './balance-level-7-8.js';
-import { diversifyDistractorLengths } from './optimize-distractor-lengths.js';
 
 const SUPABASE_URL = 'https://eurqqiebokwcrrhfbihg.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1cnFxaWVib2t3Y3JyaGZiaWhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxNDA0MzIsImV4cCI6MjEwNzcxNjQzMn0.UrhclnTabK3YEJZzroYeDmO4D4pij59IWCXyWZ9ruxs';
@@ -16,9 +15,6 @@ const balancedLevels = [
   level5Balanced, level6Balanced,
   level7Balanced, level8Balanced
 ];
-
-// Apply length diversification so correct option is never a predictable giveaway
-diversifyDistractorLengths(balancedLevels);
 
 function formatOptions(balancedQ) {
   const letters = ['a', 'b', 'c', 'd', 'e', 'f'];
@@ -50,7 +46,7 @@ function formatOptions(balancedQ) {
 }
 
 async function run() {
-  console.log('--- Remaking and Balancing All 96 Quiz Questions ---');
+  console.log('--- Remaking and Balancing All 96 Quiz Questions (Clean & Grounded) ---');
 
   // Load Part 1 and Part 2 local seed files
   const p1Module = await import('./levels-data-part1.js');
@@ -78,12 +74,18 @@ async function run() {
       originalQ.correct_option = correct_option;
 
       // Update in Supabase
+      const updateData = {
+        question: originalQ.question,
+        options,
+        correct_option,
+        explanation: originalQ.explanation,
+        section_reference: originalQ.section_reference || null,
+        section_anchor: originalQ.section_anchor || null
+      };
+
       const { error } = await supabase
         .from('study_questions')
-        .update({
-          options,
-          correct_option
-        })
+        .update(updateData)
         .match({ id: originalQ.id });
 
       if (error) {

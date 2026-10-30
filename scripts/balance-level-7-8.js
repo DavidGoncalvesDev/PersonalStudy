@@ -67,8 +67,8 @@ export const level7Balanced = [
     options: [
       { text: "By using an iterative algorithm: start with prior communality estimates (e.g. $R_j^2$), extract factors, re-estimate communalities, and repeat until convergence", isCorrect: true },
       { text: "By forcing all communalities to equal 1.0 throughout all stages of extraction, eliminating the need to estimate uniqueness parameters", isCorrect: false },
-      { text: "By replacing the sample correlation matrix with an orthogonal distance matrix, bypassing the communality estimation problem completely", isCorrect: false },
-      { text: "By fixing communalities to the diagonal elements of the inverse correlation matrix: $h_j^2 = (R^{-1})_{jj}$, which solves the system analytically", isCorrect: false },
+      { text: "By replacing the empirical correlation matrix with an orthogonal Euclidean distance matrix, which bypasses the communality estimation problem completely", isCorrect: false },
+      { text: "By fixing communalities to the diagonal elements of the inverse correlation matrix: $h_j^2 = (R^{-1})_{jj}$, which solves the algebraic system analytically in software", isCorrect: false },
       { text: "By using an unrotated PCA solution where communalities are calculated as the simple average of all extracted characteristic eigenvalues", isCorrect: false },
       { text: "By setting communalities equal to the Kaiser-Meyer-Olkin sampling adequacy measure, anchoring indicator variance to partial correlations", isCorrect: false }
     ]
@@ -209,8 +209,8 @@ export const level8Balanced = [
     targetLetter: "a",
     options: [
       { text: "Orthogonal rotations enforce a 90-degree angle so factors remain uncorrelated; Oblique rotations allow angles $< 90^\\circ$, permitting factor correlations", isCorrect: true },
-      { text: "Orthogonal rotations eliminate indicator communalities, while Oblique rotations preserve both communality and total system variance", isCorrect: false },
-      { text: "Orthogonal rotations can only be executed in SAS Base, while Oblique rotations are formulated exclusively for Python scikit-learn", isCorrect: false },
+      { text: "Orthogonal rotations eliminate indicator communalities, while Oblique rotations preserve both communality and total system variance across all dimensions", isCorrect: false },
+      { text: "Orthogonal rotations can only be executed in SAS Base PROC FACTOR, while Oblique rotations are formulated exclusively for Python scikit-learn factor libraries", isCorrect: false },
       { text: "Orthogonal rotations require observed variables to be measured on nominal scales, while Oblique rotations require continuous ratio data", isCorrect: false },
       { text: "Orthogonal rotations reduce sample size by half, while Oblique rotations preserve all $n$ observation records throughout estimation", isCorrect: false },
       { text: "Oblique rotations always produce negative eigenvalues that distort the calculation of cumulative explained variance percentages", isCorrect: false }
@@ -222,12 +222,12 @@ export const level8Balanced = [
     id: "q_l8_4",
     targetLetter: "e",
     options: [
-      { text: "EFA is restricted to small experimental samples ($n < 50$), whereas CFA is formulated strictly for massive census datasets ($n > 10,000$)", isCorrect: false },
+      { text: "EFA is restricted to small exploratory samples ($n < 50$), whereas CFA is formulated strictly for large-scale confirmation datasets ($n > 1,000$ observations)", isCorrect: false },
       { text: "EFA requires all variables to be measured on metric ratio scales, while CFA is designed exclusively for nonmetric qualitative rankings", isCorrect: false },
-      { text: "EFA uses correlation matrices while CFA uses covariance matrices, producing incompatible factor loading parameter estimates", isCorrect: false },
+      { text: "EFA analyzes standardized correlation matrices while CFA requires unstandardized covariance matrices, producing non-comparable factor loading parameter estimates", isCorrect: false },
       { text: "There is zero theoretical difference; EFA and CFA are alternative software brand names for the same Principal Components algorithm", isCorrect: false },
       { text: "EFA explores data without prior theory to discover factors; CFA tests an explicit, theory-driven hypothesis specifying which variables load on which factors", isCorrect: true },
-      { text: "EFA always extracts orthogonal uncorrelated factors, whereas CFA is constrained by structural equation rules to extract oblique factors", isCorrect: false }
+      { text: "EFA always extracts orthogonal uncorrelated factors, whereas CFA requires common factors to always be correlated by assumption", isCorrect: false }
     ]
   },
   // Q5 (Quartimax drawback)
@@ -236,8 +236,8 @@ export const level8Balanced = [
     id: "q_l8_5",
     targetLetter: "c",
     options: [
-      { text: "Because it forces all indicator communalities to equal zero, destroying the common factor variance decomposition in the model", isCorrect: false },
-      { text: "Because it requires extracted factors to be oblique, introducing severe multicollinearity into secondary regression equations", isCorrect: false },
+      { text: "Because it forces all indicator communalities to equal zero, destroying the underlying common factor variance decomposition in the estimated factor model", isCorrect: false },
+      { text: "Because it requires extracted factors to be correlated (oblique), introducing severe multicollinearity into subsequent predictive regression equations", isCorrect: false },
       { text: "Because it simplifies rows rather than columns, often producing one massive general factor with high loadings across all variables, obscuring sub-dimensions", isCorrect: true },
       { text: "Because it inverts the mathematical sign of all extracted eigenvalues, converting positive variances into negative quantities", isCorrect: false },
       { text: "Because it violates the metric triangle inequality whenever variables have different standard deviations in empirical sample data", isCorrect: false },
@@ -310,7 +310,7 @@ export const level8Balanced = [
       { text: "Because PCA cannot mathematically analyze survey items that are measured on 5-point Likert scales with uniform category intervals", isCorrect: false },
       { text: "Because Factor Analysis guarantees that 100% of total indicator variance will be explained by the extracted common factor dimensions", isCorrect: false },
       { text: "Because psychological trust can only be measured using Euclidean distance metrics in multidimensional observation space", isCorrect: false },
-      { text: "Because PCA always extracts oblique correlated components by default, violating statistical independence in structural equation models", isCorrect: false },
+      { text: "Because PCA always extracts oblique correlated components by default, violating statistical orthogonality across latent dimensions", isCorrect: false },
       { text: "Because survey items are reflective indicators of an unobservable latent construct (Trust); FA isolates the shared common factor and separates unique error", isCorrect: true },
       { text: "Because psychological constructs are constrained by measurement theory to have eigenvalues equal to the number of survey questions", isCorrect: false }
     ]
@@ -321,12 +321,12 @@ export const level8Balanced = [
     id: "q_l8_11",
     targetLetter: "c",
     options: [
-      { text: "When all pairwise bivariate correlations $r_{jk}$ are zero, indicating that observed variables share zero linear association in sample data", isCorrect: false },
+      { text: "When all pairwise bivariate correlations $r_{jk}$ approach zero, indicating that observed variables share negligible linear association in empirical sample data", isCorrect: false },
       { text: "When the number of extracted common factors equals the total number of observations minus one: $m = n - 1$, saturating the model", isCorrect: false },
       { text: "When anti-image partial correlations $a_{jk}$ approach zero relative to bivariate correlations: $\\sum\\sum r_{jk}^2 / (\\sum\\sum r_{jk}^2 + \\sum\\sum a_{jk}^2) \\to 1.0$", isCorrect: true },
-      { text: "When the determinant of the sample correlation matrix equals zero, indicating perfect multicollinearity across all observed indicators", isCorrect: false },
+      { text: "When the determinant of the empirical correlation matrix equals zero, indicating perfect multicollinearity and complete redundancy across all observed indicators", isCorrect: false },
       { text: "When all variables have identical sample variances in Covariance PCA, equalizing diagonal weights across the spectral decomposition", isCorrect: false },
-      { text: "When the Root Mean Square Residual (RMSR) equals 1.0, indicating complete discrepancy between empirical and reproduced correlation matrices", isCorrect: false }
+      { text: "When the Root Mean Square Residual (RMSR) reaches 1.0, indicating complete average discrepancy between empirical and model-reproduced correlation matrices", isCorrect: false }
     ]
   },
   // Q12 (SAS Proc Factor Method=prinit Rotate=varimax MSA Residuals)

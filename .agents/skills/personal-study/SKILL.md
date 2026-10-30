@@ -133,6 +133,10 @@ Each learning unit follows a rigorous 4-phase mastery progression:
 - **Strict Uniform Option & Letter Distribution**:
   - Across every 12-question quiz, correct choices must be strictly and uniformly distributed across A, B, C, D, E, F (exactly 2 of each letter per 12 questions).
   - In aggregate question pools and exams, every letter option (A–F) must maintain an equal ~16.7% frequency.
+- **Strict Curriculum Grounding (Authoritative Lecture Slides & Practical Exercises Only)**:
+  - Every quiz question, exercise, and flashcard must be **strictly and exclusively grounded in the provided course materials** (official university lecture slides and practical exercise workbooks).
+  - **Zero Overcomplication**: Strictly avoid inventing untelegraphed graduate-level linear algebra minutiae (such as Taylor series expansions of rotation matrices, coordinate reflection proofs, or abstract matrix lemmas) that are neither taught in the slides nor present in the practical exercise sheets.
+  - **Zero Programmatic / Robotic Distractor Filler**: NEVER programmatically append repetitive boilerplate academic suffixes (such as `", which would distort the estimation of standard errors across empirical models"` or `", introducing severe estimation bias into secondary structural equation equations"`) to balance length. All distractors must be substantive, plausible domain-specific misconceptions directly tied to course topics (e.g., confusing covariance vs correlation PCA scale sensitivity, eigenvalues vs eigenvectors, unities vs iterated communalities, orthogonal vs oblique rotations, reflective vs formative models).
 - **Strict Content Alignment Across All Levels**:
   - Every single question across all 8 levels is directly grounded in the concepts, definitions, and formulas taught in that specific Learning Unit's text guide.
   - Each question stores `section_reference` (e.g. `Section 3: Classification of Methods`) and `section_anchor` (e.g. `classification-of-multivariate-methods`).
@@ -147,8 +151,9 @@ Each learning unit follows a rigorous 4-phase mastery progression:
 - **"What am I inclined" Helper Feature (Elimination & Pre-decision Tag)**:
   - Appears on the right side of every multiple choice option (A–F) in both the Level Quiz, Exercise Zone, and 50-Min Exam.
   - Fixed-width button cycling: Faded No -> Active No (Red) -> Maybe (Amber) -> Yes (Green) -> Unclicked.
-- **Immediate Retake for Practice**:
-  - When a student who has already completed or mastered a quiz clicks **"Retake Quiz for Practice"**, the quiz must immediately enter active retake mode and present Question 1 of 12. It must **never** loop back to or trap the student on the completion screen.
+- **Immediate Retake for Practice & Robust Restart State**:
+  - When a student who has already completed or mastered a quiz clicks **"Retake Quiz for Practice"**, the quiz must immediately enter active retake mode (`isRetaking = true`, `isAllCompleted = false`, `currentIndex = 0`) and present Question 1 of 12. It must **never** loop back to or trap the student on the completion screen.
+  - If a student fails a question during a retake and clicks **"Restart Quiz (12-in-a-Row Required)"**, the state must keep `isRetaking = true` so they restart at Question 1 rather than being bounced back to the passed completion screen.
 - Upon scoring 12/12, the user unlocks Phase 3 (Workbook Exercises) and sees a direct button: `"Proceed to Phase 3: Workbook"`.
 
 ### Phase 3: Practical Workbook Exercises (In-Depth Course Problem Sets)

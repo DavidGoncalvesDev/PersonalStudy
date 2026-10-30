@@ -236,7 +236,7 @@ export const level6Balanced = [
     id: "q_l6_5",
     targetLetter: "f",
     options: [
-      { text: "When sample size $n$ exceeds 1,000 observations, minimizing finite sample estimation bias in structural equation modeling", isCorrect: false },
+      { text: "When the sample size $n$ exceeds 500 observations, minimizing sampling variability across factor loading parameters", isCorrect: false },
       { text: "When all observed indicators are measured on standardized ratio scales with zero skewness and kurtosis in sample data", isCorrect: false },
       { text: "When all extracted communalities are identically equal to 1.0, eliminating unique variance from the indicator decomposition", isCorrect: false },
       { text: "When the factor model is estimated using Maximum Likelihood rather than iterated Principal Axis Factoring in software", isCorrect: false },
@@ -287,18 +287,18 @@ export const level6Balanced = [
       { text: "The indicator has infinite communality and must be inverted to prevent algorithmic non-convergence in factor extraction", isCorrect: false }
     ]
   },
-  // Q9 (Chemistry loadings communality and uniqueness)
+  // Q9 (Two-factor reproduced correlation r_CH - Slide 20 & 21)
   {
     order: 9,
     id: "q_l6_9",
     targetLetter: "a",
     options: [
-      { text: "Communality is $0.60^2 + 0.40^2 = 0.52$; Uniqueness is $1 - 0.52 = 0.48$; the common factors explain 52% of Chemistry grade variance", isCorrect: true },
-      { text: "Communality is $0.60 + 0.40 = 1.00$; Uniqueness is $0.00$; Chemistry is fully captured by Quantitative and Verbal dimensions", isCorrect: false },
-      { text: "Communality is $\\sqrt{0.52} = 0.721$; Uniqueness is $0.279$; Chemistry correlates at 0.721 with the joint factor centroid", isCorrect: false },
-      { text: "Communality is $0.60 \\times 0.40 = 0.24$; Uniqueness is $0.76$; Chemistry shares only 24% common variance with student grades", isCorrect: false },
-      { text: "Communality is $0.36 - 0.16 = 0.20$; Uniqueness is $0.80$; Chemistry is dominated by Quantitative factor specificity", isCorrect: false },
-      { text: "Communality is $(0.60 + 0.40)^2 = 1.00$; Uniqueness is $0.00$; Chemistry represents a linear composite of the two factors", isCorrect: false }
+      { text: "$r_{CH} = \\lambda_{CQ}\\lambda_{HQ} + \\lambda_{CV}\\lambda_{HV} = (0.60 \\times 0.15) + (0.30 \\times 0.82) = 0.090 + 0.246 = 0.336$", isCorrect: true },
+      { text: "$r_{CH} = (0.60 + 0.30 + 0.15 + 0.82) / 4 = 0.468$, averaging the four factor loadings across both dimensions", isCorrect: false },
+      { text: "$r_{CH} = (0.60 \\times 0.30) + (0.15 \\times 0.82) = 0.180 + 0.123 = 0.303$, multiplying within-course loadings rather than across factors", isCorrect: false },
+      { text: "$r_{CH} = 0.60 \\times 0.82 = 0.492$, multiplying only the highest single loading from each course across factors", isCorrect: false },
+      { text: "$r_{CH} = 0.60^2 + 0.82^2 = 0.360 + 0.672 = 1.032$, summing the squared maximum loadings of the two courses", isCorrect: false },
+      { text: "$r_{CH} = 0.000$, because orthogonal factors assume that separate observed indicators share zero empirical correlation", isCorrect: false }
     ]
   },
   // Q10 (Sum of all communalities)
@@ -329,18 +329,18 @@ export const level6Balanced = [
       { text: "In FA, indicators are mutually uncorrelated by assumption; in PCA, indicators must be perfectly collinear to extract components", isCorrect: false }
     ]
   },
-  // Q12 (1-factor model reproducing correlations)
+  // Q12 (Two Inherent Indeterminacies - Slides 27-34)
   {
     order: 12,
     id: "q_l6_12",
     targetLetter: "f",
     options: [
-      { text: "No, a single-factor model cannot reproduce these correlations because $\\hat{r}_{12}$ would exceed 1.0 under all positive factor loadings", isCorrect: false },
-      { text: "No, because the empirical correlation matrix has negative eigenvalues, violating non-negative definite matrix requirements", isCorrect: false },
-      { text: "Yes, perfectly reproduced with loading $\\lambda_1 = 0.60$, because the arithmetic mean of the three correlations equals 0.413", isCorrect: false },
-      { text: "Yes, perfectly reproduced with loading $\\lambda_1 = 0.40$, because $\\lambda_1$ corresponds to the smallest off-diagonal correlation entry", isCorrect: false },
-      { text: "Yes, perfectly reproduced with loading $\\lambda_1 = 0.24$, because $\\lambda_1 = r_{23}$ anchors the baseline common factor scale", isCorrect: false },
-      { text: "Yes, perfectly reproduced with loading $\\lambda_1 = \\sqrt{r_{12} r_{13} / r_{23}} = \\sqrt{0.60 \\times 0.40 / 0.24} = \\sqrt{1.00} = 1.00$", isCorrect: true }
+      { text: "(1) Finite-sample instability when observations $n < 100$, and (2) mathematical sign indeterminacy where reversing loading signs produces negative eigenvalues", isCorrect: false },
+      { text: "(1) Iterative algorithmic non-convergence in maximum likelihood estimation, and (2) the violation of continuous metric distribution properties in survey Likert scales", isCorrect: false },
+      { text: "(1) Inability to compute standard errors in exploratory factor analysis, and (2) severe multicollinearity among observed variables in the sample correlation matrix", isCorrect: false },
+      { text: "(1) Arbitrary scaling of latent factor scores to zero mean and unit variance, and (2) software discrepancy in default communality priors between SAS and SPSS packages", isCorrect: false },
+      { text: "(1) Inability of the Kaiser-Guttman criterion to select true latent dimensions, and (2) the persistence of non-zero off-diagonal correlations in the residual matrix", isCorrect: false },
+      { text: "(1) Factor rotation indeterminacy (infinite orientations reproduce identical correlations), and (2) communality circularity (loadings depend on communalities and vice versa)", isCorrect: true }
     ]
   }
 ];

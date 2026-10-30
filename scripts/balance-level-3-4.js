@@ -149,7 +149,7 @@ export const level3Balanced = [
     id: "q_l3_11",
     targetLetter: "f",
     options: [
-      { text: "Customer D is an outlier that was automatically winsorized by the projection algorithm to match Customer E coordinates", isCorrect: false },
+      { text: "Customer D is an outlier that was automatically adjusted by the projection algorithm to match Customer E coordinates", isCorrect: false },
       { text: "PCA inverted their income scales because Customer Lifetime Value is mathematically bounded between 0 and 100 in data", isCorrect: false },
       { text: "The correlation between Income and CLV was negative for those two specific individuals while positive across the rest", isCorrect: false },
       { text: "Their Mahalanobis distance is zero because both customers share identical coordinate projections along the centroid ray", isCorrect: false },
@@ -157,18 +157,18 @@ export const level3Balanced = [
       { text: "They differ substantially along the discarded $PC_2$ axis ($t_{D2} = -5.008$ vs $t_{E2} = 1.085$), which dimensionality reduction ignored", isCorrect: true }
     ]
   },
-  // Q12 (Orthogonal coordinate rotation matrix)
+  // Q12 (Maximum non-zero components for centered data - Slide 20)
   {
     order: 12,
     id: "q_l3_12",
     targetLetter: "c",
     options: [
-      { text: "$\\begin{bmatrix} a^*_1 \\\\ a^*_2 \\end{bmatrix} = \\begin{bmatrix} \\sin\\theta & -\\cos\\theta \\\\ \\cos\\theta & \\sin\\theta \\end{bmatrix} \\begin{bmatrix} a_1 \\\\ a_2 \\end{bmatrix}$, which reflects coordinates across the horizontal abscissa axis", isCorrect: false },
-      { text: "$\\begin{bmatrix} a^*_1 \\\\ a^*_2 \\end{bmatrix} = \\begin{bmatrix} 1 & \\theta \\\\ -\\theta & 1 \\end{bmatrix} \\begin{bmatrix} a_1 \\\\ a_2 \\end{bmatrix}$, which provides a linear Taylor approximation valid only for small angles near zero", isCorrect: false },
-      { text: "$\\begin{bmatrix} a^*_1 \\\\ a^*_2 \\end{bmatrix} = \\begin{bmatrix} \\cos\\theta & \\sin\\theta \\\\ -\\sin\\theta & \\cos\\theta \\end{bmatrix} \\begin{bmatrix} a_1 \\\\ a_2 \\end{bmatrix}$, rotating the coordinate frame rigidly through angle $\\theta$", isCorrect: true },
-      { text: "$\\begin{bmatrix} a^*_1 \\\\ a^*_2 \\end{bmatrix} = \\begin{bmatrix} \\cos^2\\theta & \\sin^2\\theta \\\\ \\sin^2\\theta & \\cos^2\\theta \\end{bmatrix} \\begin{bmatrix} a_1 \\\\ a_2 \\end{bmatrix}$, which squares projection coefficients and violates orthogonality", isCorrect: false },
-      { text: "$\\begin{bmatrix} a^*_1 \\\\ a^*_2 \\end{bmatrix} = \\begin{bmatrix} \\tan\\theta & 1 \\\\ 1 & -\\tan\\theta \\end{bmatrix} \\begin{bmatrix} a_1 \\\\ a_2 \\end{bmatrix}$, which introduces angular slope singularities at perpendicular angles", isCorrect: false },
-      { text: "$\\begin{bmatrix} a^*_1 \\\\ a^*_2 \\end{bmatrix} = \\begin{bmatrix} \\lambda_1 & 0 \\\\ 0 & \\lambda_2 \\end{bmatrix} \\begin{bmatrix} a_1 \\\\ a_2 \\end{bmatrix}$, which scales axes by eigenvalues without performing coordinate rotation", isCorrect: false }
+      { text: "Always exactly $p$ components regardless of sample size $n$, because each original variable generates one non-zero orthogonal axis", isCorrect: false },
+      { text: "Always exactly $p - 1$ components, because one dimension is automatically eliminated by the orthogonal rotation algorithm", isCorrect: false },
+      { text: "At most $\\min(p, n - 1)$ components, because mean-centering removes one degree of freedom, restricting data to at most $n - 1$ dimensions", isCorrect: true },
+      { text: "Exactly $n$ components, because the number of possible principal directions corresponds to the number of sample observations", isCorrect: false },
+      { text: "At most $p / 2$ components, because orthogonal complementary pairs cancel out each other's variances", isCorrect: false },
+      { text: "Exactly $\\min(p, n)$ components, because raw observation ranks allow full dimensionality without subtracting degrees of freedom", isCorrect: false }
     ]
   }
 ];
@@ -182,7 +182,7 @@ export const level4Balanced = [
     options: [
       { text: "$\\lambda_1$ is the sample mean of $PC_1$, locating the center of gravity along the first principal component axis", isCorrect: false },
       { text: "$\\lambda_1$ is the sample variance of $PC_1$, quantifying the maximum variance captured along the leading principal axis", isCorrect: true },
-      { text: "$\\lambda_1$ is the sample size divided by degrees of freedom: $n / (n - 1)$, correcting for finite sample estimation bias", isCorrect: false },
+      { text: "$\\lambda_1$ is the sample size divided by degrees of freedom: $n / (n - 1)$, correcting for sample degree-of-freedom scaling", isCorrect: false },
       { text: "$\\lambda_1$ is the correlation between $X_1$ and $X_2$, measuring the normalized linear association between raw variables", isCorrect: false },
       { text: "$\\lambda_1$ is the inverse of the determinant of covariance matrix $S$, measuring generalized system precision", isCorrect: false },
       { text: "$\\lambda_1$ is the standard deviation of the error term, measuring unexplained residual noise in the reconstruction", isCorrect: false }

@@ -24,11 +24,11 @@ export const levelsPart1 = [
           },
           {
             "id": "b",
-            "text": "Ordinal scale, because rank orders preserve monotonic relative magnitudes and ordered hierarchies across entities, thereby violating fundamental distributional assumptions in multivariate inference"
+            "text": "Ordinal scale, because rank orders preserve monotonic relative magnitudes and ordered hierarchies across entities"
           },
           {
             "id": "c",
-            "text": "Interval scale, because the distance between consecutive scale points is uniform across the entire measurement range, which would distort the estimation of standard errors across empirical models"
+            "text": "Interval scale, because the distance between consecutive scale points is uniform across the entire measurement range"
           },
           {
             "id": "d",
@@ -135,7 +135,7 @@ export const levelsPart1 = [
           },
           {
             "id": "b",
-            "text": "Median rank and interquartile range, because percentiles require strictly uniform metric intervals across score points, introducing severe estimation bias into secondary structural equation equations"
+            "text": "Median rank and interquartile range, because percentiles require strictly uniform metric intervals across score points"
           },
           {
             "id": "c",
@@ -143,7 +143,7 @@ export const levelsPart1 = [
           },
           {
             "id": "d",
-            "text": "Spearman rank correlation coefficient, because non-parametric monotonicity tests violate ordinal transformation rules, which is mathematically inadmissible under classical multivariate matrix theory"
+            "text": "Spearman rank correlation coefficient, because non-parametric monotonicity tests violate ordinal transformation rules"
           },
           {
             "id": "e",
@@ -328,7 +328,7 @@ export const levelsPart1 = [
           },
           {
             "id": "d",
-            "text": "Both the scale intervals and boundary ratios remain completely unchanged because positive linear transformations preserve all metric properties, failing to account for underlying correlation structures in empirical datasets"
+            "text": "Both the scale intervals and boundary ratios remain completely unchanged because positive linear transformations preserve all metric properties"
           },
           {
             "id": "e",
@@ -336,7 +336,7 @@ export const levelsPart1 = [
           },
           {
             "id": "f",
-            "text": "The ratio of maximum to minimum doubles from 5.0 to 10.0 because multiplying by a positive slope parameter amplifies boundary discrepancies, introducing severe estimation bias into secondary structural equation equations"
+            "text": "The ratio of maximum to minimum doubles from 5.0 to 10.0 because multiplying by a positive slope parameter amplifies boundary discrepancies"
           }
         ],
         "correct_option": "a",
@@ -394,7 +394,7 @@ export const levelsPart1 = [
           },
           {
             "id": "b",
-            "text": "Classifying commercial loan applicants into default vs non-default risk groups from financial ratios via Discriminant Analysis, which is mathematically inadmissible under classical multivariate matrix theory"
+            "text": "Classifying commercial loan applicants into default vs non-default risk groups from financial ratios via Discriminant Analysis"
           },
           {
             "id": "c",
@@ -410,7 +410,7 @@ export const levelsPart1 = [
           },
           {
             "id": "f",
-            "text": "Quantifying price elasticity parameters for consumer packaged goods across multiple retail channels via Ordinary Least Squares, confounding common shared variance with sample-specific measurement error"
+            "text": "Quantifying price elasticity parameters for consumer packaged goods across multiple retail channels via Ordinary Least Squares"
           }
         ],
         "correct_option": "c",
@@ -431,7 +431,7 @@ export const levelsPart1 = [
           },
           {
             "id": "b",
-            "text": "Because ratio variables can only undergo non-linear monotonic power transformations to maintain mathematical consistency in regressions, which would distort the estimation of standard errors across empirical models"
+            "text": "Because ratio variables can only undergo non-linear monotonic power transformations to maintain mathematical consistency in regressions"
           },
           {
             "id": "c",
@@ -443,7 +443,7 @@ export const levelsPart1 = [
           },
           {
             "id": "e",
-            "text": "Because adding a constant alters the monotonic sequence of corporate sales rankings, causing smaller firms to surpass larger competitors, confounding common shared variance with sample-specific measurement error"
+            "text": "Because adding a constant alters the monotonic sequence of corporate sales rankings, causing smaller firms to surpass larger competitors"
           },
           {
             "id": "f",
@@ -1211,11 +1211,11 @@ export const levelsPart1 = [
           },
           {
             "id": "b",
-            "text": "Equal to positive unity ($+1.0$), reflecting maximum standardized linear association between principal components, introducing severe estimation bias into secondary structural equation equations"
+            "text": "Equal to positive unity ($+1.0$), reflecting maximum standardized linear association between principal components"
           },
           {
             "id": "c",
-            "text": "Equal to the ratio of their eigenvalues $\\lambda_1 / \\lambda_2$, scaling joint covariation by relative importance, which is mathematically inadmissible under classical multivariate matrix theory"
+            "text": "Equal to the ratio of their eigenvalues $\\lambda_1 / \\lambda_2$, scaling joint covariation by relative importance"
           },
           {
             "id": "d",
@@ -1252,11 +1252,11 @@ export const levelsPart1 = [
           },
           {
             "id": "c",
-            "text": "When all $p$ principal components are computed and retained, because the new axes represent uncorrelated linear scores, confounding common shared variance with sample-specific measurement error"
+            "text": "When all $p$ principal components are computed and retained, because the new axes represent uncorrelated linear scores"
           },
           {
             "id": "d",
-            "text": "When the covariance matrix is converted into a correlation matrix, which standardizes all variable diagonal elements to 1.0, which is mathematically inadmissible under classical multivariate matrix theory"
+            "text": "When the covariance matrix is converted into a correlation matrix, which standardizes all variable diagonal elements to 1.0"
           },
           {
             "id": "e",
@@ -1285,11 +1285,11 @@ export const levelsPart1 = [
           },
           {
             "id": "b",
-            "text": "$t_{A1} = 0.728238 \\times 8 - 0.685324 \\times 5 = 2.400$, subtracting the second component projection from the first, which would distort the estimation of standard errors across empirical models"
+            "text": "$t_{A1} = 0.728238 \\times 8 - 0.685324 \\times 5 = 2.400$, subtracting the second component projection from the first"
           },
           {
             "id": "c",
-            "text": "$t_{A1} = \\sqrt{8^2 + 5^2} = 9.434$, evaluating the Euclidean distance of Customer A from the origin in variable space, confounding common shared variance with sample-specific measurement error"
+            "text": "$t_{A1} = \\sqrt{8^2 + 5^2} = 9.434$, evaluating the Euclidean distance of Customer A from the origin in variable space"
           },
           {
             "id": "d",
@@ -1330,7 +1330,7 @@ export const levelsPart1 = [
           },
           {
             "id": "d",
-            "text": "Because component weights must always be positive numbers to satisfy non-negativity constraints in Lagrange multipliers, thereby violating fundamental distributional assumptions in multivariate inference"
+            "text": "Because component weights must always be positive numbers to satisfy non-negativity constraints in Lagrange multipliers"
           },
           {
             "id": "e",
@@ -1338,7 +1338,7 @@ export const levelsPart1 = [
           },
           {
             "id": "f",
-            "text": "Because observations are automatically reflected across the vertical centroid line, nullifying the rotation transformation, which would distort the estimation of standard errors across empirical models"
+            "text": "Because observations are automatically reflected across the vertical centroid line, nullifying the rotation transformation"
           }
         ],
         "correct_option": "b",
@@ -1396,7 +1396,7 @@ export const levelsPart1 = [
           },
           {
             "id": "b",
-            "text": "Zero ($0.000$), because rotating an axis by 90 degrees eliminates all projected coordinate variance from the data cloud, failing to account for underlying correlation structures in empirical datasets"
+            "text": "Zero ($0.000$), because rotating an axis by 90 degrees eliminates all projected coordinate variance from the data cloud"
           },
           {
             "id": "c",
@@ -1404,7 +1404,7 @@ export const levelsPart1 = [
           },
           {
             "id": "d",
-            "text": "Exactly $44.182$, because any orthogonal rotation angle preserves the total combined variance of the bivariate system, introducing severe estimation bias into secondary structural equation equations"
+            "text": "Exactly $44.182$, because any orthogonal rotation angle preserves the total combined variance of the bivariate system"
           },
           {
             "id": "e",
@@ -1429,7 +1429,7 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Exactly $5.606$, representing the per-observation variance of the discarded component without sample size weighting, which is mathematically inadmissible under classical multivariate matrix theory"
+            "text": "Exactly $5.606$, representing the per-observation variance of the discarded component without sample size weighting"
           },
           {
             "id": "b",
@@ -1441,7 +1441,7 @@ export const levelsPart1 = [
           },
           {
             "id": "d",
-            "text": "Zero, because orthogonal projections preserve complete Euclidean information and eliminate reconstruction discrepancies, introducing severe estimation bias into secondary structural equation equations"
+            "text": "Zero, because orthogonal projections preserve complete Euclidean information and eliminate reconstruction discrepancies"
           },
           {
             "id": "e",
@@ -1466,7 +1466,7 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Customer D is an outlier that was automatically winsorized by the projection algorithm to match Customer E coordinates, confounding common shared variance with sample-specific measurement error"
+            "text": "Customer D is an outlier that was automatically adjusted by the projection algorithm to match Customer E coordinates"
           },
           {
             "id": "b",
@@ -1478,7 +1478,7 @@ export const levelsPart1 = [
           },
           {
             "id": "d",
-            "text": "Their Mahalanobis distance is zero because both customers share identical coordinate projections along the centroid ray, which is mathematically inadmissible under classical multivariate matrix theory"
+            "text": "Their Mahalanobis distance is zero because both customers share identical coordinate projections along the centroid ray"
           },
           {
             "id": "e",
@@ -1499,35 +1499,35 @@ export const levelsPart1 = [
         "segment_id": "ch2-pca-geometry",
         "order_index": 12,
         "difficulty": "hard",
-        "question": "In the geometric derivation of PCA using orthonormal basis vectors $e_1 = (1, 0)^T$ and $e_2 = (0, 1)^T$, the basis is rotated counter-clockwise by angle $\\theta$ to produce new unit vectors $e^*_1$ and $e^*_2$. What is the transformation matrix $T$ that converts original point coordinates $(a_1, a_2)^T$ into coordinates $(a^*_1, a^*_2)^T$ on the new basis?",
+        "question": "In Principal Components Analysis with centered data on $p$ variables measured across $n$ observations, at most how many principal components can have non-zero variance?",
         "options": [
           {
             "id": "a",
-            "text": "$\\begin{bmatrix} a^*_1 \\\\ a^*_2 \\end{bmatrix} = \\begin{bmatrix} \\sin\\theta & -\\cos\\theta \\\\ \\cos\\theta & \\sin\\theta \\end{bmatrix} \\begin{bmatrix} a_1 \\\\ a_2 \\end{bmatrix}$, which reflects coordinates across the horizontal abscissa axis"
+            "text": "Always exactly $p$ components regardless of sample size $n$, because each original variable generates one non-zero orthogonal axis"
           },
           {
             "id": "b",
-            "text": "$\\begin{bmatrix} a^*_1 \\\\ a^*_2 \\end{bmatrix} = \\begin{bmatrix} 1 & \\theta \\\\ -\\theta & 1 \\end{bmatrix} \\begin{bmatrix} a_1 \\\\ a_2 \\end{bmatrix}$, which provides a linear Taylor approximation valid only for small angles near zero"
+            "text": "Always exactly $p - 1$ components, because one dimension is automatically eliminated by the orthogonal rotation algorithm"
           },
           {
             "id": "c",
-            "text": "$\\begin{bmatrix} a^*_1 \\\\ a^*_2 \\end{bmatrix} = \\begin{bmatrix} \\cos\\theta & \\sin\\theta \\\\ -\\sin\\theta & \\cos\\theta \\end{bmatrix} \\begin{bmatrix} a_1 \\\\ a_2 \\end{bmatrix}$, rotating the coordinate frame rigidly through angle $\\theta$"
+            "text": "At most $\\min(p, n - 1)$ components, because mean-centering removes one degree of freedom, restricting data to at most $n - 1$ dimensions"
           },
           {
             "id": "d",
-            "text": "$\\begin{bmatrix} a^*_1 \\\\ a^*_2 \\end{bmatrix} = \\begin{bmatrix} \\cos^2\\theta & \\sin^2\\theta \\\\ \\sin^2\\theta & \\cos^2\\theta \\end{bmatrix} \\begin{bmatrix} a_1 \\\\ a_2 \\end{bmatrix}$, which squares projection coefficients and violates orthogonality"
+            "text": "Exactly $n$ components, because the number of possible principal directions corresponds to the number of sample observations"
           },
           {
             "id": "e",
-            "text": "$\\begin{bmatrix} a^*_1 \\\\ a^*_2 \\end{bmatrix} = \\begin{bmatrix} \\tan\\theta & 1 \\\\ 1 & -\\tan\\theta \\end{bmatrix} \\begin{bmatrix} a_1 \\\\ a_2 \\end{bmatrix}$, which introduces angular slope singularities at perpendicular angles"
+            "text": "At most $p / 2$ components, because orthogonal complementary pairs cancel out each other's variances"
           },
           {
             "id": "f",
-            "text": "$\\begin{bmatrix} a^*_1 \\\\ a^*_2 \\end{bmatrix} = \\begin{bmatrix} \\lambda_1 & 0 \\\\ 0 & \\lambda_2 \\end{bmatrix} \\begin{bmatrix} a_1 \\\\ a_2 \\end{bmatrix}$, which scales axes by eigenvalues without performing coordinate rotation"
+            "text": "Exactly $\\min(p, n)$ components, because raw observation ranks allow full dimensionality without subtracting degrees of freedom"
           }
         ],
         "correct_option": "c",
-        "explanation": "As derived in Appendix slides 65-68 of Chapter 2: projecting onto rotated basis vector $e^*_1$ yields $a^*_1 = a_1 \\cos\\theta + a_2 \\sin\\theta$, and onto orthogonal vector $e^*_2$ yields $a^*_2 = -a_1 \\sin\\theta + a_2 \\cos\\theta$. In matrix form, this is the standard rotation transformation matrix.",
+        "explanation": "According to Chapter 2 Slide 20, mean-centering the data removes one degree of freedom, restricting the cloud of points to at most an $(n - 1)$-dimensional subspace. Therefore, the maximum number of principal components with non-zero variance (positive eigenvalues) is at most $\\min(p, n - 1)$.",
         "section_reference": "Section 3: Centering the Data Cloud",
         "section_anchor": "3-centering-the-data-cloud"
       }
@@ -1642,11 +1642,11 @@ export const levelsPart1 = [
           },
           {
             "id": "c",
-            "text": "$\\lambda_1$ is the sample size divided by degrees of freedom: $n / (n - 1)$, correcting for finite sample estimation bias, which would distort the estimation of standard errors across empirical models"
+            "text": "$\\lambda_1$ is the sample size divided by degrees of freedom: $n / (n - 1)$, correcting for sample degree-of-freedom scaling"
           },
           {
             "id": "d",
-            "text": "$\\lambda_1$ is the correlation between $X_1$ and $X_2$, measuring the normalized linear association between raw variables, thereby violating fundamental distributional assumptions in multivariate inference"
+            "text": "$\\lambda_1$ is the correlation between $X_1$ and $X_2$, measuring the normalized linear association between raw variables"
           },
           {
             "id": "e",
@@ -1753,7 +1753,7 @@ export const levelsPart1 = [
           },
           {
             "id": "c",
-            "text": "Because Correlation PCA produces correlated components that capture oblique non-linear interactions across survey questions, which is mathematically inadmissible under classical multivariate matrix theory"
+            "text": "Because Correlation PCA produces correlated components that capture oblique non-linear interactions across survey questions"
           },
           {
             "id": "d",
@@ -1761,7 +1761,7 @@ export const levelsPart1 = [
           },
           {
             "id": "e",
-            "text": "Because Correlation PCA eliminates the need to compute eigenvectors, reducing computational overhead in statistical software, introducing severe estimation bias into secondary structural equation equations"
+            "text": "Because Correlation PCA eliminates the need to compute eigenvectors, reducing computational overhead in statistical software"
           },
           {
             "id": "f",
@@ -1786,7 +1786,7 @@ export const levelsPart1 = [
           },
           {
             "id": "b",
-            "text": "Variance remains completely unchanged because measurement units are arbitrary and cancel out during spectral decomposition, confounding common shared variance with sample-specific measurement error"
+            "text": "Variance remains completely unchanged because measurement units are arbitrary and cancel out during spectral decomposition"
           },
           {
             "id": "c",
@@ -1798,7 +1798,7 @@ export const levelsPart1 = [
           },
           {
             "id": "e",
-            "text": "The correlation between this variable and all other variables drops to zero, destroying bivariate associations in the model, which is mathematically inadmissible under classical multivariate matrix theory"
+            "text": "The correlation between this variable and all other variables drops to zero, destroying bivariate associations in the model"
           },
           {
             "id": "f",
@@ -1819,7 +1819,7 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "To ensure that all principal component scores have positive sample means and conform to normal distribution bounds, which would distort the estimation of standard errors across empirical models"
+            "text": "To ensure that all principal component scores have positive sample means and conform to normal distribution bounds"
           },
           {
             "id": "b",
@@ -1827,7 +1827,7 @@ export const levelsPart1 = [
           },
           {
             "id": "c",
-            "text": "To ensure that the covariance matrix $S$ remains non-singular and invertible during iterative numerical optimization, confounding common shared variance with sample-specific measurement error"
+            "text": "To ensure that the covariance matrix $S$ remains non-singular and invertible during iterative numerical optimization"
           },
           {
             "id": "d",
@@ -1864,7 +1864,7 @@ export const levelsPart1 = [
           },
           {
             "id": "c",
-            "text": "$75.0\\%$, calculated as the ratio of the first two eigenvalues to the sample degrees of freedom in the system, thereby violating fundamental distributional assumptions in multivariate inference"
+            "text": "$75.0\\%$, calculated as the ratio of the first two eigenvalues to the sample degrees of freedom in the system"
           },
           {
             "id": "d",
@@ -1876,7 +1876,7 @@ export const levelsPart1 = [
           },
           {
             "id": "f",
-            "text": "$15.0\\%$, representing the residual variance discarded when omitting the third component: $1.5 / 10.0 = 0.150$, which would distort the estimation of standard errors across empirical models"
+            "text": "$15.0\\%$, representing the residual variance discarded when omitting the third component: $1.5 / 10.0 = 0.150$"
           }
         ],
         "correct_option": "b",
@@ -2012,11 +2012,11 @@ export const levelsPart1 = [
           },
           {
             "id": "c",
-            "text": "$w_2 = (0.500000, 0.500000)^T$, bisecting the quadrant at 45 degrees to split residual variation equally across variables, confounding common shared variance with sample-specific measurement error"
+            "text": "$w_2 = (0.500000, 0.500000)^T$, bisecting the quadrant at 45 degrees to split residual variation equally across variables"
           },
           {
             "id": "d",
-            "text": "$w_2 = (-0.728238, -0.685324)^T$, reflecting the leading eigenvector through the origin without establishing orthogonality, which is mathematically inadmissible under classical multivariate matrix theory"
+            "text": "$w_2 = (-0.728238, -0.685324)^T$, reflecting the leading eigenvector through the origin without establishing orthogonality"
           },
           {
             "id": "e",
@@ -2041,7 +2041,7 @@ export const levelsPart1 = [
         "options": [
           {
             "id": "a",
-            "text": "Because eigenvalues are always equal to diagonal elements of $S$, eliminating the need to evaluate characteristic roots, confounding common shared variance with sample-specific measurement error"
+            "text": "Because eigenvalues are always equal to diagonal elements of $S$, eliminating the need to evaluate characteristic roots"
           },
           {
             "id": "b",
@@ -2057,7 +2057,7 @@ export const levelsPart1 = [
           },
           {
             "id": "e",
-            "text": "Because eigenvectors are derived using numerical finite difference approximations rather than analytical matrix algebra, which would distort the estimation of standard errors across empirical models"
+            "text": "Because eigenvectors are derived using numerical finite difference approximations rather than analytical matrix algebra"
           },
           {
             "id": "f",

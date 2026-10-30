@@ -40,6 +40,15 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
     setInclinations({});
   }, [currentIndex]);
 
+  useEffect(() => {
+    setIsRetaking(false);
+    setIsAllCompleted(false);
+    setCurrentIndex(0);
+    setSelectedOption(null);
+    setIsFailed(false);
+    setFailedOption(null);
+  }, [questions]);
+
   const handleCycleInclination = (optId: string) => {
     playClickSound();
     setInclinations(prev => {
@@ -200,11 +209,20 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
     setIsFailed(false);
     setFailedOption(null);
     setIsAllCompleted(false);
+    if (isAlreadyPassed) {
+      setIsRetaking(true);
+    }
   };
 
   const handleRetakeQuiz = () => {
+    playClickSound();
     setIsRetaking(true);
-    handleRestartQuiz();
+    setIsAllCompleted(false);
+    setCurrentIndex(0);
+    setSelectedOption(null);
+    setInclinations({});
+    setIsFailed(false);
+    setFailedOption(null);
   };
 
   // If already passed and user visits to review (and not actively retaking)
