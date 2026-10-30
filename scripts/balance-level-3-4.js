@@ -1,121 +1,121 @@
 // Enhanced balanced options for Level 3 (ch2-pca-geometry) and Level 4 (ch2-pca-analytical)
 // Target: All 6 choices have comparable length, equal grammatical weight, and plausible theoretical rationale.
-// The correct answer is NOT the longest; distractors frequently match or exceed it in length.
+// The correct answer is NOT the longest; distractors match or exceed it naturally.
 
 export const level3Balanced = [
-  // Q1 (Primary geometric objective PC1)
+  // Q1 (First PC direction = maximum sample variance)
   {
     order: 1,
     id: "q_l3_1",
     targetLetter: "c",
     options: [
-      { text: "To minimize the sum of absolute deviations from the multidimensional median vector across all observations", isCorrect: false },
-      { text: "To force all variable loadings to equal positive unity (+1.0), equalizing the variance contributions across axes", isCorrect: false },
-      { text: "To maximize the variance of the projected observation scores along the newly defined candidate coordinate axis", isCorrect: true },
-      { text: "To ensure the new axis passes through the highest single data point to eliminate asymmetric sample skewness", isCorrect: false },
-      { text: "To minimize the distance between the coordinate origin and the multivariate centroid of the raw observations", isCorrect: false },
-      { text: "To make the sum of observation scores equal to zero for each individual variable independently in observation space", isCorrect: false }
+      { text: "The direction that minimizes total Euclidean distance to the coordinate origin $(0, 0)$ across all raw observations", isCorrect: false },
+      { text: "The direction that forces the sample covariance between all pairs of projected observations to reach exactly zero", isCorrect: false },
+      { text: "The axis along which the sample variance of the projected customer coordinates is maximized across the data cloud", isCorrect: true },
+      { text: "The ray passing through the customer with the highest income and lowest CLV to maximize total data spread", isCorrect: false },
+      { text: "The direction perpendicular to the line of best fit from an Ordinary Least Squares regression of Income on CLV", isCorrect: false },
+      { text: "The axis along which the sum of raw customer coordinates is set exactly equal to the number of sample observations", isCorrect: false }
     ]
   },
-  // Q2 (Constraint on directional coefficients)
+  // Q2 (Why mean centering required)
   {
     order: 2,
     id: "q_l3_2",
     targetLetter: "e",
     options: [
-      { text: "Their sum must equal zero: $\\cos\\theta + \\sin\\theta = 0$, ensuring directional balance around the 45-degree ray", isCorrect: false },
-      { text: "Each directional coefficient must be strictly greater than 1.0, amplifying weak observation projections along the axis", isCorrect: false },
-      { text: "Their product must equal the correlation coefficient: $\\cos\\theta \\sin\\theta = r_{12}$, preserving joint association", isCorrect: false },
-      { text: "The angle $\\theta$ must always be fixed at $45^\\circ$, splitting explained variance symmetrically between variables", isCorrect: false },
-      { text: "They must have unit length (norm of 1): $\\cos^2(\\theta) + \\sin^2(\\theta) = 1$, preventing artificial scale stretching", isCorrect: true },
-      { text: "They must equal the sample standard deviations of the original variables, weighting coordinates by raw dispersion", isCorrect: false }
+      { text: "Because rotating uncentered data causes the sample correlation matrix to become non-invertible in software packages", isCorrect: false },
+      { text: "Because mean-centering reduces the total number of required principal components by half across dimensions", isCorrect: false },
+      { text: "Because centering forces the sum of squared deviations from the origin to equal the sample degrees of freedom", isCorrect: false },
+      { text: "Because uncentered data cannot be plotted in two dimensions without introducing severe visual perspective distortion", isCorrect: false },
+      { text: "Because without centering at the origin, the first principal axis would point toward the mean rather than along maximum variance", isCorrect: true },
+      { text: "Because centering guarantees that all projected coordinate scores will follow a standard normal Gaussian distribution", isCorrect: false }
     ]
   },
-  // Q3 (Conservation of variance sum)
+  // Q3 (Customer A projected coordinate calculation)
   {
     order: 3,
     id: "q_l3_3",
     targetLetter: "a",
     options: [
-      { text: "Exactly $23.091 + 21.091 = 44.182$, because rigid coordinate rotations preserve total variance completely", isCorrect: true },
-      { text: "Always 1.000, because principal component transformation standardizes total system variance to unity", isCorrect: false },
-      { text: "Always 2.000, because each extracted principal component contributes exactly 1.0 unit of variance by definition", isCorrect: false },
-      { text: "Exactly $23.091 \\times 21.091 = 487.01$, representing the geometric product of orthogonal component dispersions", isCorrect: false },
-      { text: "Zero, because principal component scores are mean-corrected and sum to zero across all observations", isCorrect: false },
-      { text: "Half of the original variance: $44.182 / 2 = 22.091$, reflecting dimensional projection losses along axes", isCorrect: false }
+      { text: "$t_{A1} = (6.000 \\times 0.728238) + (7.143 \\times 0.685324) = 4.369 + 4.895 = 9.264 \\approx 9.253$", isCorrect: true },
+      { text: "$t_{A1} = \\sqrt{6.000^2 + 7.143^2} = \\sqrt{36.000 + 51.023} = \\sqrt{87.023} \\approx 9.329$", isCorrect: false },
+      { text: "$t_{A1} = (6.000 + 7.143) / 2 = 13.143 / 2 = 6.572$, taking the arithmetic mean of centered coordinates", isCorrect: false },
+      { text: "$t_{A1} = (6.000 \\times 0.685324) - (7.143 \\times 0.728238) = 4.112 - 5.202 = -1.090$", isCorrect: false },
+      { text: "$t_{A1} = 6.000 \\times 7.143 = 42.858$, calculating the cross-product area in observation space", isCorrect: false },
+      { text: "$t_{A1} = (6.000 - 7.143) \\times \\cos(43.26^\\circ) = -1.143 \\times 0.7282 = -0.832$", isCorrect: false }
     ]
   },
-  // Q4 (Covariance between PC1 and PC2)
+  // Q4 (Total variance preserved under rotation)
   {
     order: 4,
     id: "q_l3_4",
     targetLetter: "f",
     options: [
-      { text: "Equal to the original sample covariance $S_{12}$, because coordinate rotation preserves bivariate covariation", isCorrect: false },
-      { text: "Equal to positive unity ($+1.0$), reflecting maximum standardized linear association between principal components", isCorrect: false },
-      { text: "Equal to the ratio of their eigenvalues $\\lambda_1 / \\lambda_2$, scaling joint covariation by relative importance", isCorrect: false },
-      { text: "Negative unity ($-1.0$), because orthogonal complement axes point in opposing perpendicular directions", isCorrect: false },
-      { text: "Equal to the Pearson correlation $r_{12}$, because components preserve the normalized bivariate association", isCorrect: false },
-      { text: "Identically zero ($\\text{Cov}(PC_1, PC_2) = 0$), because principal axes are constructed to be strictly orthogonal", isCorrect: true }
+      { text: "Variance decreases because orthogonal projection eliminates unshared covariance terms from bivariate data", isCorrect: false },
+      { text: "Total variance increases to $54.12$, inflated by the trigonometric cross-products of coordinate transformation", isCorrect: false },
+      { text: "Total variance drops to $38.576$, because only the first principal component is retained in the subspace", isCorrect: false },
+      { text: "Total variance equals zero, because rotating axes to principal orientations centers the coordinate origin", isCorrect: false },
+      { text: "Total variance doubles to $88.364$, because both orthogonal axes contribute independent variance components", isCorrect: false },
+      { text: "Total variance is strictly preserved: $\\text{Var}(PC_1) + \\text{Var}(PC_2) = 38.576 + 5.606 = 44.182$", isCorrect: true }
     ]
   },
-  // Q5 (When dimensionality reduction occurs)
+  // Q5 (Optimal angle theta = 43.26 degrees)
   {
     order: 5,
     id: "q_l3_5",
     targetLetter: "b",
     options: [
-      { text: "The moment data are centered by subtracting variable sample means, which shifts the cloud to the coordinate origin", isCorrect: false },
-      { text: "When only a subset $k < p$ of the leading principal components is retained, and the remaining $p - k$ components are discarded", isCorrect: true },
-      { text: "When all $p$ principal components are computed and retained, because the new axes represent uncorrelated linear scores", isCorrect: false },
-      { text: "When the covariance matrix is converted into a correlation matrix, which standardizes all variable diagonal elements to 1.0", isCorrect: false },
-      { text: "When the sample size $n$ is reduced by eliminating bivariate outliers that deviate from the primary projection ray", isCorrect: false },
-      { text: "When the eigenvalues are normalized to sum to 100%, converting raw component variances into relative percentages", isCorrect: false }
+      { text: "Exactly $0.00^\\circ$, aligning the first principal component directly along the horizontal Income axis", isCorrect: false },
+      { text: "Approximately $\\theta = 43.26^\\circ$, aligning the coordinate axis directly along the elongated data cloud", isCorrect: true },
+      { text: "Exactly $90.00^\\circ$, rotating the basis into the orthogonal complement to maximize vertical projection", isCorrect: false },
+      { text: "Exactly $45.00^\\circ$, splitting the angle equally between the Income and Customer Lifetime Value axes", isCorrect: false },
+      { text: "Approximately $\\theta = 135.00^\\circ$, inverting the coordinate frame to evaluate negative bivariate drift", isCorrect: false },
+      { text: "Approximately $\\theta = 180.00^\\circ$, reversing the positive direction of the customer centroid ray", isCorrect: false }
     ]
   },
-  // Q6 (Customer A score on PC1)
+  // Q6 (Why unit length constraint w^T w = 1)
   {
     order: 6,
     id: "q_l3_6",
     targetLetter: "d",
     options: [
-      { text: "$t_{A1} = 13.000$, calculated as the simple unweighted arithmetic sum of centered coordinates: $8 + 5 = 13.000$", isCorrect: false },
-      { text: "$t_{A1} = 0.728238 \\times 8 - 0.685324 \\times 5 = 2.400$, subtracting the second component projection from the first", isCorrect: false },
-      { text: "$t_{A1} = \\sqrt{8^2 + 5^2} = 9.434$, evaluating the Euclidean distance of Customer A from the origin in variable space", isCorrect: false },
-      { text: "$t_{A1} = 0.728238 \\times 8 + 0.685324 \\times 5 = 9.253$, projecting centered coordinates onto the leading eigenvector", isCorrect: true },
-      { text: "$t_{A1} = 38.576$, representing the maximum eigenvalue of the system rather than an individual observation score", isCorrect: false },
-      { text: "$t_{A1} = 1.490$, standardizing Customer A coordinates by the square root of the leading system eigenvalue", isCorrect: false }
+      { text: "To prevent sample covariance from becoming negative, which would violate positive semi-definiteness", isCorrect: false },
+      { text: "To force the projected component scores to follow a standardized normal distribution with unit variance", isCorrect: false },
+      { text: "To ensure that all customer observations receive equal weight regardless of their distance from centroid", isCorrect: false },
+      { text: "To fix the scale of the axis; otherwise variance could be made arbitrarily large by scaling weights to infinity", isCorrect: true },
+      { text: "To eliminate the need for matrix inversion when calculating sample eigenvalues in statistical packages", isCorrect: false },
+      { text: "To guarantee that the second principal component is an exact 180-degree reflection of the first axis", isCorrect: false }
     ]
   },
-  // Q7 (Reversing axis direction)
+  // Q7 (Percentage of variance explained by PC1)
   {
     order: 7,
     id: "q_l3_7",
     targetLetter: "b",
     options: [
-      { text: "Because PCA eigenvalues are constrained to be negative whenever coordinate reflections are applied to sample data", isCorrect: false },
-      { text: "Because an axis and its negative describe the exact same geometric line; multiplying by $-1$ merely reflects coordinates", isCorrect: true },
-      { text: "Because statistical software automatically converts all negative scores to positive absolute values during extraction", isCorrect: false },
-      { text: "Because component weights must always be positive numbers to satisfy non-negativity constraints in Lagrange multipliers", isCorrect: false },
-      { text: "Because reversing an axis converts covariance into correlation, standardizing the metric distances between observations", isCorrect: false },
-      { text: "Because observations are automatically reflected across the vertical centroid line, nullifying the rotation transformation", isCorrect: false }
+      { text: "$38.576 / 50.000 = 77.15\\%$, comparing the leading eigenvalue against total uncentered customer sums", isCorrect: false },
+      { text: "$38.576 / 44.182 = 87.31\\%$, capturing the dominant proportion of total bivariate sample dispersion", isCorrect: true },
+      { text: "$38.576 / 100.000 = 38.58\\%$, evaluating the eigenvalue directly as an unscaled percentage metric", isCorrect: false },
+      { text: "$5.606 / 44.182 = 12.69\\%$, measuring the residual noise captured along the orthogonal complementary axis", isCorrect: false },
+      { text: "$38.576 / (38.576 - 5.606) = 117.0\\%$, evaluating the eigenvalue ratio against the net variance spread", isCorrect: false },
+      { text: "$\\sqrt{38.576 / 44.182} = \\sqrt{0.8731} = 93.44\\%$, taking the vector correlation norm of the root", isCorrect: false }
     ]
   },
-  // Q8 (Max non-zero eigenvalues min(p, n-1))
+  // Q8 (Second PC direction is orthogonal complement)
   {
     order: 8,
     id: "q_l3_8",
     targetLetter: "d",
     options: [
-      { text: "Always exactly $p$, because a dataset with $p$ variables always possesses $p$ linearly independent orthogonal axes", isCorrect: false },
-      { text: "Always exactly $n$, because each observation in the sample contributes one full dimension of variance to the space", isCorrect: false },
-      { text: "At most $p \\times (n - 1)$, because degrees of freedom multiply across all variables in the multivariate data matrix", isCorrect: false },
-      { text: "At most $\\min(p, n - 1)$, because centered data cannot span more dimensions than available observation degrees of freedom", isCorrect: true },
-      { text: "Always equal to the number of nonmetric scales, because qualitative classifications govern the rank of the covariance matrix", isCorrect: false },
-      { text: "At most $(p - 1) / 2$, because symmetry constraints eliminate half of the off-diagonal elements in the covariance matrix", isCorrect: false }
+      { text: "At an angle of $\\theta + 45^\\circ = 88.26^\\circ$, bisecting the remaining quadrant in bivariate space", isCorrect: false },
+      { text: "Parallel to the first component ($43.26^\\circ$), with direction weights scaled by the residual eigenvalue", isCorrect: false },
+      { text: "Along the horizontal axis ($0.00^\\circ$), anchoring residual dispersion to the original Income variable", isCorrect: false },
+      { text: "At $\\theta + 90^\\circ = 133.26^\\circ$, pointing in the mutually orthogonal direction to ensure zero correlation", isCorrect: true },
+      { text: "Along the vertical axis ($90.00^\\circ$), anchoring residual dispersion to Customer Lifetime Value", isCorrect: false },
+      { text: "At an angle of $180^\\circ - \\theta = 136.74^\\circ$, reflecting the leading axis across the vertical ordinate", isCorrect: false }
     ]
   },
-  // Q9 (Projected variance at orthogonal angle)
+  // Q9 (Variance of PC2 = 5.606)
   {
     order: 9,
     id: "q_l3_9",
@@ -174,172 +174,172 @@ export const level3Balanced = [
 ];
 
 export const level4Balanced = [
-  // Q1 (Largest eigenvalue = variance of PC1)
+  // Q1 (What a factor loading represents)
   {
     order: 1,
     id: "q_l4_1",
-    targetLetter: "b",
+    targetLetter: "c",
     options: [
-      { text: "$\\lambda_1$ is the sample mean of $PC_1$, locating the center of gravity along the first principal component axis", isCorrect: false },
-      { text: "$\\lambda_1$ is the sample variance of $PC_1$, quantifying the maximum variance captured along the leading principal axis", isCorrect: true },
-      { text: "$\\lambda_1$ is the sample size divided by degrees of freedom: $n / (n - 1)$, correcting for sample degree-of-freedom scaling", isCorrect: false },
-      { text: "$\\lambda_1$ is the correlation between $X_1$ and $X_2$, measuring the normalized linear association between raw variables", isCorrect: false },
-      { text: "$\\lambda_1$ is the inverse of the determinant of covariance matrix $S$, measuring generalized system precision", isCorrect: false },
-      { text: "$\\lambda_1$ is the standard deviation of the error term, measuring unexplained residual noise in the reconstruction", isCorrect: false }
+      { text: "The sample size frequency count of observations belonging to an empirical cluster in multidimensional space", isCorrect: false },
+      { text: "The degrees of freedom remaining in the residual covariance matrix after omitting insignificant components", isCorrect: false },
+      { text: "The Pearson correlation between an original variable and a principal component: $l_{ji} = \\text{Corr}(X_j, PC_i)$", isCorrect: true },
+      { text: "The ratio of leading eigenvalues between the first and second components: $\\lambda_1 / \\lambda_2$, measuring relative dominance", isCorrect: false },
+      { text: "The standardized difference between the variable sample mean and sample median across observation records", isCorrect: false },
+      { text: "The two-tailed p-value obtained when testing the statistical significance of orthogonal component scores", isCorrect: false }
     ]
   },
-  // Q2 (Characteristic equation det(A - lambda I) = 0)
+  // Q2 (Kaiser retention criterion threshold)
   {
     order: 2,
     id: "q_l4_2",
-    targetLetter: "d",
+    targetLetter: "a",
     options: [
-      { text: "$\\text{tr}(A - \\lambda I) = 0$, setting the sum of diagonal matrix elements equal to zero across all dimensions", isCorrect: false },
-      { text: "$A^{-1} - \\lambda I = 0$, requiring matrix inversion of the raw covariance matrix to isolate spectral components", isCorrect: false },
-      { text: "$\\sum_{i=1}^p (A_{ii} - \\lambda) = 1$, constraining the total trace deficit to equal positive unity across variables", isCorrect: false },
-      { text: "$\\det(A - \\lambda I) = 0$, ensuring the linear system has non-trivial, non-zero eigenvector solutions", isCorrect: true },
-      { text: "$\\lambda = A w$, equating scalar eigenvalues directly to the matrix-vector multiplication product without roots", isCorrect: false },
-      { text: "$\\det(A) + \\det(\\lambda I) = 0$, applying additive determinant properties to solve for matrix characteristic values", isCorrect: false }
+      { text: "All components with eigenvalues greater than 1.0 ($\\lambda_i > 1$), ensuring components account for more variance than one original variable", isCorrect: true },
+      { text: "All components with eigenvalues less than 0.50 ($\\lambda_i < 0.50$), retaining residual noise dimensions for secondary sensitivity tests", isCorrect: false },
+      { text: "Always exactly 2 components regardless of eigenvalue magnitudes, matching standard 2-dimensional visual plotting constraints", isCorrect: false },
+      { text: "All components required to explain at least 99% of total cumulative variance, preventing any information loss during reduction", isCorrect: false },
+      { text: "All components whose corresponding eigenvector weights are strictly positive across all original variable indicators", isCorrect: false },
+      { text: "Only the single leading component that yields the largest factor loading, collapsing the multivariate system to 1 dimension", isCorrect: false }
     ]
   },
-  // Q3 (Sum of eigenvalues in Correlation PCA = p)
+  // Q3 (Scree plot elbow rule)
   {
     order: 3,
     id: "q_l4_3",
     targetLetter: "e",
     options: [
-      { text: "Always 1.0, because correlation standardization normalizes the total cumulative variance of all components to unity", isCorrect: false },
-      { text: "Equal to $n - 1$, because total system variance in Correlation PCA is governed by sample degrees of freedom", isCorrect: false },
-      { text: "Equal to the determinant of $R$, measuring the generalized correlation volume spanned by standardized variables", isCorrect: false },
-      { text: "Equal to the sum of raw sample variances, preserving physical measurement units in the trace of the correlation matrix", isCorrect: false },
-      { text: "Always equal to $p$, because each standardized variable has variance 1.0 and $\\text{tr}(R) = p$", isCorrect: true },
-      { text: "Always 100.0, because eigenvalues are automatically scaled to represent percentages of explained variation", isCorrect: false }
+      { text: "The highest global maximum point on the vertical y-axis, identifying the primary principal component variance", isCorrect: false },
+      { text: "The coordinate intersection where the eigenvalue scree curve crosses the horizontal zero-variance baseline axis", isCorrect: false },
+      { text: "The point where cumulative explained variance reaches 100%, indicating complete preservation of multivariate information", isCorrect: false },
+      { text: "The midpoint between the largest and smallest observed eigenvalues, establishing an empirical arithmetic average cutoff", isCorrect: false },
+      { text: "The \"elbow\" or point of inflection where the steep drop levels off into a gradual scree slope; retain components before this point", isCorrect: true },
+      { text: "The inflection point where the scree slope turns sharply downward into a negative exponential decay trajectory", isCorrect: false }
     ]
   },
-  // Q4 (Why Correlation PCA preferred for surveys)
+  // Q4 (Portuguese regional study PC1 interpretation)
   {
     order: 4,
     id: "q_l4_4",
-    targetLetter: "a",
+    targetLetter: "b",
     options: [
-      { text: "Because Correlation PCA standardizes variables, preventing items with arbitrary numerical scales from dominating components", isCorrect: true },
-      { text: "Because Covariance PCA cannot handle sample sizes greater than $n = 100$ without encountering numerical singularity errors", isCorrect: false },
-      { text: "Because Correlation PCA produces correlated components that capture oblique non-linear interactions across survey questions", isCorrect: false },
-      { text: "Because Covariance PCA always produces negative eigenvalues that invalidate variance decomposition in Likert survey data", isCorrect: false },
-      { text: "Because Correlation PCA eliminates the need to compute eigenvectors, reducing computational overhead in statistical software", isCorrect: false },
-      { text: "Because Likert survey scales cannot be centered to zero mean, prohibiting the derivation of sample covariance matrices", isCorrect: false }
+      { text: "Manufacturing Industrial Capacity: Heavy Equipment and Steel Output across manufacturing districts", isCorrect: false },
+      { text: "Public Infrastructure: Health and Culture, reflecting high loadings on doctors, pharmacies, and museums", isCorrect: true },
+      { text: "Agricultural Productivity and Rural Land Cultivation Density across interior agrarian municipalities", isCorrect: false },
+      { text: "Foreign Direct Investment and Export Logistics Capacity across coastal maritime shipping terminals", isCorrect: false },
+      { text: "Demographic Emigration and Rural Depopulation Intensity across isolated interior mountainous zones", isCorrect: false },
+      { text: "Commercial Real Estate Indebtedness and Private Banking Credit Exposure across corporate centers", isCorrect: false }
     ]
   },
-  // Q5 (Scale change kg to g effect on PCA)
+  // Q5 (Factor loading formula from eigenvector weight)
   {
     order: 5,
     id: "q_l4_5",
-    targetLetter: "c",
+    targetLetter: "d",
     options: [
-      { text: "Variance increases by 1,000; Covariance PCA is unaffected because scale changes leave eigenvector directions unchanged", isCorrect: false },
-      { text: "Variance remains completely unchanged because measurement units are arbitrary and cancel out during spectral decomposition", isCorrect: false },
-      { text: "Variance increases by $1,000^2 = 1,000,000$; Covariance PCA is heavily distorted, whereas Correlation PCA is completely invariant", isCorrect: true },
-      { text: "Both Covariance PCA and Correlation PCA scale their eigenvalues by 1,000, leaving explained variance percentages identical", isCorrect: false },
-      { text: "The correlation between this variable and all other variables drops to zero, destroying bivariate associations in the model", isCorrect: false },
-      { text: "The trace of the correlation matrix increases by 1,000, expanding the sum of standardized eigenvalues across the system", isCorrect: false }
+      { text: "$l_{ji} = w_{ij} \\times s_j / \\sqrt{\\lambda_i}$, dividing the eigenvector weight by the standard deviation of component scores", isCorrect: false },
+      { text: "$l_{ji} = \\lambda_i / (w_{ij} + s_j)$, taking the ratio of the characteristic root to the sum of weights and standard deviations", isCorrect: false },
+      { text: "$l_{ji} = w_{ij}^2 \\times \\lambda_i$, multiplying the squared eigenvector coefficient by the system characteristic eigenvalue", isCorrect: false },
+      { text: "$l_{ji} = w_{ij} \\frac{\\sqrt{\\lambda_i}}{s_j}$ where $s_j$ is the standard deviation of variable $X_j$ and $\\lambda_i$ is the eigenvalue", isCorrect: true },
+      { text: "$l_{ji} = \\sqrt{w_{ij} \\lambda_i s_j}$, taking the geometric root across eigenvector weights, eigenvalues, and variable dispersion", isCorrect: false },
+      { text: "$l_{ji} = s_j / \\lambda_i$, evaluating the ratio of original sample standard deviation to the principal component variance", isCorrect: false }
     ]
   },
-  // Q6 (Why Lagrange constraint w'w = 1)
+  // Q6 (Why Kaiser cutoff of 1.0 not applied to Covariance PCA)
   {
     order: 6,
     id: "q_l4_6",
     targetLetter: "f",
     options: [
-      { text: "To ensure that all principal component scores have positive sample means and conform to normal distribution bounds", isCorrect: false },
-      { text: "To guarantee that all extracted eigenvalues are constrained to equal 1.0, standardizing variance across dimensions", isCorrect: false },
-      { text: "To ensure that the covariance matrix $S$ remains non-singular and invertible during iterative numerical optimization", isCorrect: false },
-      { text: "To eliminate negative correlation coefficients between variables, preserving positive manifold geometry in data", isCorrect: false },
-      { text: "To convert continuous metric variables into standardized nonmetric categories, enabling non-parametric projections", isCorrect: false },
-      { text: "To fix the scale of the weights; without it, multiplying weights by any constant $c > 1$ would inflate variance to infinity", isCorrect: true }
+      { text: "Because Covariance PCA generates imaginary complex eigenvalues whenever raw variables have unequal measurement units", isCorrect: false },
+      { text: "Because Covariance PCA does not permit the computation of characteristic roots or spectral eigenvectors in software", isCorrect: false },
+      { text: "Because Kaiser developed his eigenvalue criterion exclusively for nonmetric nominal rankings and contingency cross-tables", isCorrect: false },
+      { text: "Because Covariance PCA is constrained by matrix rank properties to extract exactly one significant principal component", isCorrect: false },
+      { text: "Because statistical software automatically converts the default Kaiser threshold to 0.05 when analyzing raw covariances", isCorrect: false },
+      { text: "Because in Covariance PCA, total variance is the sum of raw variances, not $p$; the average eigenvalue is $\\bar{\\lambda} = \\text{tr}(S)/p$, not 1.0", isCorrect: true }
     ]
   },
-  // Q7 (3x3 covariance variance percent)
+  // Q7 (SAS PROC PRINCOMP COV option)
   {
     order: 7,
     id: "q_l4_7",
-    targetLetter: "b",
+    targetLetter: "c",
     options: [
-      { text: "$60.0\\%$, calculated by taking the ratio of the first eigenvalue to total trace: $6.0 / 10.0 = 0.600$", isCorrect: false },
-      { text: "$85.0\\%$, calculated as the cumulative percentage explained by the first two components: $(6.0 + 2.5) / 10.0 = 0.850$", isCorrect: true },
-      { text: "$75.0\\%$, calculated as the ratio of the first two eigenvalues to the sample degrees of freedom in the system", isCorrect: false },
-      { text: "$90.0\\%$, calculated by weighting the leading eigenvalues against the determinant of the covariance matrix", isCorrect: false },
-      { text: "$25.0\\%$, representing the individual variance percentage contributed by the second principal component alone", isCorrect: false },
-      { text: "$15.0\\%$, representing the residual variance discarded when omitting the third component: $1.5 / 10.0 = 0.150$", isCorrect: false }
+      { text: "`METHOD=ML`, which requests Maximum Likelihood parameter extraction instead of ordinary principal components", isCorrect: false },
+      { text: "`OUTSTAT=COV`, which outputs the calculated sample covariance matrix directly into an external SAS dataset", isCorrect: false },
+      { text: "`COV`, which instructs PROC PRINCOMP to analyze the sample covariance matrix $S$ instead of the default correlation matrix $R$", isCorrect: true },
+      { text: "`VARDEF=N`, which divides sums of squares by sample size $n$ rather than degrees of freedom $n - 1$", isCorrect: false },
+      { text: "`STD`, which automatically standardizes all variables to zero mean and unit variance before running analysis", isCorrect: false },
+      { text: "`NOINT`, which suppresses the intercept term when calculating deviation cross-products from the raw origin", isCorrect: false }
     ]
   },
-  // Q8 (When justifiable to use Covariance PCA)
+  // Q8 (Scale sensitivity of Covariance PCA - 1,000x multiplication)
   {
     order: 8,
     id: "q_l4_8",
-    targetLetter: "d",
+    targetLetter: "b",
     options: [
-      { text: "When variables are measured on nominal and ordinal scales, because covariance matrices preserve nonmetric rank properties", isCorrect: false },
-      { text: "When the researcher wants all variables to have an equal influence regardless of their natural empirical dispersion", isCorrect: false },
-      { text: "When the sample size $n$ is smaller than 20 observations, because correlation matrices require large asymptotic samples", isCorrect: false },
-      { text: "When all variables are measured in identical physical units, and differences in actual variances carry vital domain information", isCorrect: true },
-      { text: "When all pairwise correlations are zero, because Covariance PCA extracts orthogonal components without matrix roots", isCorrect: false },
-      { text: "When the primary research objective is to perform oblique factor rotation to discover correlated latent constructs", isCorrect: false }
+      { text: "Its sample variance increases by a factor of 1,000, leaving its relative weight on $PC_1$ virtually unaltered in the analysis", isCorrect: false },
+      { text: "Its sample variance is multiplied by $1,000^2 = 1,000,000$, causing $X_1$ to completely dominate $PC_1$ purely due to unit choice", isCorrect: true },
+      { text: "Its sample variance remains constant because linear scaling transformations are automatically cancelled by PCA normalization", isCorrect: false },
+      { text: "Its sample variance decreases by $1,000$, forcing $PC_1$ to align with the remaining unscaled variables in the sample matrix", isCorrect: false },
+      { text: "Its sample variance becomes non-invertible, producing arithmetic division by zero in the characteristic polynomial equation", isCorrect: false },
+      { text: "Its sample variance is multiplied by $\\sqrt{1,000} \\approx 31.6$, resulting in a moderate increase in its factor loading on $PC_1$", isCorrect: false }
     ]
   },
-  // Q9 (2x2 covariance second eigenvalue)
+  // Q9 (Trace of Correlation Matrix equals p)
   {
     order: 9,
     id: "q_l4_9",
-    targetLetter: "e",
+    targetLetter: "a",
     options: [
-      { text: "$\\lambda_2 = 16.455$, corresponding to the off-diagonal sample covariance between the two variables in matrix $S$", isCorrect: false },
-      { text: "$\\lambda_2 = 38.576$, representing the leading eigenvalue $\\lambda_1$ rather than the second orthogonal root", isCorrect: false },
-      { text: "$\\lambda_2 = 2.000$, representing the trace of a standardized correlation matrix rather than the covariance eigenvalue", isCorrect: false },
-      { text: "$\\lambda_2 = 21.091$, corresponding to the unrotated sample variance of the second original variable $X_2$", isCorrect: false },
-      { text: "$\\lambda_2 = 5.606$, calculated as the smaller characteristic root of the quadratic characteristic polynomial", isCorrect: true },
-      { text: "$\\lambda_2 = 0.746$, representing the ratio of the smaller eigenvalue to the larger eigenvalue in the system", isCorrect: false }
+      { text: "Exactly $p$, because standardizing each variable sets its sample variance to 1.0, making the trace of the correlation matrix $\\text{tr}(R) = p$", isCorrect: true },
+      { text: "Exactly 1.0, because eigenvalues are constrained by the spectral decomposition algorithm to sum to unity across dimensions", isCorrect: false },
+      { text: "Exactly $\\sqrt{p}$, representing the Euclidean norm of the unit-variance indicator vector in standardized observation space", isCorrect: false },
+      { text: "Exactly $(p - 1) / n$, adjusting the total matrix dispersion by the sample degrees of freedom available in the dataset", isCorrect: false },
+      { text: "Exactly the determinant of the correlation matrix: $\\det(R)$, quantifying the total generalized multivariate variance", isCorrect: false },
+      { text: "Exactly $p^2$, because every pairwise bivariate correlation coefficient contributes 1.0 to the quadratic matrix form", isCorrect: false }
     ]
   },
-  // Q10 (Two standardized variables correlation r eigenvalues)
+  // Q10 (Component retention: Kaiser & 80% cumulative variance)
   {
     order: 10,
     id: "q_l4_10",
-    targetLetter: "a",
+    targetLetter: "d",
     options: [
-      { text: "$\\lambda_1 = 1 + r = 1.60$ and $\\lambda_2 = 1 - r = 0.40$, summing to $p = 2$ and preserving total standardized variance", isCorrect: true },
-      { text: "$\\lambda_1 = 1.00$ and $\\lambda_2 = 1.00$, because standardized variables always have unit eigenvalues under zero correlation", isCorrect: false },
-      { text: "$\\lambda_1 = 1.20$ and $\\lambda_2 = 0.80$, splitting the correlation coefficient symmetrically across both components", isCorrect: false },
-      { text: "$\\lambda_1 = 0.60$ and $\\lambda_2 = 0.40$, equating the leading eigenvalue directly to the Pearson correlation coefficient", isCorrect: false },
-      { text: "$\\lambda_1 = 2.00$ and $\\lambda_2 = 0.00$, because any positive correlation collapses bivariate data into a single component", isCorrect: false },
-      { text: "$\\lambda_1 = 1.36$ and $\\lambda_2 = 0.64$, taking the square of the correlation coefficient: $r^2 = 0.36$ as the root offset", isCorrect: false }
+      { text: "(1) Kaiser retains 1 component ($\\lambda_1 = 2.85$); (2) 80% criterion retains 2 components ($(2.85 + 1.25)/5 = 82.0\\%$)", isCorrect: false },
+      { text: "(1) Kaiser retains 3 components ($\\lambda_1, \\lambda_2, \\lambda_3$); (2) 80% criterion retains 4 components ($94.0\\%$)", isCorrect: false },
+      { text: "(1) Kaiser retains 4 components; (2) 80% criterion retains all 5 components to capture 100% of standardized variance", isCorrect: false },
+      { text: "(1) Kaiser retains 2 components ($\\lambda_1, \\lambda_2 > 1.0$); (2) 80% criterion retains 2 components, because $(2.85 + 1.25) / 5.00 = 82.0\\% \\ge 80\\%$", isCorrect: true },
+      { text: "(1) Kaiser retains 1 component; (2) 80% criterion retains 3 components ($(2.85 + 1.25 + 0.50)/5 = 92.0\\%$)", isCorrect: false },
+      { text: "(1) Kaiser retains 2 components; (2) 80% criterion retains 3 components ($82.0\\% > 80\\%$), requiring an extra safety component", isCorrect: false }
     ]
   },
-  // Q11 (Orthogonal second eigenvector w2)
+  // Q11 (25 US cities food prices study - Anchorage & normalization)
   {
     order: 11,
     id: "q_l4_11",
-    targetLetter: "f",
+    targetLetter: "e",
     options: [
-      { text: "$w_2 = (0.728238, 0.685324)^T$, matching the leading eigenvector weights exactly to preserve directional orientation", isCorrect: false },
-      { text: "$w_2 = (1.000000, 0.000000)^T$, aligning the second component axis strictly with the horizontal coordinate abscissa", isCorrect: false },
-      { text: "$w_2 = (0.500000, 0.500000)^T$, bisecting the quadrant at 45 degrees to split residual variation equally across variables", isCorrect: false },
-      { text: "$w_2 = (-0.728238, -0.685324)^T$, reflecting the leading eigenvector through the origin without establishing orthogonality", isCorrect: false },
-      { text: "$w_2 = (0.000000, 1.000000)^T$, aligning the second component axis strictly with the vertical coordinate ordinate", isCorrect: false },
-      { text: "$w_2 = (-0.685324, 0.728238)^T$ or $(0.685324, -0.728238)^T$, satisfying the zero dot product orthogonality condition: $w_1 \\cdot w_2 = 0$", isCorrect: true }
+      { text: "Because Mean-Corrected Covariance PCA cannot compute component scores for geographical observations like Anchorage", isCorrect: false },
+      { text: "Because Correlation PCA forces all 5 food categories to have identical mean prices across the 25 metropolitan areas", isCorrect: false },
+      { text: "Because the covariance matrix of food prices was singular and could not be inverted without prior $z$-score transformation", isCorrect: false },
+      { text: "Because Correlation PCA eliminated the Anchorage price outlier by winsorizing extreme price observations in Alaska", isCorrect: false },
+      { text: "Because food items had differing unit dispersions, and standardizing allowed all 5 categories to contribute equally to price patterns", isCorrect: true },
+      { text: "Because food commodities are nonmetric ordinal rankings that violate the continuous interval assumptions of Covariance PCA", isCorrect: false }
     ]
   },
-  // Q12 (Why solving for eigenvectors doesn't invert S - lambda I)
+  // Q12 (Python scikit-learn StandardScaler requirement)
   {
     order: 12,
     id: "q_l4_12",
-    targetLetter: "c",
+    targetLetter: "f",
     options: [
-      { text: "Because eigenvalues are always equal to diagonal elements of $S$, eliminating the need to evaluate characteristic roots", isCorrect: false },
-      { text: "Because matrix inversion is only mathematically possible for diagonal matrices that have zero off-diagonal covariances", isCorrect: false },
-      { text: "Because $(S - \\lambda I)$ is deliberately singular ($\\det = 0$); an invertible matrix would yield only the trivial zero vector $w = 0$", isCorrect: true },
-      { text: "Because PCA algorithms only utilize matrix trace operations and never evaluate determinants or characteristic roots", isCorrect: false },
-      { text: "Because eigenvectors are derived using numerical finite difference approximations rather than analytical matrix algebra", isCorrect: false },
-      { text: "Because sample covariance matrix $S$ is always constrained to be an identity matrix in multivariate dimension reduction", isCorrect: false }
+      { text: "Because `PCA` in scikit-learn will throw a syntax error if input variables have sample means different from zero", isCorrect: false },
+      { text: "Because `StandardScaler` converts continuous metric variables into discrete integer classes for spectral factorization", isCorrect: false },
+      { text: "Because scikit-learn's `PCA` module performs orthogonal Varimax rotation only when variables have standard deviation of 1.0", isCorrect: false },
+      { text: "Because `StandardScaler` removes outlier observations by evaluating multivariate Mahalanobis distance thresholds", isCorrect: false },
+      { text: "Because `PCA` requires the input matrix to be non-singular, and standardization guarantees a non-zero determinant", isCorrect: false },
+      { text: "Because `PCA` in scikit-learn performs Covariance SVD by default without internal scaling, requiring explicit $z$-score standardization", isCorrect: true }
     ]
   }
 ];

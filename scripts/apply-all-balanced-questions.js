@@ -2,18 +2,22 @@ import fs from 'fs';
 import { createClient } from '@supabase/supabase-js';
 import { level1Balanced, level2Balanced } from './balance-level-1-2.js';
 import { level3Balanced, level4Balanced } from './balance-level-3-4.js';
-import { level5Balanced, level6Balanced } from './balance-level-5-6.js';
+import { level6Balanced } from './balance-level-5-6.js';
 import { level7Balanced, level8Balanced } from './balance-level-7-8.js';
 
 const SUPABASE_URL = 'https://eurqqiebokwcrrhfbihg.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1cnFxaWVib2t3Y3JyaGZiaWhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxNDA0MzIsImV4cCI6MjEwNzcxNjQzMn0.UrhclnTabK3YEJZzroYeDmO4D4pij59IWCXyWZ9ruxs';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// 7 Curriculum Levels (Chapter 1: 2 segments, Chapter 2: 2 segments, Chapter 3: 3 segments)
 const balancedLevels = [
-  level1Balanced, level2Balanced,
-  level3Balanced, level4Balanced,
-  level5Balanced, level6Balanced,
-  level7Balanced, level8Balanced
+  level1Balanced, // Level 1: ch1-scales-methods
+  level2Balanced, // Level 2: ch1-manipulation-distances
+  level3Balanced, // Level 3: ch2-pca-geometry
+  level4Balanced, // Level 4: ch2-pca-analytical (merged Covariance/Correlation + Interpretation)
+  level6Balanced, // Level 5: ch3-fa-theory
+  level7Balanced, // Level 6: ch3-fa-extraction
+  level8Balanced  // Level 7: ch3-fa-rotation-evaluation
 ];
 
 function formatOptions(balancedQ) {
@@ -46,7 +50,7 @@ function formatOptions(balancedQ) {
 }
 
 async function run() {
-  console.log('--- Remaking and Balancing All 96 Quiz Questions (Clean & Grounded) ---');
+  console.log('--- Remaking and Balancing All 84 Quiz Questions Across 7 Levels ---');
 
   // Load Part 1 and Part 2 local seed files
   const p1Module = await import('./levels-data-part1.js');
@@ -58,10 +62,10 @@ async function run() {
   const allLevelsData = [...p1Data, ...p2Data];
   let dbUpdateCount = 0;
 
-  for (let l = 0; l < 8; l++) {
+  for (let l = 0; l < 7; l++) {
     const segment = allLevelsData[l];
     const balancedQs = balancedLevels[l];
-    console.log(`\nProcessing Segment ${l + 1}: ${segment.segment.id}`);
+    console.log(`\nProcessing Level ${l + 1}: ${segment.segment.id}`);
 
     for (let q = 0; q < 12; q++) {
       const originalQ = segment.questions[q];
@@ -106,13 +110,13 @@ async function run() {
 
   fs.writeFileSync(
     './scripts/levels-data-part2.js',
-    `// Part 2: Levels 5 to 8 of Data Analysis curriculum\n\nexport const levelsPart2 = ${JSON.stringify(p2Data, null, 2)};\n`,
+    `// Part 2: Levels 5 to 7 of Data Analysis curriculum\n\nexport const levelsPart2 = ${JSON.stringify(p2Data, null, 2)};\n`,
     'utf8'
   );
   console.log('Saved updated scripts/levels-data-part2.js');
 
   console.log(`\n--- Completed! ---`);
-  console.log(`Successfully updated ${dbUpdateCount} / 96 questions in Supabase DB.`);
+  console.log(`Successfully updated ${dbUpdateCount} / 84 questions in Supabase DB.`);
 }
 
 run();

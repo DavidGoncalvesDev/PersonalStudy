@@ -85,25 +85,20 @@ This skill defines the operational specifications, system architecture, database
 
 ---
 
-## 4. Curriculum Architecture & Granular Segmentation
+## 4. Curriculum Architecture & Learning Units (Data Analysis)
 
-Divide university courses (like Multivariate Data Analysis) into **granular 4–5 segment learning units per chapter** to keep focus sharp:
-- **Discipline**: e.g., *Multivariate Data Analysis (MDA)*.
+Divide university courses into **granular, highly focused learning units** directly aligned with official course materials (lecture slides and practical exercise workbooks):
+- **Discipline**: *Multivariate Data Analysis (MDA)* (`data-analysis`).
 - **Chapter 1: Foundations & Measurement Scales**:
-  - **L1**: Variable Typologies & Measurement Scales (Nominal, Ordinal, Interval, Ratio).
-  - **L2**: Metric Proximities & Distances (Euclidean, Mahalanobis, Manhattan, Canberra).
-  - **L3**: Non-Metric Associations & Binary Similarities (Jaccard, Dice, Simple Matching).
-  - **L4**: Multivariate Assumptions, Outliers & Missing Data Diagnostics (Mahalanobis $D^2$, Box's $M$).
+  - **L1**: Variable Typologies & Measurement Scales (Nominal, Ordinal, Interval, Ratio, Permissible Transformations, Dummy Variable Design Matrix) (`ch1-scales-methods`).
+  - **L2**: Data Manipulation Fundamentals & Distance Metrics (Sums of Squares, Covariance, Correlation, Euclidean vs Statistical vs Mahalanobis $D^2$, Metric Space Axioms) (`ch1-manipulation-distances`).
 - **Chapter 2: Principal Component Analysis (PCA)**:
-  - **L5**: Dimensionality Reduction Geometry & Covariance Eigen-Decomposition ($\mathbf{\Sigma} \mathbf{v} = \lambda \mathbf{v}$).
-  - **L6**: Component Extraction Criteria (Kaiser Criterion, Scree Plot, Variance Explained).
-  - **L7**: Component Scores, Loadings & Geometric Variable Representation.
-  - **L8**: PCA Diagnostic Evaluation & Practical Business Interpretations.
+  - **L3**: Geometric Foundations & Projections (12-Customer Bivariate Case, Coordinate Rotation $\theta = 43.26^\circ$, Variance Maximization along $PC_1$, Orthogonal Complement $PC_2$, Centered Subspace $\min(p, n-1)$) (`ch2-pca-geometry`).
+  - **L4**: Covariance vs. Correlation, Loadings & Retention Diagnostics (The Scale Sensitivity Problem: $c^2$ Variance Inflation, Standardized Correlation PCA $\text{tr}(R) = p$, 25 US Cities Food Prices, 4 Fundamental Quantities: $\lambda_i, w_i, t_{hi}, l_{ji}$, Kaiser Criterion $\lambda > 1$, Cattell Scree Elbow Rule, Cumulative Variance $\ge 70\%$, Portuguese 7 Regions Case Study, SAS `PROC PRINCOMP COV` vs Python `StandardScaler` + `PCA`) (`ch2-pca-analytical`).
 - **Chapter 3: Factor Analysis (FA)**:
-  - **L9**: Latent Variable Theory & Common Factor Model ($X_i = \sum \lambda_{ij} F_j + e_i$).
-  - **L10**: Variance Decomposition: Communalities ($h_i^2$), Specific Variance ($u_i^2$), and Error.
-  - **L11**: Factor Extraction: Principal Axis Factoring (PAF) vs Maximum Likelihood (ML) vs PCA.
-  - **L12**: Factor Rotations (Orthogonal Varimax vs Oblique Promax) & Reproduced Correlation Matrix ($\hat{\mathbf{R}} = \mathbf{\Lambda} \mathbf{\Phi} \mathbf{\Lambda}^T$).
+  - **L5**: Latent Variable Theory & Variance Decomposition (Spearman Common Factor Model, 6-Course Grades, Total Variance Decomposition $1.0 = h_j^2 + u_j^2$, Communality vs Uniqueness, Reproduced Correlations $\hat{r}_{jk}$, Reflective vs Formative Models) (`ch3-fa-theory`).
+  - **L6**: Indeterminacies & Extraction Methods (The Two Inherent Indeterminacies: Factor Rotation & Communality Estimation Circularity, Principal Component Factoring vs Iterated Principal Axis Factoring, Residual Matrix $R_{\text{res}} = R - \hat{R}$, RMSR $\le 0.08$) (`ch3-fa-extraction`).
+  - **L7**: Sampling Adequacy, Rotations & FA vs PCA (Kaiser-Meyer-Olkin MSA Benchmarks, Bartlett Sphericity, Anti-Image Matrix, Varimax vs Quartimax vs Oblique Promax, Pattern vs Structure Matrices, Heywood Cases, 6 Systematic Differences PCA vs FA) (`ch3-fa-rotation-evaluation`).
 
 ---
 
