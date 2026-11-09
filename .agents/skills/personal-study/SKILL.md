@@ -100,6 +100,32 @@ Divide university courses into **granular, highly focused learning units** direc
   - **L6**: Indeterminacies & Extraction Methods (The Two Inherent Indeterminacies: Factor Rotation & Communality Estimation Circularity, Principal Component Factoring vs Iterated Principal Axis Factoring, Residual Matrix $R_{\text{res}} = R - \hat{R}$, RMSR $\le 0.08$) (`ch3-fa-extraction`).
   - **L7**: Sampling Adequacy, Rotations & FA vs PCA (Kaiser-Meyer-Olkin MSA Benchmarks, Bartlett Sphericity, Anti-Image Matrix, Varimax vs Quartimax vs Oblique Promax, Pattern vs Structure Matrices, Heywood Cases, 6 Systematic Differences PCA vs FA) (`ch3-fa-rotation-evaluation`).
 
+### New Discipline: Financial Analysis & Management Control (`financial-analysis`)
+
+This discipline is separate from Data Analysis and is grounded in the eight uploaded NOVA IMS lecture PDFs for Financial Analysis & Management Control. Organize the material into three course chapters, each with four focused segments:
+
+- **Chapter 1: Accounting Foundations & Financial Statements**:
+  - **F1**: Accounting Principles, Accounts & Double Entry (SNC context, accrual basis, substance over form, account families, debit/credit logic, journal entries) (`fa-accounting-foundations`).
+  - **F2**: Inventory Valuation & Period-End Adjustments (FIFO, LIFO and weighted average cost as taught, depreciation, provisions, accruals/deferments, tax and closing entries) (`fa-period-end-adjustments`).
+  - **F3**: Balance Sheet & Income Statement (assets = liabilities + equity, period performance, revenue/expense classification, margins and statement limitations) (`fa-balance-income-statements`).
+  - **F4**: Cash Flow Statement & Integrated Reporting (operating, investing and financing flows, profit-to-cash bridge, free cash flow, balance checks and the ABC/Byte Bakery challenge cases) (`fa-cash-flow-integration`).
+- **Chapter 2: Financial Statement Analysis**:
+  - **F5**: Common-Size, Trend & Comparative Analysis (vertical and horizontal analysis, peer/industry comparisons, time-series interpretation and limitations) (`fa-common-size-trends`).
+  - **F6**: Liquidity & Activity Ratios (current ratio, quick ratio, inventory turnover, days sales outstanding, fixed-asset and total-asset turnover; use ending balance-sheet values where the lecture specifies) (`fa-liquidity-activity-ratios`).
+  - **F7**: Debt & Profitability Ratios (total debt/total assets, total debt/equity, times interest earned, gross and net margins, ROA, ROE and leverage trade-offs) (`fa-debt-profitability-ratios`).
+  - **F8**: Market Ratios & Integrated Diagnosis (EPS, P/E, market-to-book, dividend yield, industry context, trend interpretation and Joe's Gadgets case) (`fa-market-ratios-diagnosis`).
+- **Chapter 3: Business Valuation**:
+  - **F9**: Valuation Purpose & Relative Methods (market capitalization, revenue multiples, earnings multipliers, equity versus enterprise value and limitations) (`fa-valuation-methods`).
+  - **F10**: Time Value of Money, WACC & Discounting (capital weights, cost of equity, after-tax cost of debt, discount factors, present value, NPV and IRR) (`fa-wacc-discounting`).
+  - **F11**: DCF Forecasts & Terminal Value (unlevered free cash flows, explicit forecast horizon, perpetuity-growth and exit-multiple approaches, sensitivity to assumptions) (`fa-dcf-terminal-value`).
+  - **F12**: Enterprise-to-Equity Value & Valuation Challenge (add non-operating assets, subtract debt and other non-equity claims, divide by shares, reconcile projected statements and communicate assumptions) (`fa-equity-value-challenge`).
+
+Use the uploaded lecture examples and challenge datasets as the authoritative source. Keep financial statement analysis content distinct from multivariate statistical Data Analysis content even when a case company uses analytics in its name.
+
+#### Financial-course quality gate
+
+Do not call a new discipline complete based on database row counts alone. Before seeding or reporting completion, inventory every supplied lecture and map its substantive concepts, formulas, worked examples, and case datasets to the segment guides. Guides must teach each mapped topic in clear narrative prose with definitions, reasoning, worked calculations, interpretation, and common mistakes; short topic summaries are drafts, not finished study guides. Quiz distractors must be plausible misconceptions from the same concept area, not unrelated answers copied from other questions. Explanations must teach the reasoning and distinguish the correct answer from tempting alternatives. Workbook exercises must use the supplied cases and provide enough practice to cover the material’s calculation and interpretation demands. Audit topic coverage, rendered heading anchors, quiz balance, and exercise solutions before calling the discipline study-ready.
+
 ---
 
 ## 5. Four-Phase Mastery Progression per Segment
