@@ -327,7 +327,7 @@ $$\\text{Preparation Score} = \\min(100, \\text{round}(C + A + E + P + D))$$
 
 ### SOP 4: Pre-Deployment Build & Verification
 1. Run \`npm run build\` inside \`PersonalStudy/\` to ensure zero TypeScript/JSX errors.
-2. Run database audit script verifying 12 questions per quiz, 8 flashcards, and uniform distribution.
+2. Run \`npm run validate:curriculum [discipline-id]\` to execute the automated quality linter: verifying exact 12-question counts, uniform A-F option distribution (2 of each), KaTeX formula validity, anti-verbosity checks, and distractor authenticity.
 3. Commit and push to \`origin main\`.
 
 ---
