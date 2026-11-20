@@ -106,17 +106,19 @@ PersonalStudy/
 
 ## 3. Notion Knowledge Base Integration ('David Study Workspace')
 
-The Personal Study system is synchronized with the collaborative **David Study Workspace** inside Notion:
+The Personal Study system is synchronized directly with the dedicated **David Study Workspace** inside Notion:
 
-- **Master Workspace Page**: `https://app.notion.com/p/41e2c4ea9b0e810c8d33f3f30ad9bb07`
-  - **Title**: *📚 David Study — Learning Platform & Quality Protocols*
-  - **Scope**: Houses the platform architecture, 7-level curriculum map, 4-phase mastery progression, standard operating procedures (SOPs), quality assurance rules, and pre-deployment checklists.
-- **Reference Examples Subpage**: `https://app.notion.com/p/41e2c4ea9b0e81cc92d6d3131c5502f8`
-  - **Title**: *📝 David Study — Concrete Production Examples*
-  - **Scope**: Contains canonical JSON schemas and formatting standards for balanced quiz questions, practical workbook exercises, atomic flashcards, and narrative text guides.
-- **Parent Workspace Hub**: `https://app.notion.com/p/4172c4ea9b0e8018a561f53202866383` (*Data Analysis — Group Project Knowledge Base*).
+- **Master Workspace Page**: `https://app.notion.com/p/41e0ce06915281709fd9dd076aa40cfc`
+  - **Title**: *📚 David Study — Knowledge Base & AI Hub*
+  - **Map of Content (MOC)**: Houses the six core hubs:
+    1. **Platform Architecture & System Design**: `https://app.notion.com/p/41e0ce069152815b90bdec7f334ff8da`
+    2. **Curriculum Architecture & Content Map (7 Levels)**: `https://app.notion.com/p/41e0ce06915281d2baa0e8bb303a5e36`
+    3. **The 4-Phase Mastery Pedagogy**: `https://app.notion.com/p/41e0ce06915281c89164c548ead13ad5`
+    4. **Workflows & Execution Pipelines (SOPs)**: `https://app.notion.com/p/41e0ce06915281a19326ed76ade861d8`
+    5. **Quality Guidelines & Verification Checklists**: `https://app.notion.com/p/41e0ce0691528154808df94e4fd7168d`
+    6. **Concrete Production Examples**: `https://app.notion.com/p/41e0ce069152819e910ded2434eba311`
 - **Dual-Synchronization Protocol**:
-  Whenever curriculum levels, exam rules, or architectural standards are refined, the agent must ensure that both this `SKILL.md` file and the Notion Knowledge Base pages are synchronously updated to maintain complete alignment across all AI tools and team members.
+  Whenever curriculum levels, exam rules, or architectural standards are refined, the agent must ensure that both this `SKILL.md` file and the Notion Knowledge Base pages in the David Study workspace are synchronously updated to maintain complete alignment across all AI tools and team members.
 
 ---
 
