@@ -311,50 +311,60 @@ $$\\text{Preparation Score} = \\min(100, \\text{round}(C + A + E + P + D))$$
 3. Insert metadata records into \`study_segments\` via Supabase.
 4. Update local curriculum seed scripts (\`scripts/levels-data-part1.js\` or \`part2.js\`).
 
-### SOP 2: Formulating & Balancing Quiz Questions
-1. Formulate 12 substantive questions grounded strictly in official slides.
+### SOP 2: Formulating & Balancing Questions (Principles 1 & 2)
+1. Formulate substantive questions grounded strictly in official course slides and workbooks.
 2. Formulate 5 high-yield distractors per question targeting authentic student misconceptions.
-3. Enforce length parity: no option may deviate by >25% from average option length.
-4. Assign correct options uniformly across choices: **exactly 2 A, 2 B, 2 C, 2 D, 2 E, 2 F**.
+3. **Principle 1 (Anti-Verbosity)**: Ensure correct answers are strictly longest in at most ~16.7% of questions. For any question where the correct option is the longest, enrich 1 or 2 plausible distractors with authentic domain reasoning from the slides.
+4. **Principle 2 (Uniform Option Distribution)**: Map correct choices uniformly: exactly **2 A, 2 B, 2 C, 2 D, 2 E, 2 F** across 12-question Quizzes, and **3 A, 3 B, 3 C, 3 D, 3 E, 3 F** across 18-question Practice sets.
 5. Populate \`section_reference\` and \`section_anchor\` on every question.
-6. Seed to Supabase table \`study_questions\` using \`scripts/apply-all-balanced-questions.js\`.
+6. Seed to Supabase table \`study_questions\` and maintain local seed scripts.
 
 ### SOP 3: Authoring Practical Workbook Exercises
-1. Extract authentic problem sets from \`materials/04_Practical_Workbook_Exercises.pdf\`.
+1. Extract authentic problem sets from \`materials/\` PDFs.
 2. Construct detailed multi-part prompt statements with concrete datasets.
 3. Write complete step-by-step worked solutions rendered in KaTeX.
 4. Seed to Supabase table \`study_workbook_exercises\`.
 
 ### SOP 4: Pre-Deployment Build & Verification
-1. Run \`npm run build\` inside \`PersonalStudy/\` to ensure zero TypeScript/JSX errors.
-2. Run \`npm run validate:curriculum [discipline-id]\` to execute the automated quality linter: verifying exact 12-question counts, uniform A-F option distribution (2 of each), KaTeX formula validity, anti-verbosity checks, and distractor authenticity.
-3. Commit and push to \`origin main\`.
+1. Run \`npm run build\` inside \`PersonalStudy/\` to ensure zero TypeScript/JSX errors (under 5 seconds).
+2. Run \`npm run validate:curriculum [discipline-id]\` to execute the automated quality linter:
+   - Verifies 100% uniform option distribution across A–F (Principle 2).
+   - Verifies correct option is longest in $\le 16.7\%$ of questions (Principle 1).
+   - Verifies zero banned robotic filler keywords.
+   - Verifies all KaTeX formulas parse cleanly without LaTeX errors.
+3. Commit and push to \`origin main\` to trigger automatic Netlify production deployment.
 
 ---
 
 ## 12. Quality Assurance Guidelines Ensuring Final Product Excellence
 
-1. **Anti-Verbosity Rule**: The correct answer must NEVER dominate as the longest choice. Across any bank, correct answer is longest in at most ~16.7% of questions.
-2. **Zero Robotic Filler**: Never use repetitive boilerplate academic suffixes to artificially inflate distractor length.
-3. **Strict Grounding**: Never introduce abstract graduate-level lemmas not found in the lecture slides.
-4. **No Discipline Deletion**: Prohibit any delete buttons for disciplines in the user interface.
-5. **KaTeX HTML Only**: Configure KaTeX with \`output: 'html'\` to prevent duplicate number rendering.
-6. **Anti-Instant Popup**: Require 550ms hover delay on desktop and 600ms hold on touch for level preview cards.
-7. **Apple Pencil Priority**: Lock stylus pointer events; suppress iOS 18 text selection and AI callouts during drawing.
-8. **Zero Asterisks**: Never leave raw \`*\` in text guide prose; use semantic HTML headings and spans.
+1. **Principle 1: Anti-Verbosity Rule**: The correct answer must NEVER dominate as the longest choice. Across any question bank (Quiz or Practice), the correct answer must be strictly longest in at most ~16.7% of questions. Distractors must be enriched with domain-specific conceptual reasoning rather than generic filler.
+2. **Principle 2: Uniform Option Distribution**: The correct answer must NEVER cluster around any single letter. Every 12-question Quiz must contain exactly 2 of each (A–F). Every 18-question Practice set must contain exactly 3 of each (A–F).
+3. **Zero Robotic Filler**: Never use repetitive boilerplate academic suffixes to artificially inflate distractor length.
+4. **Strict Grounding**: Never introduce abstract graduate-level lemmas not found in the lecture slides.
+5. **Dynamic Discipline Themes**: Every discipline must have its own signature color palette defined in \`src/utils/theme.ts\` (e.g. Data Analysis = Warm Brown & Amber; Financial Analysis = Prestige Emerald & Mint) that dynamically transforms the header, level selector, phase tabs, notes canvas, and mobile theme-color.
+6. **Bulletproof Session Persistence**: For first-time visitors, open the most recently added discipline (\`created_at DESC\`); for returning visitors, restore their exact discipline, segment/LU, and phase via dual local/cloud persistence.
+7. **No Discipline Deletion**: Prohibit any delete buttons for disciplines in the user interface.
+8. **KaTeX HTML Only**: Configure KaTeX with \`output: 'html'\` to prevent duplicate number rendering.
+9. **Anti-Instant Popup**: Require 550ms hover delay on desktop and 600ms hold on touch for level preview cards.
+10. **Apple Pencil Priority**: Lock stylus pointer events; suppress iOS 18 text selection and AI callouts during drawing.
+11. **Zero Asterisks**: Never leave raw \`*\` in text guide prose; use semantic HTML headings and spans.
 
 ---
 
 ## 13. Pre-Deployment Quality Checklist
 
 Before publishing new content or deploying application updates, verify:
-- [ ] Exactly 12 questions per quiz with 6 choices each (A–F).
-- [ ] Exactly 2 of each option letter (2 A, 2 B, 2 C, 2 D, 2 E, 2 F) per 12-question quiz.
-- [ ] Correct answer is not predictably the longest option (length variance <20%).
-- [ ] KaTeX formulas render cleanly without duplicate numbers or broken syntax.
+- [ ] Run \`npm run validate:curriculum [discipline-id]\` with **0 critical errors**.
+- [ ] **Principle 1 Verified**: Correct option is longest in **$\le 16.7\%$** of questions across both Quiz and Practice pools.
+- [ ] **Principle 2 Verified**: Exactly **2 A, 2 B, 2 C, 2 D, 2 E, 2 F** per 12-question Quiz; exactly **3 A, 3 B, 3 C, 3 D, 3 E, 3 F** per 18-question Practice set.
+- [ ] Zero robotic distractor boilerplate; all distractor expansions contain authentic domain reasoning.
+- [ ] KaTeX formulas render cleanly without duplicate numbers, unescaped dollar signs, or broken syntax.
 - [ ] Every question, exercise, and flashcard has a valid \`section_anchor\` linking to the text guide.
 - [ ] All workbook exercises include a writing zone, "Copy for AI", and self-evaluation buttons.
-- [ ] \`npm run build\` exits with code 0.
+- [ ] Dynamic discipline theme is configured in \`src/utils/theme.ts\` with custom primary, accent, and canvas colors.
+- [ ] First-time users load the most recently added discipline; returning users resume their exact LU and phase.
+- [ ] \`npm run build\` exits with code 0 in under 5 seconds.
 `;
 
 const targetPaths = [
