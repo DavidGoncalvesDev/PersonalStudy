@@ -121,7 +121,7 @@ export const SegmentSelector: React.FC<SegmentSelectorProps> = ({
         marginBottom: '0.65rem'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#78350f', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+          <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--brand-brown)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
             Levels ({segments.length})
           </span>
           {currentSegment && (
@@ -143,14 +143,14 @@ export const SegmentSelector: React.FC<SegmentSelectorProps> = ({
             fontSize: '0.74rem',
             fontWeight: 700,
             cursor: 'pointer',
-            border: unlockAll ? '1.5px solid #d97706' : '1px solid #e7e2d7',
-            backgroundColor: unlockAll ? '#fef3c7' : '#ffffff',
-            color: unlockAll ? '#78350f' : '#78716c',
+            border: unlockAll ? '1.5px solid var(--border-focus)' : '1px solid var(--border-light)',
+            backgroundColor: unlockAll ? 'var(--accent-amber-light)' : '#ffffff',
+            color: unlockAll ? 'var(--brand-brown)' : '#78716c',
             transition: 'all 0.15s ease',
             boxShadow: '0 1px 2px rgba(0,0,0,0.03)'
           }}
         >
-          {unlockAll ? <Unlock size={13} color="#78350f" /> : <Lock size={13} color="#78716c" />}
+          {unlockAll ? <Unlock size={13} color="var(--brand-brown)" /> : <Lock size={13} color="#78716c" />}
           <span>{unlockAll ? 'Unlock All (Active)' : 'Unlock All'}</span>
         </button>
       </div>
@@ -192,21 +192,21 @@ export const SegmentSelector: React.FC<SegmentSelectorProps> = ({
                 padding: '0.42rem 0.8rem',
                 borderRadius: '8px',
                 border: isSelected
-                  ? '1.5px solid #78350f'
+                  ? '1.5px solid var(--brand-brown)'
                   : isDone
                   ? '1.5px solid #86efac'
                   : isManuallyUnlocked
                   ? '1.5px solid #fde68a'
-                  : '1px solid #e7e2d7',
+                  : '1px solid var(--border-light)',
                 backgroundColor: isSelected
-                  ? '#78350f'
+                  ? 'var(--brand-brown)'
                   : isDone
                   ? '#f0fdf4'
                   : isManuallyUnlocked
-                  ? '#fffbeb'
+                  ? 'var(--accent-cream)'
                   : accessible
                   ? '#ffffff'
-                  : '#f7f4ee',
+                  : 'var(--bg-subtle)',
                 color: isSelected
                   ? '#ffffff'
                   : isDone

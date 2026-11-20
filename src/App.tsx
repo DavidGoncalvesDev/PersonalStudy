@@ -11,6 +11,7 @@ import { ExerciseZone } from './components/ExerciseZone';
 import { ScratchpadModal } from './components/ScratchpadModal';
 import { UserLoginModal } from './components/UserLoginModal';
 import { calculatePreparationScore } from './utils/scoreCalculator';
+import { applyDisciplineTheme, getDisciplineTheme } from './utils/theme';
 import { BookOpen, HelpCircle, Layers, CheckCircle2, ChevronRight, Loader2, Edit3 } from 'lucide-react';
 
 export const App: React.FC = () => {
@@ -63,34 +64,53 @@ export const App: React.FC = () => {
     return name.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '') || 'david';
   };
 
+  // Apply dynamic theme whenever discipline changes
+  useEffect(() => {
+    if (currentDiscipline) {
+      applyDisciplineTheme(currentDiscipline.id);
+    }
+  }, [currentDiscipline?.id]);
+
   // 1. Load disciplines on mount or when currentUser changes
   useEffect(() => {
     fetchDisciplines();
   }, [currentUser]);
 
-  // Reactive Persistence: Auto-save active discipline, segment, and phase for returning users
+  // Reactive Persistence: Auto-save active discipline, segment, and phase for returning users & devices
   useEffect(() => {
-    if (currentUser && currentDiscipline) {
-      const uKey = normalizeUserKey(currentUser);
-      localStorage.setItem(`david_study_last_disc_${uKey}`, currentDiscipline.id);
-      supabase.from('study_user_settings').update({
-        active_discipline_id: currentDiscipline.id,
-        updated_at: new Date().toISOString()
-      }).eq('id', uKey).then(() => {});
+    if (currentDiscipline) {
+      localStorage.setItem('david_study_last_discipline', currentDiscipline.id);
+      localStorage.setItem('david_study_active_discipline', currentDiscipline.id);
+      if (currentUser) {
+        const uKey = normalizeUserKey(currentUser);
+        localStorage.setItem(`david_study_last_disc_${uKey}`, currentDiscipline.id);
+        supabase.from('study_user_settings').update({
+          active_discipline_id: currentDiscipline.id,
+          updated_at: new Date().toISOString()
+        }).eq('id', uKey).then(() => {});
+      }
     }
   }, [currentDiscipline?.id, currentUser]);
 
   useEffect(() => {
-    if (currentUser && currentDiscipline && currentSegment) {
-      const uKey = normalizeUserKey(currentUser);
-      localStorage.setItem(`david_study_last_seg_${uKey}_${currentDiscipline.id}`, currentSegment.id);
+    if (currentDiscipline && currentSegment) {
+      localStorage.setItem('david_study_last_segment', currentSegment.id);
+      localStorage.setItem(`david_study_last_seg_${currentDiscipline.id}`, currentSegment.id);
+      if (currentUser) {
+        const uKey = normalizeUserKey(currentUser);
+        localStorage.setItem(`david_study_last_seg_${uKey}_${currentDiscipline.id}`, currentSegment.id);
+      }
     }
   }, [currentSegment?.id, currentDiscipline?.id, currentUser]);
 
   useEffect(() => {
-    if (currentUser && currentSegment) {
-      const uKey = normalizeUserKey(currentUser);
-      localStorage.setItem(`david_study_last_phase_${uKey}_${currentSegment.id}`, activePhase);
+    if (currentSegment) {
+      localStorage.setItem('david_study_last_phase', activePhase);
+      localStorage.setItem(`david_study_last_phase_${currentSegment.id}`, activePhase);
+      if (currentUser) {
+        const uKey = normalizeUserKey(currentUser);
+        localStorage.setItem(`david_study_last_phase_${uKey}_${currentSegment.id}`, activePhase);
+      }
     }
   }, [activePhase, currentSegment?.id, currentUser]);
 
@@ -165,29 +185,33 @@ export const App: React.FC = () => {
 
         let targetDisc: Discipline | null = null;
 
-        // If returning user: restore where they were
-        if (currentUser) {
-          const savedDiscId = localStorage.getItem(`david_study_last_disc_${uKey}`);
-          if (savedDiscId) {
-            targetDisc = data.find(d => d.id === savedDiscId) || null;
-          }
-          if (!targetDisc) {
-            const { data: userSettings } = await supabase
-              .from('study_user_settings')
-              .select('active_discipline_id')
-              .eq('id', uKey)
-              .maybeSingle();
-            if (userSettings?.active_discipline_id) {
-              targetDisc = data.find(d => d.id === userSettings.active_discipline_id) || null;
-            }
+        // 1. Device or User-specific localStorage for returning users
+        const userSavedDiscId = currentUser ? localStorage.getItem(`david_study_last_disc_${uKey}`) : null;
+        const deviceSavedDiscId = localStorage.getItem('david_study_last_discipline') || localStorage.getItem('david_study_active_discipline');
+        const candidateDiscId = userSavedDiscId || deviceSavedDiscId;
+
+        if (candidateDiscId) {
+          targetDisc = data.find(d => d.id === candidateDiscId) || null;
+        }
+
+        // 2. Cloud fallback for returning logged-in users
+        if (!targetDisc && currentUser) {
+          const { data: userSettings } = await supabase
+            .from('study_user_settings')
+            .select('active_discipline_id')
+            .eq('id', uKey)
+            .maybeSingle();
+          if (userSettings?.active_discipline_id) {
+            targetDisc = data.find(d => d.id === userSettings.active_discipline_id) || null;
           }
         }
 
-        // For first users (or no saved history): always open the most recently added one (data[0])!
+        // 3. For first users (or no saved history): always open the most recently added one (data[0])!
         if (!targetDisc) {
           targetDisc = data[0];
         }
 
+        applyDisciplineTheme(targetDisc.id);
         setCurrentDiscipline(targetDisc);
       }
     } finally {
@@ -240,25 +264,34 @@ export const App: React.FC = () => {
       if (segData && segData.length > 0) {
         let chosenSeg: Segment | null = null;
 
+        // 1. User-specific localStorage for this discipline
         if (activeUser) {
-          // 1. Check local storage for this user and discipline
-          const savedSegId = localStorage.getItem(`david_study_last_seg_${uKey}_${disciplineId}`);
-          if (savedSegId) {
-            chosenSeg = segData.find(s => s.id === savedSegId) || null;
-          }
-
-          // 2. Cloud fallback: Find most recently updated progress for this user in this discipline
-          if (!chosenSeg && progData && progData.length > 0) {
-            const sortedByRecent = [...progData].sort((a, b) => 
-              new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
-            );
-            if (sortedByRecent[0]) {
-              chosenSeg = segData.find(s => s.id === sortedByRecent[0].segment_id) || null;
-            }
+          const userSavedSegId = localStorage.getItem(`david_study_last_seg_${uKey}_${disciplineId}`);
+          if (userSavedSegId) {
+            chosenSeg = segData.find(s => s.id === userSavedSegId) || null;
           }
         }
 
-        // 3. For first-time users or no saved history: default to the first segment of the discipline
+        // 2. Device-level localStorage for this discipline
+        if (!chosenSeg) {
+          const deviceSavedSegId = localStorage.getItem(`david_study_last_seg_${disciplineId}`) ||
+            (localStorage.getItem('david_study_last_discipline') === disciplineId ? localStorage.getItem('david_study_last_segment') : null);
+          if (deviceSavedSegId) {
+            chosenSeg = segData.find(s => s.id === deviceSavedSegId) || null;
+          }
+        }
+
+        // 3. Cloud fallback: Find most recently updated progress for this user in this discipline
+        if (!chosenSeg && progData && progData.length > 0) {
+          const sortedByRecent = [...progData].sort((a, b) => 
+            new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+          );
+          if (sortedByRecent[0]) {
+            chosenSeg = segData.find(s => s.id === sortedByRecent[0].segment_id) || null;
+          }
+        }
+
+        // 4. For first-time users on this discipline: default to the first segment of the discipline
         if (!chosenSeg) {
           chosenSeg = segData[0];
         }
@@ -266,7 +299,10 @@ export const App: React.FC = () => {
         setCurrentSegment(chosenSeg);
 
         // Check if user had a saved phase for this segment
-        const savedPhase = localStorage.getItem(`david_study_last_phase_${uKey}_${chosenSeg.id}`);
+        const savedPhase = (activeUser ? localStorage.getItem(`david_study_last_phase_${uKey}_${chosenSeg.id}`) : null) ||
+          localStorage.getItem(`david_study_last_phase_${chosenSeg.id}`) ||
+          localStorage.getItem('david_study_last_phase');
+
         if (savedPhase && ['text', 'quiz', 'workbook', 'flashcards'].includes(savedPhase)) {
           setActivePhase(savedPhase as any);
         }
@@ -282,19 +318,6 @@ export const App: React.FC = () => {
   useEffect(() => {
     if (!currentSegment) return;
     fetchSegmentDetails(currentSegment.id);
-
-    const prog = progressMap[currentSegment.id];
-    if (prog?.completed) {
-      setActivePhase('text');
-    } else if (prog?.workbook_passed) {
-      setActivePhase('flashcards');
-    } else if (prog?.quiz_passed) {
-      setActivePhase('workbook');
-    } else if (prog?.text_completed) {
-      setActivePhase('quiz');
-    } else {
-      setActivePhase('text');
-    }
   }, [currentSegment?.id]);
 
   const fetchSegmentDetails = async (segmentId: string) => {
@@ -668,17 +691,44 @@ export const App: React.FC = () => {
     ? Math.round((completedSegmentsCount / segments.length) * 100)
     : 0;
 
+  const handleSelectDiscipline = (d: Discipline) => {
+    applyDisciplineTheme(d.id);
+    setCurrentDiscipline(d);
+    localStorage.setItem('david_study_last_discipline', d.id);
+    localStorage.setItem('david_study_active_discipline', d.id);
+    if (currentUser) {
+      const uKey = normalizeUserKey(currentUser);
+      localStorage.setItem(`david_study_last_disc_${uKey}`, d.id);
+      supabase.from('study_user_settings').update({
+        active_discipline_id: d.id,
+        updated_at: new Date().toISOString()
+      }).eq('id', uKey).then(() => {});
+    }
+  };
+
+  const handleSelectSegment = (seg: Segment) => {
+    setCurrentSegment(seg);
+    localStorage.setItem('david_study_last_segment', seg.id);
+    if (currentDiscipline) {
+      localStorage.setItem(`david_study_last_seg_${currentDiscipline.id}`, seg.id);
+      if (currentUser) {
+        const uKey = normalizeUserKey(currentUser);
+        localStorage.setItem(`david_study_last_seg_${uKey}_${currentDiscipline.id}`, seg.id);
+      }
+    }
+  };
+
   const currentSegmentProgress = currentSegment ? progressMap[currentSegment.id] : undefined;
   const currentSegmentIdx = currentSegment ? segments.findIndex(s => s.id === currentSegment.id) : -1;
   const hasNextSegment = currentSegmentIdx !== -1 && currentSegmentIdx + 1 < segments.length;
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#fdfbf7' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--bg-primary)' }}>
       {/* Top Header */}
       <Header
         disciplines={disciplines}
         currentDiscipline={currentDiscipline}
-        onSelectDiscipline={(d) => setCurrentDiscipline(d)}
+        onSelectDiscipline={handleSelectDiscipline}
         onCreateDiscipline={handleCreateDiscipline}
         completionPercentage={completionPercentage}
         preparationScore={preparationScore}
@@ -698,13 +748,13 @@ export const App: React.FC = () => {
       <main style={{ flex: 1, maxWidth: '960px', width: '100%', margin: '0 auto', padding: '0.85rem clamp(0.5rem, 2vw, 1rem) 5.5rem' }}>
         {loading && disciplines.length === 0 ? (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '300px', gap: '0.75rem' }}>
-            <Loader2 size={32} color="#78350f" className="animate-spin" />
+            <Loader2 size={32} color="var(--brand-brown)" className="animate-spin" />
             <p style={{ color: '#78716c', fontWeight: 600, fontSize: '0.9rem' }}>Loading study guide...</p>
           </div>
         ) : !currentDiscipline ? (
           <div style={{ textAlign: 'center', padding: '3.5rem 1rem' }}>
             <BookOpen size={44} color="#a8a29e" style={{ margin: '0 auto 0.75rem' }} />
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#451a03' }}>No Disciplines Found</h2>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--brand-brown-dark)' }}>No Disciplines Found</h2>
             <p style={{ color: '#78716c', maxWidth: '380px', margin: '0.5rem auto 1.25rem', fontSize: '0.875rem' }}>
               Create your study discipline or load content to begin.
             </p>
@@ -733,7 +783,7 @@ export const App: React.FC = () => {
             <SegmentSelector
               segments={segments}
               currentSegment={currentSegment}
-              onSelectSegment={(seg) => setCurrentSegment(seg)}
+              onSelectSegment={handleSelectSegment}
               onDoubleClickSegment={handleDoubleClickSegment}
               progressMap={progressMap}
               unlockAll={unlockAll}
@@ -747,11 +797,11 @@ export const App: React.FC = () => {
                   display: 'flex',
                   alignItems: 'center',
                   backgroundColor: '#ffffff',
-                  border: '1px solid #e7e2d7',
+                  border: '1px solid var(--border-light)',
                   borderRadius: '10px',
                   padding: '0.3rem',
                   gap: '0.25rem',
-                  boxShadow: '0 1px 3px rgba(120, 53, 15, 0.02)'
+                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.02)'
                 }}>
                   {/* Phase 1 Tab */}
                   <button
@@ -765,8 +815,8 @@ export const App: React.FC = () => {
                       padding: '0.48rem 0.4rem',
                       borderRadius: '8px',
                       border: 'none',
-                      backgroundColor: activePhase === 'text' ? '#fef3c7' : 'transparent',
-                      color: activePhase === 'text' ? '#78350f' : '#78716c',
+                      backgroundColor: activePhase === 'text' ? 'var(--accent-amber-light)' : 'transparent',
+                      color: activePhase === 'text' ? 'var(--brand-brown)' : '#78716c',
                       fontWeight: activePhase === 'text' ? 800 : 600,
                       fontSize: '0.8rem',
                       cursor: 'pointer',
@@ -799,9 +849,9 @@ export const App: React.FC = () => {
                       padding: '0.48rem 0.4rem',
                       borderRadius: '8px',
                       border: 'none',
-                      backgroundColor: activePhase === 'quiz' ? '#fef3c7' : 'transparent',
+                      backgroundColor: activePhase === 'quiz' ? 'var(--accent-amber-light)' : 'transparent',
                       color: activePhase === 'quiz'
-                        ? '#78350f'
+                        ? 'var(--brand-brown)'
                         : (currentSegmentProgress?.text_completed || unlockAll)
                         ? '#78716c'
                         : '#c7c2b6',
@@ -837,9 +887,9 @@ export const App: React.FC = () => {
                       padding: '0.48rem 0.4rem',
                       borderRadius: '8px',
                       border: 'none',
-                      backgroundColor: activePhase === 'workbook' ? '#fef3c7' : 'transparent',
+                      backgroundColor: activePhase === 'workbook' ? 'var(--accent-amber-light)' : 'transparent',
                       color: activePhase === 'workbook'
-                        ? '#78350f'
+                        ? 'var(--brand-brown)'
                         : (currentSegmentProgress?.quiz_passed || unlockAll)
                         ? '#78716c'
                         : '#c7c2b6',
@@ -875,9 +925,9 @@ export const App: React.FC = () => {
                       padding: '0.48rem 0.4rem',
                       borderRadius: '8px',
                       border: 'none',
-                      backgroundColor: activePhase === 'flashcards' ? '#fef3c7' : 'transparent',
+                      backgroundColor: activePhase === 'flashcards' ? 'var(--accent-amber-light)' : 'transparent',
                       color: activePhase === 'flashcards'
-                        ? '#78350f'
+                        ? 'var(--brand-brown)'
                         : (currentSegmentProgress?.workbook_passed || (currentSegmentProgress?.quiz_passed && currentSegmentWorkbookExercises.length === 0) || unlockAll)
                         ? '#78716c'
                         : '#c7c2b6',

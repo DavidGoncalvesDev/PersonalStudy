@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Discipline } from '../types';
 import { ChevronDown, Plus, Check, BookOpen, Flame, Edit3, User } from 'lucide-react';
 import { playClickSound } from '../utils/soundEffects';
+import { getDisciplineTheme } from '../utils/theme';
 
 interface HeaderProps {
   disciplines: Discipline[];
@@ -208,21 +209,29 @@ export const Header: React.FC<HeaderProps> = ({
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.35rem',
+                  gap: '0.4rem',
                   padding: '0.32rem 0.65rem',
-                  backgroundColor: '#fffbeb',
-                  border: '1px solid #d6cebf',
+                  backgroundColor: 'var(--accent-cream)',
+                  border: '1.5px solid var(--border-light)',
                   borderRadius: '8px',
-                  color: '#78350f',
+                  color: 'var(--brand-brown)',
                   fontWeight: 700,
                   fontSize: '0.78rem',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease'
                 }}
               >
+                <span style={{
+                  width: '8px',
+                  height: '8px',
+                  borderRadius: '50%',
+                  backgroundColor: 'var(--brand-brown)',
+                  flexShrink: 0
+                }} />
                 <span style={{ maxWidth: '130px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {currentDiscipline ? currentDiscipline.name : 'Select Course'}
                 </span>
-                <ChevronDown size={13} color="#92400e" />
+                <ChevronDown size={13} color="var(--brand-brown-light)" />
               </button>
 
               {dropdownOpen && (
@@ -230,47 +239,63 @@ export const Header: React.FC<HeaderProps> = ({
                   position: 'absolute',
                   right: 0,
                   marginTop: '0.35rem',
-                  width: '230px',
+                  width: '240px',
                   backgroundColor: '#ffffff',
-                  border: '1.5px solid #e7e2d7',
+                  border: '1.5px solid var(--border-light)',
                   borderRadius: '10px',
-                  boxShadow: '0 10px 25px rgba(120, 53, 15, 0.1)',
+                  boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
                   padding: '0.35rem',
                   zIndex: 50
                 }}>
                   <div style={{ padding: '0.35rem 0.5rem', fontSize: '0.68rem', fontWeight: 800, color: '#a8a29e', textTransform: 'uppercase' }}>
-                    Disciplines
+                    Disciplines & Themes
                   </div>
 
-                  {disciplines.map((d) => (
-                    <button
-                      key={d.id}
-                      onClick={() => {
-                        onSelectDiscipline(d);
-                        setDropdownOpen(false);
-                      }}
-                      style={{
-                        width: '100%',
-                        textAlign: 'left',
-                        padding: '0.45rem 0.6rem',
-                        borderRadius: '6px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        backgroundColor: currentDiscipline?.id === d.id ? '#fef3c7' : 'transparent',
-                        color: currentDiscipline?.id === d.id ? '#78350f' : '#292524',
-                        fontWeight: currentDiscipline?.id === d.id ? 700 : 500,
-                        fontSize: '0.82rem',
-                        border: 'none',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      <span>{d.name}</span>
-                      {currentDiscipline?.id === d.id && <Check size={14} color="#78350f" />}
-                    </button>
-                  ))}
+                  {disciplines.map((d) => {
+                    const dTheme = getDisciplineTheme(d.id);
+                    const isSelected = currentDiscipline?.id === d.id;
+                    return (
+                      <button
+                        key={d.id}
+                        onClick={() => {
+                          onSelectDiscipline(d);
+                          setDropdownOpen(false);
+                        }}
+                        style={{
+                          width: '100%',
+                          textAlign: 'left',
+                          padding: '0.45rem 0.6rem',
+                          borderRadius: '6px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          backgroundColor: isSelected ? dTheme.accentLight : 'transparent',
+                          color: isSelected ? dTheme.primary : '#292524',
+                          fontWeight: isSelected ? 700 : 500,
+                          fontSize: '0.82rem',
+                          border: 'none',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', overflow: 'hidden' }}>
+                          <span style={{
+                            width: '10px',
+                            height: '10px',
+                            borderRadius: '50%',
+                            backgroundColor: dTheme.primary,
+                            flexShrink: 0,
+                            boxShadow: isSelected ? `0 0 0 2px ${dTheme.primaryLight}` : 'none'
+                          }} />
+                          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {d.name}
+                          </span>
+                        </div>
+                        {isSelected && <Check size={14} color={dTheme.primary} />}
+                      </button>
+                    );
+                  })}
 
-                  <div style={{ height: '1px', backgroundColor: '#e7e2d7', margin: '0.3rem 0' }} />
+                  <div style={{ height: '1px', backgroundColor: 'var(--border-light)', margin: '0.3rem 0' }} />
 
                   <button
                     onClick={() => {
@@ -286,7 +311,7 @@ export const Header: React.FC<HeaderProps> = ({
                       alignItems: 'center',
                       gap: '0.4rem',
                       backgroundColor: 'transparent',
-                      color: '#78350f',
+                      color: 'var(--brand-brown)',
                       fontWeight: 700,
                       fontSize: '0.8rem',
                       border: 'none',
@@ -447,22 +472,29 @@ export const Header: React.FC<HeaderProps> = ({
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.25rem',
+                gap: '0.35rem',
                 padding: '0.32rem 0.55rem',
-                backgroundColor: '#fffbeb',
-                border: '1px solid #d6cebf',
+                backgroundColor: 'var(--accent-cream)',
+                border: '1.5px solid var(--border-light)',
                 borderRadius: '8px',
-                color: '#78350f',
+                color: 'var(--brand-brown)',
                 fontWeight: 700,
                 fontSize: '0.74rem',
                 cursor: 'pointer',
-                maxWidth: '110px'
+                maxWidth: '125px'
               }}
             >
+              <span style={{
+                width: '7px',
+                height: '7px',
+                borderRadius: '50%',
+                backgroundColor: 'var(--brand-brown)',
+                flexShrink: 0
+              }} />
               <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {currentDiscipline ? currentDiscipline.code || currentDiscipline.name : 'Course'}
               </span>
-              <ChevronDown size={11} color="#92400e" />
+              <ChevronDown size={11} color="var(--brand-brown-light)" />
             </button>
 
             {dropdownOpen && (
@@ -470,44 +502,59 @@ export const Header: React.FC<HeaderProps> = ({
                 position: 'absolute',
                 right: 0,
                 marginTop: '0.35rem',
-                width: '210px',
+                width: '220px',
                 backgroundColor: '#ffffff',
-                border: '1.5px solid #e7e2d7',
+                border: '1.5px solid var(--border-light)',
                 borderRadius: '10px',
-                boxShadow: '0 10px 25px rgba(120, 53, 15, 0.15)',
+                boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
                 padding: '0.35rem',
                 zIndex: 60
               }}>
                 <div style={{ padding: '0.3rem 0.5rem', fontSize: '0.65rem', fontWeight: 800, color: '#a8a29e', textTransform: 'uppercase' }}>
-                  Disciplines
+                  Disciplines & Themes
                 </div>
-                {disciplines.map((d) => (
-                  <button
-                    key={d.id}
-                    onClick={() => {
-                      onSelectDiscipline(d);
-                      setDropdownOpen(false);
-                    }}
-                    style={{
-                      width: '100%',
-                      textAlign: 'left',
-                      padding: '0.4rem 0.5rem',
-                      borderRadius: '6px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      backgroundColor: currentDiscipline?.id === d.id ? '#fef3c7' : 'transparent',
-                      color: currentDiscipline?.id === d.id ? '#78350f' : '#292524',
-                      fontWeight: currentDiscipline?.id === d.id ? 700 : 500,
-                      fontSize: '0.78rem',
-                      border: 'none',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    <span>{d.name}</span>
-                    {currentDiscipline?.id === d.id && <Check size={13} color="#78350f" />}
-                  </button>
-                ))}
+                {disciplines.map((d) => {
+                  const dTheme = getDisciplineTheme(d.id);
+                  const isSelected = currentDiscipline?.id === d.id;
+                  return (
+                    <button
+                      key={d.id}
+                      onClick={() => {
+                        onSelectDiscipline(d);
+                        setDropdownOpen(false);
+                      }}
+                      style={{
+                        width: '100%',
+                        textAlign: 'left',
+                        padding: '0.4rem 0.5rem',
+                        borderRadius: '6px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        backgroundColor: isSelected ? dTheme.accentLight : 'transparent',
+                        color: isSelected ? dTheme.primary : '#292524',
+                        fontWeight: isSelected ? 700 : 500,
+                        fontSize: '0.78rem',
+                        border: 'none',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', overflow: 'hidden' }}>
+                        <span style={{
+                          width: '9px',
+                          height: '9px',
+                          borderRadius: '50%',
+                          backgroundColor: dTheme.primary,
+                          flexShrink: 0
+                        }} />
+                        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {d.name}
+                        </span>
+                      </div>
+                      {isSelected && <Check size={13} color={dTheme.primary} />}
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>
