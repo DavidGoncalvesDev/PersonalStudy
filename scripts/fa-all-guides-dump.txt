@@ -1,0 +1,347 @@
+# Complete Text Guide for Financial Analysis & Management Control
+
+
+
+================================================================================
+SEGMENT 1: Accounting Foundations & Double Entry (fa-accounting-foundations)
+SUBTITLE: Accounting principles, account families, debit and credit logic, and transaction recording.
+================================================================================
+
+# Accounting Foundations & Double Entry
+
+## Accounting as a decision system
+Accounting records economic events in a consistent structure so owners, managers, lenders and investors can understand a company’s position and performance. Financial analysis starts with reliable records: if an event is classified in the wrong period or account, every later statement and ratio may be misleading. Portuguese and European reporting uses standardized rules to support consistency and comparison.
+
+### Core accounting principles
+The accrual or specialization principle recognizes income when earned and costs when incurred, even when cash moves in another period. Substance over form asks the accountant to reflect the economic reality of a transaction, not only its legal wording. Historical cost records an acquired asset initially at the cost paid or incurred, subject to later accounting adjustments. Relevance, reliability and comparability help users judge whether reported information is useful.
+
+### Accounts and the accounting equation
+An account groups movements of one economic kind. Balance-sheet accounts describe assets, liabilities and equity at a date; income-statement accounts collect revenue and expenses over a period. The balance-sheet identity is $Assets = Liabilities + Equity$. Revenue and expenses affect profit, and profit ultimately affects equity.
+
+### Debits, credits and double entry
+Every transaction has equal debit and credit amounts. Debits increase assets and expenses; credits increase liabilities, equity and revenue. A credit is not inherently a cash inflow, and a debit is not inherently a cash outflow. For example, invoicing a customer for €1,000 records a debit to receivables and a credit to revenue. Collecting that invoice later debits cash and credits receivables, with no new revenue.
+
+## From economic event to standardized account
+
+The lectures place accounting inside Portugal’s standardization framework. Standardized accounting rules provide a common structure for recording and comparing organizations across time and between firms. The materials refer to the Portuguese accounting normalization system and its historical chart-of-accounts framework, the POC; the practical lesson is that a company uses an organized chart of accounts rather than inventing labels each time. The account has a title identifying the kind of resource, claim, income or cost, and extensions that record individual movements.
+
+The basic qualitative aims are that information should be relevant to a decision, reliable enough to trust, understandable to its intended users and comparable across periods or firms. Historical cost records an acquired asset using its purchase or production cost, while accrual accounting places transactions in the period in which the economic activity occurs. These principles work together: standardization makes entries comparable, and period attribution makes them meaningful.
+
+### Worked transaction sequence
+
+Suppose a firm buys €1,000 of inventory, paying €500 now and owing €500. The entry is debit Inventory €1,000, credit Cash €500 and credit Accounts Payable €500. When it later sells the goods for €1,500 cash, record debit Cash €1,500 and credit Revenue €1,500. Separately recognize debit COGS €1,000 and credit Inventory €1,000. The gross profit is €500. The sale creates revenue and a cost; neither entry is the same thing as the cash receipt alone.
+
+This is the practical test for every entry: identify what happened, select the accounts affected, determine which balances increased or decreased, then make total debits equal total credits. A balanced entry is necessary, but the classification and period must also be correct.
+
+================================================================================
+SEGMENT 2: Inventory Valuation & Period-End Adjustments (fa-period-end-adjustments)
+SUBTITLE: Cost-flow assumptions, depreciation, provisions, accruals, deferrals and tax.
+================================================================================
+
+# Inventory Valuation & Period-End Adjustments
+
+## Why closing entries matter
+Provisional accounts often omit costs already consumed, revenues already earned, or changes in asset value. Period-end operations align the accounts with the period’s economic activity before statements are prepared. The uploaded lectures emphasize depreciation, provisions, accruals and deferments, inventory measurement and income tax.
+
+### Inventory cost methods
+When identical items are acquired at different prices, a cost-flow assumption determines which costs remain in inventory and which flow into cost of goods sold (COGS). FIFO assigns the earliest costs to items sold, leaving more recent costs in ending inventory. LIFO assigns the latest costs to sold units; the lecture compares it as an analytical method. Weighted average cost (WAC) divides total cost available by total units available. Under rising purchase prices, the methods can report different COGS and gross margins even when physical sales are identical.
+
+### Depreciation and provisions
+Depreciation allocates the cost of a tangible asset across its useful life. If an asset costs €12,000, has no residual value and is used for four years on a straight-line basis, annual depreciation is €3,000. Depreciation reduces profit and the carrying amount of the asset, but does not itself use cash in the period. A provision recognizes an estimated obligation or loss when the relevant conditions warrant it; it should not be confused with cash set aside in a separate bank account.
+
+### Accruals, deferrals and tax
+An accrued salary earned by employees but unpaid at year end is an expense and liability. Prepaid insurance used during the year becomes an expense and reduces the prepaid asset. Deferred revenue received before delivery remains a liability until earned. After adjustments, income tax is applied to the relevant pre-tax result using the rate supplied by the case.
+
+## Inventory, estimates and the close
+
+Inventory cost-flow assumptions change the allocation between COGS and ending inventory, even when the physical units sold are unchanged. The class keyboard example has 1,000 keyboards available: 250 at €6.50, 600 at €5.70 and 150 at €5.00. The weighted average unit cost is $(250×6.50 + 600×5.70 + 150×5.00)/1,000 = €5.80$. FIFO assigns the oldest acquisition costs to goods sold; LIFO assigns the latest costs to goods sold in the comparison shown in the lecture. The resulting COGS and gross margins differ. The analyst must state the convention and not compare figures calculated under different assumptions as if they were identical.
+
+### Period-end adjustments step by step
+
+For straight-line depreciation, subtract any residual value from cost and divide by useful life. A €12,000 asset with zero residual value and a four-year life generates €3,000 depreciation each year. Debit Depreciation Expense and credit Accumulated Depreciation. The expense lowers profit and accumulated depreciation lowers the asset’s net carrying amount; neither side represents a new cash payment in the depreciation year. A provision is an estimate of an obligation or expected loss, such as a doubtful receivable. It is not money placed in a separate bank account.
+
+Accruals record activity already earned or incurred but not yet settled in cash. Deferrals postpone revenue or expense recognition when cash or billing precedes delivery or consumption. The Byte Bakery case asks students to adjust depreciation, insurance used, accrued salaries and deferred revenue before calculating tax. The sequence matters: make all accounting adjustments first, compute adjusted earnings before tax, and only then apply the case’s tax rate. Finish by checking the balance sheet equation and whether the adjustments explain cash movement.
+
+================================================================================
+SEGMENT 3: Balance Sheet & Income Statement (fa-balance-income-statements)
+SUBTITLE: Position at a date, performance over a period, statement structure and margin analysis.
+================================================================================
+
+# Balance Sheet & Income Statement
+
+## Position and performance answer different questions
+The balance sheet is a snapshot of resources and claims at a specified date. It classifies assets, liabilities and equity and must satisfy $Assets = Liabilities + Equity$. Assets may be current, such as cash, receivables and inventory, or long-term, such as buildings and equipment. Liabilities distinguish obligations such as accounts payable and loans; equity represents the residual interest after liabilities.
+
+### Income statement
+The income statement reports revenues and expenses over a period. Revenue may arise from a company’s core sales or from other sources. Expenses include COGS and operating costs such as salaries, utilities, depreciation and provisions. Gross profit equals revenue minus COGS. EBIT measures operating profit before interest and tax; EBT subtracts interest; net income subtracts tax. These subtotals reveal where performance changes occur.
+
+### Linking the statements
+Net income increases retained earnings unless distributions or other equity movements intervene. Accrual sales can increase receivables before cash collection. Depreciation reduces profit and the carrying amount of fixed assets without an equal cash payment at that time. Therefore, positive net income does not guarantee positive operating cash flow. Dividends reduce cash and equity but are not an operating expense on the income statement.
+
+### Reading statements carefully
+A statement is a structured representation, not a complete explanation of business quality. Accounting estimates, timing, business models and industry conditions affect interpretation. Compare multiple periods and examine the notes and cash-flow statement before concluding that a rise in sales means a healthier company.
+
+## Reading the statements as one model
+
+The lecture distinguishes a balance sheet at a date from an income statement over a period. On the balance sheet, current assets include cash, receivables and inventory; longer-lived resources include equipment and buildings. Liabilities include supplier balances, accruals and loans. Equity is the residual claim: assets less liabilities. The income statement begins with sales, subtracts COGS to obtain gross profit, then operating expenses to reach EBIT, interest to reach EBT, and tax to reach net income. Keep the subtotals separate because each answers a different question about the business.
+
+### DataVision worked close
+
+The source case begins with provisional Year 2 sales of €500,000, COGS of €300,000, salaries of €90,000, other operating costs of €48,000 and interest of €8,000. The close adds €20,000 depreciation, €5,000 accrued bonuses, reverses €15,000 of revenue for work not delivered until Year 3, and records €4,000 expected bad debt. Final sales are €485,000. Gross profit is €185,000. EBIT is €18,000 after salaries of €95,000, other costs of €48,000, depreciation of €20,000 and bad-debt expense of €4,000. EBT is €10,000 after interest; tax at 21% is €2,100; net income is €7,900.
+
+The closing balance sheet records accrued salaries €5,000, deferred revenue €15,000 and tax payable €2,100. The source case gives total assets of €356,000 and uses equity as the residual after known liabilities because the information is incomplete. That residual is a balancing identity, not evidence that the equity estimate is independently verified. When evidence is missing, label the limitation instead of inventing a figure.
+
+================================================================================
+SEGMENT 4: Cash Flow & Integrated Reporting (fa-cash-flow-integration)
+SUBTITLE: Operating, investing and financing cash flows, free cash flow and statement reconciliation.
+================================================================================
+
+# Cash Flow & Integrated Reporting
+
+## Profit is not cash
+The cash-flow statement explains cash receipts and payments during a period and complements the balance sheet and income statement. It groups flows into operating, investing and financing activities. The closing cash balance should reconcile to opening cash plus the net change across those sections.
+
+### Operating, investing and financing
+Operating flows arise from core business and working capital. Under the indirect approach shown in the lecture, adjusted net income is reconciled for non-cash items and changes in amounts due from customers or to suppliers. An increase in receivables generally uses cash relative to revenue; an increase in payables generally preserves cash relative to expense. Investing flows include purchases or disposals of fixed assets. Financing flows include borrowing, repayment and capital raised.
+
+### Free cash flow
+The course examples calculate free cash flow as operating cash flow less investment cash flow used for investment. A fixed-asset purchase is a cash outflow even when its accounting expense is spread through future depreciation. Financing flows are excluded from the unlevered operating cash flow used in a DCF. The exact definition must be kept consistent across forecast periods and discount rates.
+
+### Integrated statement checks
+A useful close produces a balanced balance sheet, an income statement with period profit, and a cash-flow statement that explains the movement in cash. Challenge cases in the supplied slides ask students to apply depreciation, insurance expiry, accrued salaries, deferred revenue and tax before preparing all three statements. A mismatch is a clue to revisit assumptions and entries, not an invitation to insert an unexplained balancing number.
+
+## A full profit-to-cash reconciliation
+
+The challenge slides show why the three statements must agree. Company ABC’s 2025 close reports net loss of €219,165, depreciation of €66,665, provisions of €80,000, receivables of €830,000, inventory of €930,000, payables of €870,000, other liabilities of €50,000, fixed equipment of €445,000 and financing raised through €1,050,000 loans plus €500,000 share capital. If opening operating balances are zero, operating cash flow by the indirect bridge is approximately $-219,165 + 66,665 + 80,000 - 830,000 - 930,000 + 870,000 + 50,000 = -€912,500$. The net fixed-asset investment is €445,000, so investing cash flow is −€445,000. Financing cash flow is €1,550,000. Net cash movement is €192,500, matching the reported closing cash.
+
+This reconciliation makes several signs intuitive. Depreciation and the non-cash provision are added back to profit. Growth in receivables and inventory absorbs cash. Growth in payables and other liabilities temporarily supplies cash. Buying equipment is an investing outflow. Borrowing and issuing shares are financing inflows, not revenue.
+
+### Cash-flow checks
+
+The closing cash in the statement of cash flows must match cash on the balance sheet. Free cash flow in the course examples is operating cash flow less fixed-asset investment. For a valuation, remove financing flows from the operating cash-flow stream before discounting unlevered cash flow at WACC. If the bridge fails, revisit opening balances, working-capital movements, non-cash entries and investment amounts instead of inserting an unexplained plug.
+
+================================================================================
+SEGMENT 5: Common-Size, Trend & Comparative Analysis (fa-common-size-trends)
+SUBTITLE: Vertical and horizontal analysis, time trends, peer comparisons and interpretation limits.
+================================================================================
+
+# Common-Size, Trend & Comparative Analysis
+
+## Making statements comparable
+Absolute amounts are difficult to compare when firms differ in size or when a firm changes scale over time. Common-size analysis expresses line items as percentages of a common base. In an income statement, sales are normally the base; in a balance sheet, total assets are a common base. This vertical analysis highlights composition, such as the share of sales consumed by COGS.
+
+### Horizontal and trend analysis
+Horizontal analysis compares amounts across periods, often using both currency changes and percentage changes. Trend analysis extends this comparison across several years so direction and persistence become visible. The financial-ratio lecture notes that two years can show change, while three to five years often provide a better view of trends.
+
+### Comparisons need context
+A company can be compared with an industry average or relevant competitors, but accounting policies, business models, seasonality and market positions may differ. Ratios and common-size statements are not self-explanatory. The Joe’s Gadgets case combines ratios, common-size statements and industry averages to identify strengths and weaknesses rather than treating one metric as a verdict.
+
+### A disciplined reading sequence
+Start with revenue, margins and statement composition, then examine working capital, debt, cash flow and returns. Ask whether a change reflects operations, investment, funding, timing or a denominator effect. Rising receivables can make their common-size share increase even while sales also rise. A fall in fixed assets as a percentage of total assets may result from a rapid increase in current assets, not from asset disposal.
+
+## Trend and peer analysis in practice
+
+Vertical analysis divides each income-statement item by sales and each balance-sheet item by total assets. Horizontal analysis compares both the amount and percentage change between periods. A common-size percentage can move because its numerator changed, because its denominator changed faster, or both. For example, receivables can rise as a share of assets because credit sales grew, because collection slowed, or because other assets shrank. The percentage identifies a question; it does not settle the cause.
+
+The lecture recommends three to five years for identifying trends where available. Two periods show movement but may not distinguish a trend from normal fluctuation. Quarterly figures require seasonal comparisons: compare the same quarter across years when sales peak in a particular season. A trend can also change suddenly, so extrapolation is not a forecast guarantee.
+
+### Joe’s Gadgets common-size example
+
+In Joe’s Gadgets, COGS rises from 40% of sales in 2016 to 55% in 2017, while S&A falls from 20% to 17.5%. EBIT margin declines from 26.7% to 15%; net margin declines from 14% to about 5.25%. On the balance sheet, receivables and inventory each rise from 11.8% to 18.1% of assets. These figures point to cost pressure and working-capital questions. The peer comparison shows whether the issue may be industry-wide, but comparability can be weak for conglomerates, dominant firms or companies with different accounting choices and business mixes. State which observation is evidence and which explanation remains a hypothesis.
+
+================================================================================
+SEGMENT 6: Liquidity & Activity Ratios (fa-liquidity-activity-ratios)
+SUBTITLE: Short-term obligations, current and quick ratios, working-capital efficiency and asset turnover.
+================================================================================
+
+# Liquidity & Activity Ratios
+
+## Short-term capacity and operating efficiency
+Liquidity ratios assess the ability to meet current obligations such as payables, accruals and short-term loans. The current ratio compares current assets with current liabilities. The lecture gives a broad rule of thumb of 1.5 to 4, while stressing that industry and strategy may justify values outside that range. A high number can also mean idle current assets.
+
+### Current and quick ratios
+The current ratio is $Current Assets / Current Liabilities$. The quick ratio removes inventory because inventory must be sold, and a credit sale may then need to be collected before it becomes cash. Thus $Quick Ratio = (Current Assets - Inventory) / Current Liabilities$ in the lecture’s simplified setup. Start-up Z’s current ratio rises from 1.08 to 1.70 across the shown forecast years, while its quick ratio is lower because it holds inventory.
+
+### Activity measures
+Inventory turnover relates COGS to inventory in the course’s chosen convention; the slides warn that other sources may use sales and may use average rather than ending inventory. Days sales outstanding estimates collection time using receivables and sales. Fixed-asset turnover and total-asset turnover relate sales to fixed assets or total assets. Higher turnover can indicate more sales per asset invested, but the appropriate level depends heavily on industry and investment needs.
+
+### Interpretation
+Use the same formula and denominator convention across periods and peers. High inventory turnover is not always better if it creates stockouts or removes product variety. High DSO can indicate slower collections, higher financing costs or more bad debt. Evaluate liquidity with cash flow and maturity information, not with a rule of thumb alone.
+
+## Formula conventions and worked activity ratios
+
+For this class, use ending balance-sheet values unless the case explicitly supplies an average-balance method. The current ratio is $Current Assets/Current Liabilities$. The quick ratio is $(Current Assets-Inventory)/Current Liabilities$. Inventory turnover is $COGS/Ending Inventory$. Days sales outstanding is $Accounts Receivable/(Sales/365)$, equivalently receivables divided by sales and multiplied by 365. Fixed-asset turnover is $Sales/Net Fixed Assets$; total-asset turnover is $Sales/Total Assets$. Always label turnover as “times” and DSO as days.
+
+### Joe’s Gadgets: collection and efficiency
+
+For 2016, Joe’s Gadgets has current assets €7.0m, inventory €2.0m and current liabilities €4.5m. Current ratio is 1.56 and quick ratio 1.11. With COGS €6m, inventory turnover is 3.0 times. Receivables of €2m and sales of €15m give DSO $2/(15/365)=48.67$ days. Fixed assets of €10m give fixed-asset turnover 1.50; total assets of €17m give total-asset turnover 0.88.
+
+In 2017, current and quick ratios are 1.58 and 1.01; inventory turnover falls to 2.75 times; DSO rises to 73 days; fixed-asset and total-asset turnover are 1.82 and 0.91. The combination suggests slower collections and weaker inventory movement even though fixed assets generate more sales. Seasonality can distort a year-end DSO: compare the balance-sheet date with the sales pattern and collection terms before blaming credit management. Higher turnover is not automatically better if it creates stockouts or lost sales.
+
+================================================================================
+SEGMENT 7: Debt & Profitability Ratios (fa-debt-profitability-ratios)
+SUBTITLE: Leverage, interest coverage, margins, ROA, ROE and the risk-return trade-off.
+================================================================================
+
+# Debt & Profitability Ratios
+
+## Financing risk and earnings power
+Debt-management ratios assess long-term obligations and the company’s capacity to service them. Total debt to total assets is $Total Debt / Total Assets$. A higher value means more asset financing comes from creditors and generally greater financial risk, although the acceptable level depends on profitability, business stability, firm size, management and sector. Total debt to equity compares creditor financing with owner financing and can exceed 1.
+
+### Interest coverage
+Times interest earned is $EBIT / Interest Expense$. It asks how many times operating earnings cover interest. The lecture says a value above 2 often provides a cushion, but coverage below 1 can persist only temporarily through asset reduction or other measures and raises concern. A backward-looking coverage ratio may look comfortable even when future earnings are deteriorating.
+
+### Profitability ratios
+Gross profit margin is $Gross Profit / Sales$ and reflects the relationship between sales and direct costs. Net profit margin is $Net Income / Sales$. Return on assets is $Net Income / Total Assets$ in the course example, while return on equity is $Net Income / Equity$. ROE measures earnings relative to shareholders’ book investment. Additional debt can raise ROE when returns exceed borrowing cost, while increasing risk and volatility.
+
+### Diagnose rather than rank blindly
+Margins and returns vary by sector and economic conditions. In Start-up Z, improving gross margin and later positive earnings coincide with higher returns, but leverage also contributes to a very high ROE. Read ROE together with debt ratios, cash flow and trend.
+
+## Formula map and leverage interpretation
+
+Use $Total Debt/Total Assets$ for debt-to-assets and $Total Debt/Equity$ for debt-to-equity. The first is generally below 1 because debt is one component of total assets’ financing; the second can exceed 1 when debt is greater than equity. Times interest earned is $EBIT/Interest Expense$. Gross profit margin is $(Sales-COGS)/Sales$; net profit margin is $Net Income/Sales$; ROA is $Net Income/Total Assets$; and ROE is $Net Income/Equity$. Keep the earnings measure and balance-sheet denominator consistent when comparing firms.
+
+Joe’s Gadgets illustrates the combined story. Debt-to-assets rises from 58.8% in 2016 to 68.0% in 2017, debt-to-equity from 142.9% to 212.8%, and interest coverage falls from 4.0 to 2.0 times. Gross margin falls from 60% to 45%, net margin from 14% to 5.25%, ROA from 12.4% to 4.76%, and ROE from 30.0% to 14.9%. The profitability decline is paired with higher leverage and less interest cushion.
+
+A high ROE is not automatically a sign of stronger operations. Debt can shrink the equity denominator and amplify returns in good periods, while fixed interest claims make a downturn more dangerous. Compare ROA and ROE, inspect operating margins, test interest coverage, and ask whether the cash-flow pattern can service debt. The lecture’s preference for TIE above 2 is a broad rule of thumb, not a universal covenant or proof of safety.
+
+================================================================================
+SEGMENT 8: Market Ratios & Integrated Diagnosis (fa-market-ratios-diagnosis)
+SUBTITLE: EPS, P/E, market-to-book, dividend yield and interpretation using the Joe’s Gadgets case.
+================================================================================
+
+# Market Ratios & Integrated Diagnosis
+
+## Market price relative to accounting measures
+Market ratios compare share price or market capitalization with earnings, book value or dividends. Earnings per share is $EPS = Net Income / Shares Outstanding$. The price-to-earnings ratio is $P/E = Share Price / EPS$ and indicates the price investors pay for each unit of current earnings. A lower P/E may look cheaper, but expected growth, risk and business quality can explain differences. The lecture’s Alphabet and Facebook example shows why comparing share prices alone is misleading.
+
+### Market-to-book and dividend yield
+Market-to-book compares market value per share with book value per share. A high ratio can reflect intangible assets not recognized on the balance sheet, expected growth or optimism. Dividend yield is annual dividends per share divided by share price. Mature cash-generative firms may distribute more, while younger firms may reinvest. A yield is not a guarantee of safety.
+
+### Integrated diagnosis
+The Joe’s Gadgets case asks students to compute liquidity, activity, debt, profitability and market ratios, prepare common-size statements, compare with industry averages and explain strengths and weaknesses. Its key lesson is that the ratios tell a connected story: worsening COGS share can compress margins; receivable and inventory growth affect cash conversion; asset turnover and leverage shape returns.
+
+### Limits and communication
+A ratio is only as useful as its numerator, denominator, accounting basis and comparison set. Negative or near-zero earnings make P/E uninformative. Book value omits some internally developed intangibles. Explain the evidence and plausible causes without treating a single metric as proof.
+
+## Market measures and the Joe’s Gadgets diagnosis
+
+The class formulas are $EPS=Net Income/Shares$, $P/E=Share Price/EPS$, $Market-to-Book=Share Price/Book Value per Share$, and $Dividend Yield=Dividend per Share/Share Price$. In Joe’s Gadgets, EPS falls from €1.05 to €0.525, while price falls from €25 to €17.50. P/E therefore rises from 23.81 to 33.33 because earnings fell proportionally faster than price. Market-to-book falls from 7.14 to 4.96 as book value per share and market price move differently; dividend yield rises from 2.0% to about 2.86% because the €0.50 dividend is divided by a lower share price.
+
+Against 2017 industry averages, Joe’s Gadgets has adequate current liquidity, but weaker inventory turnover and a longer DSO. Fixed-asset turnover is stronger. Debt ratios are riskier, interest coverage is lower, and margins and returns have declined. COGS is high versus the prior year but similar interpretation requires industry context. The dividend yield looks higher, yet debt pressure and falling earnings mean the dividend may not be sustainable.
+
+A high P/E can reflect growth expectations, but in this case it can also rise because earnings have collapsed. A high market-to-book can reflect unrecorded brands or growth; a low ratio may reflect risk or weak prospects. P/E is not meaningful with negative earnings. Dividend yield is not a guaranteed return. Explain the direction of the denominator before calling a market ratio cheap or expensive.
+
+================================================================================
+SEGMENT 9: Valuation Purpose & Relative Methods (fa-valuation-methods)
+SUBTITLE: Business value, market capitalization, revenue and earnings multiples, and method limitations.
+================================================================================
+
+# Valuation Purpose & Relative Methods
+
+## What business valuation estimates
+Business valuation estimates the economic value of a whole company or business unit for decisions such as investment, financing, acquisition or sale. Value depends on expected future benefits, risk and the claim being valued. Equity value belongs to shareholders; enterprise value represents operating value available to all capital providers before debt and other non-equity claims are deducted.
+
+### Market capitalization
+For a publicly traded company, market capitalization is share price multiplied by shares outstanding. It is an observable market value of equity at a point in time, not enterprise value. It changes with market price and does not by itself account for debt or excess cash.
+
+### Revenue and earnings multiples
+The times-revenue method applies a revenue multiple to a revenue base. The earnings-multiplier approach applies a multiple to earnings, often providing more information about profitability than revenue alone. Multiples should be selected from comparable firms and periods. They are relative methods: a market multiple reflects expectations, risk, growth, accounting and market conditions.
+
+### Choosing and communicating a method
+Relative valuation can be useful when comparable data are available, but a multiple is not an absolute answer. The lecture presents DCF as a method based on projected future cash flows and a discount rate. Use the method that matches the question, define whether the result is equity or enterprise value, disclose the inputs and test limitations.
+
+## Book value, liquidation value and relative methods
+
+The course distinguishes several valuation bases. Book value is assets less liabilities as shown on the balance sheet; it is an accounting residual, not necessarily the price a buyer would pay. Liquidation value estimates net cash from selling assets and paying liabilities now. Market capitalization is share price multiplied by shares outstanding and values public equity. A recent financing round can provide a private-company market signal, but it is tied to that round’s terms and date.
+
+The times-revenue method applies an industry- and environment-dependent revenue multiple. An earnings multiplier uses a profit measure and is more sensitive to margins and earnings quality. In the lecture example, a €50 share price divided by €5 EPS gives 10 times earnings; another firm at €65 with the same €5 EPS trades at 13 times. That is a relative comparison, not proof that either company has an absolute fair value. DCF instead forecasts cash flows and discounts for time and risk.
+
+### Match the method to the question
+
+Market capitalization is equity value. An enterprise value bridge starts from operating value, then considers cash and debt claims. Do not compare EV-based multiples with equity-based multiples without reconciling the numerator. Use multiples from genuinely comparable businesses, define the earnings or revenue period, and explain growth, risk and accounting differences. When reliable forecasts are available, DCF can make assumptions explicit; when they are not, a precise DCF can create false confidence rather than accuracy.
+
+================================================================================
+SEGMENT 10: Time Value, WACC & Discounting (fa-wacc-discounting)
+SUBTITLE: Present value, cost of equity, after-tax cost of debt, weighted average cost and NPV/IRR.
+================================================================================
+
+# Time Value, WACC & Discounting
+
+## Future cash flows in today’s terms
+Money available sooner can be invested and is generally worth more than the same amount received later. Discounting converts a future cash flow to present value: $PV_t = CF_t/(1+r)^t$, where $r$ reflects time and risk and $t$ is the number of periods. Present values can then be added when cash flows are defined consistently.
+
+### Weighted average cost of capital
+The WACC is the weighted average required return from equity and debt capital. In the course example, $WACC = (E/V)R_e + (D/V)R_d(1-T)$, where equity and debt weights sum to one, $R_e$ is the cost of equity, $R_d$ the cost of debt, and $T$ the tax rate. The after-tax debt term reflects the tax effect of interest in the model. The discount rate must match the cash flow’s risk and financing definition.
+
+### NPV and IRR
+The present value of projected cash flows is closely related to NPV. In project analysis, NPV subtracts the initial investment from the discounted future cash flows. IRR is the discount rate that makes NPV equal zero. The lecture presents IRR as an additional indicator, not a replacement for understanding cash-flow scale and assumptions.
+
+### Consistency checks
+Use end-of-year timing consistently unless the model specifies otherwise. Match unlevered cash flows with WACC and equity cash flows with the required return on equity. WACC is not simply the interest rate on the latest loan: it includes both debt and equity capital costs and the capital structure.
+
+## WACC from the Startup Z case
+
+The Startup Z example finances 65% of capital with debt costing 7.2% and 35% with equity costing 12%; the tax rate is 21%. The after-tax debt cost is $7.2%×(1-0.21)=5.688%$. WACC is $0.35×12%+0.65×5.688%=8.0%$ after rounding. This is not simply the loan rate: it weights the cost of both financing sources and reflects the debt tax effect used in the course model.
+
+### Discounting, NPV and IRR
+
+A cash flow $CF_t$ received at year end has present value $CF_t/(1+r)^t$. At 8%, €10,000 received in year 2 is worth €10,000/1.08² = about €8,573 today. Add the present values of the modeled future cash flows to get the DCF value. For a project, NPV then subtracts the initial investment. Positive NPV means the discounted inflows exceed that initial cost at the chosen required return; it does not guarantee that the forecast will occur. IRR is the rate that makes NPV equal zero.
+
+Use WACC for unlevered operating cash flows. The rate must match the period, currency, inflation basis and risk of the cash flow. A higher discount rate lowers present value; a later cash flow is discounted for more periods. The course’s project example has a positive NPV of about $2.307m$ when discounted cash flows total about $13.307m$ against an €11m initial cost.
+
+================================================================================
+SEGMENT 11: DCF Forecasts & Terminal Value (fa-dcf-terminal-value)
+SUBTITLE: Unlevered free cash flow, explicit projections, perpetuity growth and exit multiples.
+================================================================================
+
+# DCF Forecasts & Terminal Value
+
+## The two-stage DCF
+A discounted cash-flow valuation estimates value from future unlevered free cash flows. The explicit stage often forecasts about five years, supported by linked income statement, balance sheet and cash-flow assumptions. A continuing business is not assumed to disappear at the end of that horizon; cash flows after the forecast period are summarized by terminal value.
+
+### Forecasting unlevered free cash flow
+The supplied slides build free cash flow from operating cash flow less investment in fixed assets and exclude financing flows. In a more formal unlevered formulation, operating cash generated after tax and required reinvestment is available to both debt and equity providers. Keep this definition consistent with the model and its WACC.
+
+### Terminal value methods
+The perpetuity-growth method assumes mature cash flow grows at a stable long-term rate $g$ and uses $TV_n = FCF_{n+1}/(WACC-g)$, with $g < WACC$. The exit-multiple method applies a selected market multiple, such as EV/EBITDA, to a terminal operating metric. The lecture notes that exit multiples incorporate current market valuation into DCF and can dominate total value, making assumptions especially important.
+
+### Present value and sensitivity
+Discount forecast-year cash flows and terminal value back to the valuation date. Terminal value is treated as a cash flow at the end of the explicit horizon. Small changes in WACC, long-term growth, revenue growth or margins can materially alter valuation. Test reasonable scenarios and explain that the estimate depends on assumptions rather than presenting it as certain.
+
+## Terminal value with a complete worked example
+
+The lecture’s five-year exercise forecasts FCF of €10m, €12m, €15m, €18m and €20m, uses WACC of 10%, and assumes long-run growth of 3%. Discount the explicit flows: approximately €9.09m, €9.92m, €11.27m, €12.29m and €12.42m, totalling about €55.0m. Year 6 FCF is €20m×1.03=€20.6m. The perpetuity-growth terminal value at year 5 is $20.6/(0.10-0.03)=€294.3m$. Discount it five years: €294.3m/1.10⁵≈€182.7m. Enterprise value is approximately €55.0m+€182.7m=€237.7m.
+
+The exit-multiple approach instead applies a market multiple, often EV/EBITDA, to a terminal-year measure. It is intuitive when considering a future sale but imports current market pricing into a DCF. Both methods are sensitive to assumptions; terminal value often forms a large share of total value.
+
+In the Startup Z example, the course shows a WACC of 8% and forecast cash flows of −€58,000, −€18,190, €21,980, €41,980 and €41,980, producing an NPV around €7,577 under the stated assumptions. A different maintenance-investment assumption changes later FCF and valuation. This is why a forecast must specify whether investment merely expands capacity or is required to sustain existing operations.
+
+================================================================================
+SEGMENT 12: Enterprise-to-Equity Value & Valuation Challenge (fa-equity-value-challenge)
+SUBTITLE: Value bridge, non-operating assets, debt, shares outstanding and communicating the result.
+================================================================================
+
+# Enterprise-to-Equity Value & Valuation Challenge
+
+## From operating value to shareholder value
+A DCF of unlevered free cash flow discounted at WACC produces enterprise value, the value of operations available to all capital providers. To reach equity value, add non-operating assets not included in operating cash flow, such as excess cash, marketable securities and equity investments. Then subtract debt and other non-equity claims, including leases, preferred stock and non-controlling interests.
+
+### Equity value per share
+After deriving total equity value, divide by shares outstanding to estimate value per share. Keep units consistent and avoid subtracting financing claims twice. Cash must be identified as operating or excess/non-operating consistently; debt must be included in the bridge if the DCF cash flows are unlevered.
+
+### Integrated challenge workflow
+The valuation challenge in the lecture builds balance sheet, profit and loss and cash-flow projections for 2025–2030, calculates free cash flow, estimates WACC and terminal value, discounts cash flows, derives enterprise value, adds cash, subtracts loans and derives equity value. This sequence relies on internally consistent statements and assumptions.
+
+### Communicating value
+Report the forecast horizon, growth and margin assumptions, tax and reinvestment assumptions, WACC components, terminal method and bridge from enterprise to equity value. Explain the largest sensitivities and use scenarios where small assumption changes create material differences. A valuation is a reasoned estimate, not a guaranteed transaction price.
+
+## The six-step bridge in Company X
+
+Follow the source lecture’s unlevered sequence: forecast unlevered free cash flow; calculate terminal value; discount forecast flows and terminal value at WACC; add non-operating assets; subtract debt and other non-equity claims; then divide equity value by shares outstanding. In the 2024 Company X example, the discounted DCF gives enterprise value of €158.719k. Add cash of €45.473k and subtract loans of €80k: equity value is €124.192k. If there were 10,000 shares, value per share would be €12.4192. Do not include payables as debt automatically without following the model’s defined operating-liability treatment; do not subtract any claim twice.
+
+### Connect operating forecasts to the bridge
+
+The Company X model starts from five years of income statements, balance sheets and cash flows. The cash-flow statement supplies operating and investment flows; financing informs capital structure and WACC. Its listed assumptions include average growth of 4%, WACC 10%, equity weight 38%, debt weight 62%, tax 19%, return on equity 18% and interest rate 5%. The slides label the bridge components explicitly: enterprise value first, then cash added and loans subtracted to reach equity value.
+
+A defensible presentation states the forecast horizon, growth and margin assumptions, WACC inputs, terminal method and value bridge. Reconcile projected statements before valuation. Show how the result changes with WACC and terminal assumptions, and distinguish a model estimate from a transaction price.

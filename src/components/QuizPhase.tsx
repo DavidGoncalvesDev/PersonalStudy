@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Question } from '../types';
 import confetti from 'canvas-confetti';
-import { Award, Edit3, ShieldAlert, RotateCcw, ArrowRight, BookOpen, Check, X, Lightbulb, Bookmark, Copy } from 'lucide-react';
+import { Award, Edit3, ShieldAlert, RotateCcw, ArrowRight, BookOpen, Check, X, Lightbulb, Bookmark, Copy, FastForward } from 'lucide-react';
 import { renderInlineMath, MathRenderer } from './MathRenderer';
 import { playCorrectSound, playWrongSound, playSuccessChime, playClickSound } from '../utils/soundEffects';
 
@@ -32,6 +32,10 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
   const [failedOption, setFailedOption] = useState<string | null>(null);
   const [isAllCompleted, setIsAllCompleted] = useState<boolean>(false);
   const [isRetaking, setIsRetaking] = useState<boolean>(false);
+  // Missed question tracking & skip feature
+  const [lastFailedIndex, setLastFailedIndex] = useState<number | null>(null);
+  const [hasSkipped, setHasSkipped] = useState<boolean>(false);
+  const [isSkippedCompleted, setIsSkippedCompleted] = useState<boolean>(false);
   // "What am I inclined" helper state (No -> Maybe -> Yes -> unselected)
   const [inclinations, setInclinations] = useState<Record<string, 'no' | 'maybe' | 'yes'>>({});
   const [copiedQuiz, setCopiedQuiz] = useState<boolean>(false);
@@ -43,6 +47,9 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
   useEffect(() => {
     setIsRetaking(false);
     setIsAllCompleted(false);
+    setIsSkippedCompleted(false);
+    setHasSkipped(false);
+    setLastFailedIndex(null);
     setCurrentIndex(0);
     setSelectedOption(null);
     setIsFailed(false);
@@ -166,7 +173,7 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
   const currentQ = questions[currentIndex];
 
   const handleSelectOption = (optId: string) => {
-    if (isFailed || isAllCompleted) return;
+    if (isFailed || isAllCompleted || isSkippedCompleted) return;
 
     setSelectedOption(optId);
 
@@ -176,15 +183,22 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
       playCorrectSound();
       // Correct! Immediate transition without any intermediate popups or clicking "next"
       if (currentIndex === questions.length - 1) {
-        // All 12/12 in a row completed!
-        setIsAllCompleted(true);
-        playSuccessChime();
-        confetti({
-          particleCount: 120,
-          spread: 80,
-          origin: { y: 0.6 }
-        });
-        onPassQuiz(12);
+        if (hasSkipped) {
+          // Finished quiz after skipping: cannot pass yet, must take all in order from start
+          setIsSkippedCompleted(true);
+          playSuccessChime();
+        } else {
+          // All 12/12 in a row completed in order!
+          setIsAllCompleted(true);
+          setLastFailedIndex(null);
+          playSuccessChime();
+          confetti({
+            particleCount: 120,
+            spread: 80,
+            origin: { y: 0.6 }
+          });
+          onPassQuiz(12);
+        }
       } else {
         // Move instantly to the next question after a tiny 150ms visual confirmation
         setTimeout(() => {
@@ -194,10 +208,11 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
         }, 150);
       }
     } else {
-      // Wrong! Show explanation card and enforce restart
+      // Wrong! Show explanation card, record failed question position, and show skip/restart options
       playWrongSound();
       setFailedOption(optId);
       setIsFailed(true);
+      setLastFailedIndex(currentIndex);
     }
   };
 
@@ -209,6 +224,37 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
     setIsFailed(false);
     setFailedOption(null);
     setIsAllCompleted(false);
+    setIsSkippedCompleted(false);
+    setHasSkipped(false);
+    // Note: lastFailedIndex is preserved so "Skip until missed" button remains available at Q1
+    if (isAlreadyPassed) {
+      setIsRetaking(true);
+    }
+  };
+
+  const handleSkipUntilMissed = () => {
+    if (lastFailedIndex === null) return;
+    playClickSound();
+    setHasSkipped(true);
+    setCurrentIndex(lastFailedIndex);
+    setSelectedOption(null);
+    setInclinations({});
+    setIsFailed(false);
+    setFailedOption(null);
+    setIsAllCompleted(false);
+    setIsSkippedCompleted(false);
+  };
+
+  const handleGoToStart = () => {
+    playClickSound();
+    setCurrentIndex(0);
+    setSelectedOption(null);
+    setInclinations({});
+    setIsFailed(false);
+    setFailedOption(null);
+    setIsAllCompleted(false);
+    setIsSkippedCompleted(false);
+    setHasSkipped(false);
     if (isAlreadyPassed) {
       setIsRetaking(true);
     }
@@ -218,12 +264,86 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
     playClickSound();
     setIsRetaking(true);
     setIsAllCompleted(false);
+    setIsSkippedCompleted(false);
+    setHasSkipped(false);
+    setLastFailedIndex(null);
     setCurrentIndex(0);
     setSelectedOption(null);
     setInclinations({});
     setIsFailed(false);
     setFailedOption(null);
   };
+
+  // If finished quiz after skipping, prompt user to go to the start to take the quiz in order and pass
+  if (isSkippedCompleted) {
+    return (
+      <div style={{
+        backgroundColor: '#ffffff',
+        borderRadius: '12px',
+        border: '1.5px solid #d97706',
+        padding: '2.25rem 1.5rem',
+        boxShadow: '0 4px 12px rgba(217, 119, 6, 0.08)',
+        textAlign: 'center'
+      }}>
+        <div style={{
+          width: '56px',
+          height: '56px',
+          borderRadius: '50%',
+          backgroundColor: '#fffbeb',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          margin: '0 auto 1rem',
+          border: '1.5px solid #fde68a'
+        }}>
+          <RotateCcw size={28} color="#d97706" />
+        </div>
+        <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#92400e', marginBottom: '0.5rem' }}>
+          Practice Finished (Skipped Mode)
+        </h2>
+        <p style={{ color: '#44403c', fontSize: '0.92rem', maxWidth: '480px', margin: '0 auto 1.25rem', lineHeight: 1.6 }}>
+          You reached the end of the quiz after using <strong>Skip until missed</strong> (practicing from Question {lastFailedIndex !== null ? lastFailedIndex + 1 : 1} through Question {questions.length}).
+        </p>
+        <div style={{
+          backgroundColor: '#fffbeb',
+          border: '1px solid #fde68a',
+          borderRadius: '8px',
+          padding: '0.85rem 1.15rem',
+          maxWidth: '520px',
+          margin: '0 auto 1.5rem',
+          fontSize: '0.85rem',
+          color: '#78350f',
+          lineHeight: 1.5,
+          fontWeight: 600
+        }}>
+          ⚠️ <strong>Mastery Requirement:</strong> To officially master this segment and unlock Phase 3, you must get all {questions.length} questions correct in order in a single run starting from Question 1.
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+          <button
+            onClick={handleGoToStart}
+            style={{
+              padding: '0.75rem 1.75rem',
+              backgroundColor: '#78350f',
+              color: '#ffffff',
+              border: 'none',
+              borderRadius: '8px',
+              fontWeight: 800,
+              fontSize: '0.9rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.45rem',
+              boxShadow: '0 3px 8px rgba(120, 53, 15, 0.25)',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            <RotateCcw size={16} />
+            <span>Go to Start & Take Official Quiz (1-{questions.length} in Order)</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   // If already passed and user visits to review (and not actively retaking)
   if (isAllCompleted || (!isRetaking && isAlreadyPassed && !selectedOption && currentIndex === 0 && !isFailed)) {
@@ -352,8 +472,58 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
           </span>
         </div>
 
-        {/* Quick Actions: Review in Text Guide (without quiz reset) + Copy for AI + Scratchpad */}
+        {/* Quick Actions: Skip until missed + Return to start + Copy for AI + Text Guide + Scratchpad */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexWrap: 'wrap' }}>
+          {lastFailedIndex !== null && currentIndex !== lastFailedIndex && (
+            <button
+              onClick={handleSkipUntilMissed}
+              title={`Skip directly to the question you had wrong (Question ${lastFailedIndex + 1})`}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.3rem',
+                padding: '0.32rem 0.55rem',
+                borderRadius: '6px',
+                backgroundColor: '#fffbeb',
+                border: '1.5px solid #d97706',
+                color: '#92400e',
+                fontWeight: 700,
+                fontSize: '0.74rem',
+                cursor: 'pointer',
+                boxShadow: '0 1px 3px rgba(217, 119, 6, 0.15)',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <FastForward size={12} color="#b45309" />
+              <span className="desktop-only">Skip until missed (Q{lastFailedIndex + 1})</span>
+              <span className="mobile-only">Skip to Q{lastFailedIndex + 1}</span>
+            </button>
+          )}
+
+          {hasSkipped && (
+            <button
+              onClick={handleGoToStart}
+              title="Restart from Question 1 to take the quiz in order and pass"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.3rem',
+                padding: '0.32rem 0.55rem',
+                borderRadius: '6px',
+                backgroundColor: '#fffdfa',
+                border: '1px solid #d6cebf',
+                color: '#78350f',
+                fontWeight: 700,
+                fontSize: '0.74rem',
+                cursor: 'pointer'
+              }}
+            >
+              <RotateCcw size={12} color="#78350f" />
+              <span className="desktop-only">Go to Start</span>
+              <span className="mobile-only">Start</span>
+            </button>
+          )}
+
           <button
             onClick={handleCopyQuizExercise}
             title="Copy formatted exercise for AI prompt"
@@ -436,25 +606,122 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
       <div style={{
         display: 'flex',
         gap: '0.3rem',
-        marginBottom: '1.25rem'
+        marginBottom: '1rem'
       }}>
-        {questions.map((_, qIdx) => (
-          <div
-            key={`prog-step-${qIdx}`}
-            style={{
-              flex: 1,
-              height: '5px',
-              borderRadius: '3px',
-              backgroundColor: qIdx < currentIndex
-                ? '#15803d'
-                : qIdx === currentIndex
-                ? '#d97706'
-                : '#f2ede4',
-              transition: 'all 0.2s ease'
-            }}
-          />
-        ))}
+        {questions.map((_, qIdx) => {
+          let stepColor = '#f2ede4';
+          if (qIdx === currentIndex) {
+            stepColor = '#d97706';
+          } else if (qIdx < currentIndex) {
+            if (hasSkipped && lastFailedIndex !== null && qIdx < lastFailedIndex) {
+              stepColor = '#fde68a'; // Faded amber for skipped questions
+            } else {
+              stepColor = '#15803d'; // Green for answered questions
+            }
+          }
+          return (
+            <div
+              key={`prog-step-${qIdx}`}
+              style={{
+                flex: 1,
+                height: '5px',
+                borderRadius: '3px',
+                backgroundColor: stepColor,
+                transition: 'all 0.2s ease'
+              }}
+            />
+          );
+        })}
       </div>
+
+      {/* Missed Question Notice Banner (when at start/earlier questions before skipped point) */}
+      {lastFailedIndex !== null && currentIndex < lastFailedIndex && !hasSkipped && (
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '0.5rem',
+          padding: '0.5rem 0.85rem',
+          borderRadius: '8px',
+          backgroundColor: '#fffbeb',
+          border: '1.5px solid #fde68a',
+          marginBottom: '1rem',
+          fontSize: '0.8rem',
+          color: '#92400e'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontWeight: 600 }}>
+            <Bookmark size={14} color="#b45309" />
+            <span>
+              Saved missed point: <strong>Question {lastFailedIndex + 1}</strong>
+            </span>
+          </div>
+          <button
+            onClick={handleSkipUntilMissed}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              padding: '0.32rem 0.75rem',
+              borderRadius: '6px',
+              backgroundColor: '#92400e',
+              color: '#ffffff',
+              border: 'none',
+              fontSize: '0.76rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+              boxShadow: '0 1px 3px rgba(146, 64, 14, 0.2)'
+            }}
+          >
+            <FastForward size={13} />
+            <span>Skip until missed (Jump to Q{lastFailedIndex + 1})</span>
+          </button>
+        </div>
+      )}
+
+      {/* Skipped Practice Mode Alert Banner */}
+      {hasSkipped && (
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '0.5rem',
+          padding: '0.5rem 0.85rem',
+          borderRadius: '8px',
+          backgroundColor: '#fffbeb',
+          border: '1.5px solid #fde68a',
+          marginBottom: '1rem',
+          fontSize: '0.8rem',
+          color: '#92400e'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontWeight: 600 }}>
+            <FastForward size={14} color="#b45309" />
+            <span>
+              <strong>Skipped Practice Mode:</strong> Jumped to Question {lastFailedIndex !== null ? lastFailedIndex + 1 : 1}. All {questions.length} questions must be answered in order from Question 1 to pass.
+            </span>
+          </div>
+          <button
+            onClick={handleGoToStart}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              padding: '0.32rem 0.75rem',
+              borderRadius: '6px',
+              backgroundColor: '#78350f',
+              color: '#ffffff',
+              border: 'none',
+              fontSize: '0.74rem',
+              fontWeight: 700,
+              cursor: 'pointer'
+            }}
+          >
+            <RotateCcw size={12} />
+            <span>Go to Start to Pass</span>
+          </button>
+        </div>
+      )}
 
       {/* Curriculum Point Anchor if available */}
       {currentQ.section_reference && (
@@ -809,7 +1076,7 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
               </div>
             </div>
 
-            {/* Action Buttons: Copy Solution for AI + Restart Quiz */}
+            {/* Action Buttons: Copy Solution for AI + Skip until missed + Restart Quiz */}
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
               <button
                 onClick={handleCopyQuizExercise}
@@ -831,27 +1098,52 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
                 <span>{copiedQuiz ? 'Copied Full Solution!' : 'Copy Question & Solution for AI'}</span>
               </button>
 
-              <button
-                onClick={handleRestartQuiz}
-                style={{
-                  padding: '0.85rem 1.85rem',
-                  backgroundColor: '#78350f',
-                  color: '#ffffff',
-                  border: 'none',
-                  borderRadius: '8px',
-                  fontWeight: 800,
-                  fontSize: '0.92rem',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  boxShadow: '0 4px 12px rgba(120, 53, 15, 0.25)',
-                  transition: 'all 0.15s ease'
-                }}
-              >
-                <RotateCcw size={16} />
-                <span>Understood • Restart Quiz from Question 1</span>
-              </button>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
+                <button
+                  onClick={handleSkipUntilMissed}
+                  style={{
+                    padding: '0.85rem 1.35rem',
+                    backgroundColor: '#fffbeb',
+                    color: '#92400e',
+                    border: '1.5px solid #d97706',
+                    borderRadius: '8px',
+                    fontWeight: 800,
+                    fontSize: '0.9rem',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.45rem',
+                    boxShadow: '0 2px 6px rgba(217, 119, 6, 0.12)',
+                    transition: 'all 0.15s ease'
+                  }}
+                  title={`Retry Question ${currentIndex + 1} immediately in practice mode`}
+                >
+                  <FastForward size={16} color="#b45309" />
+                  <span>Skip until missed (Retry Q{currentIndex + 1})</span>
+                </button>
+
+                <button
+                  onClick={handleRestartQuiz}
+                  style={{
+                    padding: '0.85rem 1.6rem',
+                    backgroundColor: '#78350f',
+                    color: '#ffffff',
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontWeight: 800,
+                    fontSize: '0.92rem',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    boxShadow: '0 4px 12px rgba(120, 53, 15, 0.25)',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  <RotateCcw size={16} />
+                  <span>Restart Quiz from Question 1</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -67,12 +67,15 @@ PersonalStudy/
 │   └── skills/
 │       └── personal-study/
 │           └── SKILL.md                 # Primary repo skill (SSOT)
-├── materials/                           # Official course materials (slides & workbooks)
-│   ├── 01_Chapter_1_Scales_and_Distances.pdf
-│   ├── 01_Chapter_1_Introduction_Overview.pdf
-│   ├── 02_Chapter_2_Principal_Component_Analysis.pdf
-│   ├── 03_Chapter_3_Factor_Analysis.pdf
-│   ├── 04_Practical_Workbook_Exercises.pdf
+├── materials/                           # Curated academic materials organized by discipline
+│   ├── data-analysis/                   # Multivariate Data Analysis slide decks & workbooks
+│   │   ├── 01_Chapter_1_Scales_and_Distances.pdf
+│   │   ├── 01_Chapter_1_Introduction_Overview.pdf
+│   │   ├── 02_Chapter_2_Principal_Component_Analysis.pdf
+│   │   ├── 03_Chapter_3_Factor_Analysis.pdf
+│   │   └── 04_Practical_Workbook_Exercises.pdf
+│   ├── financial-analysis/              # Financial Analysis & Management Control slide decks & workbooks
+│   ├── shared/                          # Shared assets (book logo, icons)
 │   └── david_study_book_logo.png
 ├── public/                              # Public web assets (favicon, logo)
 ├── scripts/                             # Curriculum data seeds, migrations & verification tools
@@ -104,21 +107,20 @@ PersonalStudy/
 
 ---
 
-## 3. Notion Knowledge Base Integration ('David Study Workspace')
+## 3. Obsidian Knowledge Base Integration ('Obsidian Vault David Study')
 
-The Personal Study system is synchronized directly with the dedicated **David Study Workspace** inside Notion:
-
-- **Master Workspace Page**: `https://app.notion.com/p/41e0ce06915281709fd9dd076aa40cfc`
-  - **Title**: *📚 David Study — Knowledge Base & AI Hub*
-  - **Map of Content (MOC)**: Houses the six core hubs:
-    1. **Platform Architecture & System Design**: `https://app.notion.com/p/41e0ce069152815b90bdec7f334ff8da`
-    2. **Curriculum Architecture & Content Map (7 Levels)**: `https://app.notion.com/p/41e0ce06915281d2baa0e8bb303a5e36`
-    3. **The 4-Phase Mastery Pedagogy**: `https://app.notion.com/p/41e0ce06915281c89164c548ead13ad5`
-    4. **Workflows & Execution Pipelines (SOPs)**: `https://app.notion.com/p/41e0ce06915281a19326ed76ade861d8`
-    5. **Quality Guidelines & Verification Checklists**: `https://app.notion.com/p/41e0ce0691528154808df94e4fd7168d`
-    6. **Concrete Production Examples**: `https://app.notion.com/p/41e0ce069152819e910ded2434eba311`
-- **Dual-Synchronization Protocol**:
-  Whenever curriculum levels, exam rules, or architectural standards are refined, the agent must ensure that both this `SKILL.md` file and the Notion Knowledge Base pages in the David Study workspace are synchronously updated to maintain complete alignment across all AI tools and team members.
+The Personal Study system is synchronized directly with the dedicated local **Obsidian Vault** inside the repository:
+- **Vault Location**: \`C:\\Users\\david_kttkn32\\OneDrive\\Documents\\GitHub\\PersonalStudy\\Obsidian Vault David Study\`
+- **Map of Content (MOC)**: \`[[00 📚 Map of Content]]\` and \`[[David Study — Knowledge Base & AI Hub]]\`
+- **Core Knowledge Hubs**:
+  1. **Platform Architecture & System Design**: \`[[Platform Architecture & System Design]]\`
+  2. **Curriculum Architecture & Content Map (7 Levels)**: \`[[Curriculum Architecture & Content Map]]\`
+  3. **The 4-Phase Mastery Pedagogy**: \`[[The 4-Phase Mastery Pedagogy]]\`
+  4. **Workflows & Execution Pipelines (SOPs)**: \`[[Workflows & Execution Pipelines (SOPs)]]\`
+  5. **Quality Guidelines & Verification Checklists**: \`[[Quality Guidelines & Verification Checklists]]\`
+  6. **Concrete Production Examples**: \`[[Concrete Production Examples]]\`
+- **Continuity Protocol**:
+  Whenever curriculum levels, exam rules, or architectural standards are refined, the agent must ensure that both this \`SKILL.md\` file and the Obsidian Knowledge Base notes in \`Obsidian Vault David Study\` are synchronously updated to maintain complete alignment across all AI tools and team members.
 
 ---
 
@@ -161,21 +163,21 @@ The academic curriculum is structured into **7 granular, highly focused learning
 - **Discipline**: *Multivariate Data Analysis (MDA)* (`data-analysis`).
 - **Chapter 1: Foundations & Measurement Scales**:
   - **L1**: Variable Typologies & Measurement Scales (Nominal, Ordinal, Interval, Ratio, Permissible Transformations, Dummy Variable Design Matrix) (`ch1-scales-methods`).
-    - *Source Slide*: `materials/01_Chapter_1_Scales_and_Distances.pdf`
+    - *Source Slide*: `materials/data-analysis/01_Chapter_1_Scales_and_Distances.pdf`
   - **L2**: Data Manipulation Fundamentals & Distance Metrics (Sums of Squares, Covariance, Correlation, Euclidean vs Statistical vs Mahalanobis $D^2$, Metric Space Axioms) (`ch1-manipulation-distances`).
-    - *Source Slide*: `materials/01_Chapter_1_Scales_and_Distances.pdf`
+    - *Source Slide*: `materials/data-analysis/01_Chapter_1_Scales_and_Distances.pdf`
 - **Chapter 2: Principal Component Analysis (PCA)**:
   - **L3**: Geometric Foundations & Projections (12-Customer Bivariate Case, Coordinate Rotation $	heta = 43.26^circ$, Variance Maximization along $PC_1$, Orthogonal Complement $PC_2$, Centered Subspace $min(p, n-1)$) (`ch2-pca-geometry`).
-    - *Source Slide*: `materials/02_Chapter_2_Principal_Component_Analysis.pdf`
+    - *Source Slide*: `materials/data-analysis/02_Chapter_2_Principal_Component_Analysis.pdf`
   - **L4**: Covariance vs. Correlation, Loadings & Retention Diagnostics (The Scale Sensitivity Problem: $c^2$ Variance Inflation, Standardized Correlation PCA $	ext{tr}(R) = p$, 25 US Cities Food Prices, 4 Fundamental Quantities: $lambda_i, w_i, t_{hi}, l_{ji}$, Kaiser Criterion $lambda > 1$, Cattell Scree Elbow Rule, Cumulative Variance $ge 70%$, Portuguese 7 Regions Case Study, SAS `PROC PRINCOMP COV` vs Python `StandardScaler` + `PCA`) (`ch2-pca-analytical`).
-    - *Source Slide*: `materials/02_Chapter_2_Principal_Component_Analysis.pdf`
+    - *Source Slide*: `materials/data-analysis/02_Chapter_2_Principal_Component_Analysis.pdf`
 - **Chapter 3: Factor Analysis (FA)**:
   - **L5**: Latent Variable Theory & Variance Decomposition (Spearman Common Factor Model, 6-Course Grades, Total Variance Decomposition $1.0 = h_j^2 + u_j^2$, Communality vs Uniqueness, Reproduced Correlations $hat{r}_{jk}$, Reflective vs Formative Models) (`ch3-fa-theory`).
-    - *Source Slide*: `materials/03_Chapter_3_Factor_Analysis.pdf`
+    - *Source Slide*: `materials/data-analysis/03_Chapter_3_Factor_Analysis.pdf`
   - **L6**: Indeterminacies & Extraction Methods (The Two Inherent Indeterminacies: Factor Rotation & Communality Estimation Circularity, Principal Component Factoring vs Iterated Principal Axis Factoring, Residual Matrix $R_{	ext{res}} = R - hat{R}$, RMSR $le 0.08$) (`ch3-fa-extraction`).
-    - *Source Slide*: `materials/03_Chapter_3_Factor_Analysis.pdf`
+    - *Source Slide*: `materials/data-analysis/03_Chapter_3_Factor_Analysis.pdf`
   - **L7**: Sampling Adequacy, Rotations & FA vs PCA (Kaiser-Meyer-Olkin MSA Benchmarks, Bartlett Sphericity, Anti-Image Matrix, Varimax vs Quartimax vs Oblique Promax, Pattern vs Structure Matrices, Heywood Cases, 6 Systematic Differences PCA vs FA) (`ch3-fa-rotation-evaluation`).
-    - *Source Slide*: `materials/03_Chapter_3_Factor_Analysis.pdf`
+    - *Source Slide*: `materials/data-analysis/03_Chapter_3_Factor_Analysis.pdf`
 
 ---
 
@@ -211,6 +213,12 @@ Each learning unit follows a rigorous 4-phase mastery progression:
 - **Strict Reset on Failure**:
   - The user must score **12/12 in a single consecutive run**!
   - If the user selects an incorrect answer on ANY question, the quiz is reset back to Question 1 (0/12).
+- **"Skip Until Missed" & Consecutive Mastery Enforcement**:
+  - When the user fails a question, the failed index is automatically recorded (`lastFailedIndex`).
+  - A prominent **"Skip until missed (Retry QX)"** button appears directly on the failure card, in the top quiz toolbar, and in a dedicated amber notice banner above the question when restarting.
+  - Clicking this button jumps directly to the question previously missed in skipped practice mode (`hasSkipped = true`).
+  - **Strict Mastery Guardrail**: Skipping forward allows targeted practice, but does NOT unlock segment mastery. To pass the quiz and unlock Phase 3 (Workbook), all 12 questions must be answered correctly in order from Question 1 without skipping.
+  - If the student completes the quiz after skipping, a dedicated **"Practice Finished (Skipped Mode)"** completion screen is displayed with an explicit **"Go to Start & Take Official Quiz (1-12 in Order)"** button. A **"Go to Start to Pass"** button is also available at any time during skipped mode.
 - **Large, Fundamental Explanations on Failure**:
   - Failure cards display a comprehensive theoretical breakdown explaining the underlying mathematical principles, analytical derivations, why the correct answer holds, and why each distractor is invalid.
 - **"What am I inclined" Helper Feature (Elimination & Pre-decision Tag)**:
@@ -300,36 +308,22 @@ $$\text{Preparation Score} = \min(100, \text{round}(C + A + E + P + D))$$
 
 ---
 
-## 11. Standard Operating Procedures (Workflows)
+## 11. Standard Operating Procedures (Turnkey Ingestion Workflow)
 
-### SOP 1: Ingesting New Slides/Workbooks into a Discipline
-1. Copy official PDFs into `PersonalStudy/materials/`.
-2. Map lecture slides into granular, focused learning units (2 to 4 segments per chapter).
-3. Insert metadata records into `study_segments` via Supabase.
-4. Update local curriculum seed scripts (`scripts/levels-data-part1.js` or `part2.js`).
-
-### SOP 2: Formulating & Balancing Questions (Principles 1 & 2)
-1. Formulate substantive questions grounded strictly in official course slides and workbooks.
-2. Formulate 5 high-yield distractors per question targeting authentic student misconceptions.
-3. **Principle 1 (Anti-Verbosity)**: Ensure correct answers are strictly longest in at most ~16.7% of questions. For any question where the correct option is the longest, enrich 1 or 2 plausible distractors with authentic domain reasoning from the slides.
-4. **Principle 2 (Uniform Option Distribution)**: Map correct choices uniformly: exactly **2 A, 2 B, 2 C, 2 D, 2 E, 2 F** across 12-question Quizzes, and **3 A, 3 B, 3 C, 3 D, 3 E, 3 F** across 18-question Practice sets.
-5. Populate `section_reference` and `section_anchor` on every question.
-6. Seed to Supabase table `study_questions` and maintain local seed scripts.
-
-### SOP 3: Authoring Practical Workbook Exercises
-1. Extract authentic problem sets from `materials/` PDFs.
-2. Construct detailed multi-part prompt statements with concrete datasets.
-3. Write complete step-by-step worked solutions rendered in KaTeX.
-4. Seed to Supabase table `study_workbook_exercises`.
-
-### SOP 4: Pre-Deployment Build & Verification
-1. Run `npm run build` inside `PersonalStudy/` to ensure zero TypeScript/JSX errors (under 5 seconds).
-2. Run `npm run validate:curriculum [discipline-id]` to execute the automated quality linter:
-   - Verifies 100% uniform option distribution across A–F (Principle 2).
-   - Verifies correct option is longest in $le 16.7%$ of questions (Principle 1).
-   - Verifies zero banned robotic filler keywords.
-   - Verifies all KaTeX formulas parse cleanly without LaTeX errors.
-3. Commit and push to `origin main` to trigger automatic Netlify production deployment.
+### The 4-Step Ingestion Pipeline:
+1. **Step 1 (Ingest & Organize Materials)**:
+   - **Mode A (Pull from Folder)**: If materials already exist in `materials/<discipline-id>/`, workflow scripts pull directly from there.
+   - **Mode B (Auto-Organize on Upload)**: When new files or slides are uploaded, run:
+     `npm.cmd run organize:materials` (or `node scripts/organize-materials.js`).
+     It automatically inspects file content and metadata to determine the correct discipline, eliminates duplicate uploads via SHA-256 (preventing redundant `media_*` clutter), derives canonical names, and stages files into `materials/<discipline-id>/`.
+   - Deconstruct topics into 2–4 learning units. Write Phase 1 narrative guides with KaTeX math and semantic headings (extracting heading slugs for anchors).
+2. **Step 2 (Generate Content via Template)**: Clone \`scripts/templates/discipline-template.js\` into \`scripts/[name]-content.js\`. Follow Principle 1 (Anti-Verbosity: longest option $\le 16.7\%$) and Principle 2 (Uniform A–F: exactly 2 of each in 12-question quiz, 3 of each in 18-question practice).
+3. **Step 3 (One-Command Database Seeding)**: Run:
+   \`node scripts/seed-discipline.js scripts/[name]-content.js\`
+   This automatically checks and organizes materials, logs pulled course files, and seeds discipline, segments, questions, workbooks, and flashcards into Supabase tracker tables with batching and transaction safety.
+4. **Step 4 (Automated CI Audit & Verification)**: Run:
+   \`node scripts/validate-curriculum.js\`
+   Verifies question counts, uniform A–F distribution, anti-verbosity limits, KaTeX syntax, and anchor integrity. Then run \`npm.cmd run build\` to confirm clean compilation before pushing to Netlify.
 
 ---
 
@@ -346,6 +340,7 @@ $$\text{Preparation Score} = \min(100, \text{round}(C + A + E + P + D))$$
 9. **Anti-Instant Popup**: Require 550ms hover delay on desktop and 600ms hold on touch for level preview cards.
 10. **Apple Pencil Priority**: Lock stylus pointer events; suppress iOS 18 text selection and AI callouts during drawing.
 11. **Zero Asterisks**: Never leave raw `*` in text guide prose; use semantic HTML headings and spans.
+12. **Organized Materials Directory**: Materials must always be organized into discipline subfolders (`materials/<discipline-id>/`), with zero redundant duplicate uploads or unclassified loose files.
 
 ---
 
@@ -353,6 +348,7 @@ $$\text{Preparation Score} = \min(100, \text{round}(C + A + E + P + D))$$
 
 Before publishing new content or deploying application updates, verify:
 - [ ] Run `npm run validate:curriculum [discipline-id]` with **0 critical errors**.
+- [ ] **Materials Pipeline Verified**: Materials are organized in `materials/<discipline-id>/` with 0 unclassified or duplicate files.
 - [ ] **Principle 1 Verified**: Correct option is longest in **$le 16.7%$** of questions across both Quiz and Practice pools.
 - [ ] **Principle 2 Verified**: Exactly **2 A, 2 B, 2 C, 2 D, 2 E, 2 F** per 12-question Quiz; exactly **3 A, 3 B, 3 C, 3 D, 3 E, 3 F** per 18-question Practice set.
 - [ ] Zero robotic distractor boilerplate; all distractor expansions contain authentic domain reasoning.
