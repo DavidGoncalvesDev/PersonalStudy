@@ -5,26 +5,29 @@ description: >-
   Use whenever the user mentions 'personal study' or 'David Study', provides slides, exercises,
   or course materials, asks to update or adapt the study app, or modifies disciplines,
   segments, quizzes, workbook exercises, and flashcards. Defines the architecture, Supabase schema,
-  granular 4-5 segment-per-chapter division, clear brown theme, 4-phase mastery
-  progression (rich text -> 1-by-1 quiz with reset -> practical workbook exercises with writing zone & self-assessment -> flashcards), non-resetting quiz state,
-  per-device & per-person user login data isolation, text guide anchoring with amber highlights,
+  canonical repository location (Documents/GitHub/PersonalStudy), materials mapping,
+  granular 7-segment curriculum, clear brown theme, 4-phase mastery progression
+  (rich text -> 1-by-1 quiz with reset -> practical workbook exercises with writing zone & self-assessment -> flashcards),
+  non-resetting quiz state, per-device & per-person user login data isolation, text guide anchoring with amber highlights,
   large fundamental explanations, elimination of longest-option bias, uniform A-F option distribution,
   live scratchpad question synchronization, iOS Apple Pencil callout suppression, scratchpad canvas with palm rejection,
-  Apple Pencil priority, faded graph paper grid & pinch/wheel zoom, "Copy for AI" formatted exercise clipboard feature,
-  Exercise Zone (Random practice, Sudden Death & 50-Minute Comprehensive Exam),
-  Preparation Score formulation, discipline deletion prevention, mobile optimization, and self-updating guidelines.
+  Apple Pencil priority, faded graph paper grid & pinch/wheel zoom, 'Copy for AI' formatted exercise clipboard feature,
+  Exercise Zone (Random practice, Sudden Death & 50-Minute Comprehensive Exam), Preparation Score formulation,
+  discipline deletion prevention, mobile optimization, Notion Knowledge Base integration ('David Study Workspace'),
+  execution workflows (SOPs), and strict quality guidelines ensuring final product excellence.
 ---
 
 # David Study System Skill
 
-This skill defines the operational specifications, system architecture, database design, content pedagogy, granular segmentation rules, visual theme, and progression logic for the **David Study** platform (customized for multivariate data analysis and academic coursework).
+This skill defines the operational specifications, system architecture, database design, content pedagogy, granular segmentation rules, visual theme, progression logic, execution workflows, and quality assurance framework for the **David Study** platform (customized for multivariate data analysis and academic coursework).
 
 > [!IMPORTANT]
 > **CRITICAL AGENT ADAPTATION DIRECTIVE**:
 > Whenever the user refers to `personal study` or `David Study`, uploads course files (slides, exercises, syllabi), or corrects any aspect of the system in conversation:
-> 1. The agent **MUST immediately update this SKILL.md file** across both workspace and global locations to track and persist the user's instructions and refinements.
-> 2. The agent **MUST adapt the codebase and database** to reflect the new requirements or content immediately.
-> 3. Any future agent loading this skill must adhere to all rules documented here.
+> 1. The agent **MUST base all work in the canonical repository**: `C:\Users\david_kttkn32\OneDrive\Documents\GitHub\PersonalStudy`.
+> 2. The agent **MUST immediately update this SKILL.md file** across all repository and global locations to persist refinements.
+> 3. The agent **MUST adapt the codebase, database, and Notion Knowledge Base** to reflect the new requirements or content immediately.
+> 4. Any future agent loading this skill must adhere to all rules documented here.
 
 ---
 
@@ -32,7 +35,7 @@ This skill defines the operational specifications, system architecture, database
 
 - **Branding**: Titled **David Study** across the app header, browser tab (`<title>David Study</title>`), and favicon.
 - **Header Navigation**: Clicking the header title ("David Study") or the custom book logo navigates directly back to the main levels overview (`curriculum` tab).
-- **Logo**: The custom Book Icon PNG (warm brown leather cover, yellow title badge, cream pages). Located at `/public/logo.png`.
+- **Logo**: The custom Book Icon PNG (warm brown leather cover, yellow title badge, cream pages). Located at `/public/logo.png` and in `materials/david_study_book_logo.png`.
 - **Color Palette (Clear Warm Brown & Amber)**:
   - **Primary Brand / Headers / Active Accents**: Deep Leather Brown (`#78350f` / `#6d3b14` / `#451a03`).
   - **Warm Accent / Badges**: Warm Amber & Gold (`#d97706` / `#b45309` / `#fef3c7`).
@@ -53,10 +56,74 @@ This skill defines the operational specifications, system architecture, database
 
 ---
 
-## 2. Per-Device & Per-Person User Login (Isolated Data Architecture)
+## 2. Repository Architecture & Directory Standards
+
+All project files and assets are based in the canonical Git repository:
+`C:\Users\david_kttkn32\OneDrive\Documents\GitHub\PersonalStudy`
+
+```
+PersonalStudy/
+├── .agents/
+│   └── skills/
+│       └── personal-study/
+│           └── SKILL.md                 # Primary repo skill (SSOT)
+├── materials/                           # Official course materials (slides & workbooks)
+│   ├── 01_Chapter_1_Scales_and_Distances.pdf
+│   ├── 01_Chapter_1_Introduction_Overview.pdf
+│   ├── 02_Chapter_2_Principal_Component_Analysis.pdf
+│   ├── 03_Chapter_3_Factor_Analysis.pdf
+│   ├── 04_Practical_Workbook_Exercises.pdf
+│   └── david_study_book_logo.png
+├── public/                              # Public web assets (favicon, logo)
+├── scripts/                             # Curriculum data seeds, migrations & verification tools
+│   ├── levels-data-part1.js             # Part 1: Levels 1 to 4 curriculum seeds
+│   ├── levels-data-part2.js             # Part 2: Levels 5 to 7 curriculum seeds
+│   ├── apply-all-balanced-questions.js  # Automated A-F quiz balancing & DB updater
+│   └── merge-lu4-lu5.js                 # Merged Level 4 analytical guide and questions
+├── src/                                 # Vite + React + TypeScript source code
+│   ├── components/                      # UI Phase and Canvas components
+│   │   ├── TextSummaryPhase.tsx         # Phase 1: Rich narrative text guide with anchors
+│   │   ├── QuizPhase.tsx                # Phase 2: 12-question resetting quiz
+│   │   ├── WorkbookPhase.tsx            # Phase 3: Practical workbook & writing zone
+│   │   ├── FlashcardsPhase.tsx          # Phase 4: High-yield flashcard deck
+│   │   ├── ExerciseZone.tsx             # Random Practice, Sudden Death & Mock Exam
+│   │   ├── ExamSimulation.tsx           # 50-minute continuous paper simulation
+│   │   ├── ScratchpadModal.tsx          # Universal calculation canvas with Apple Pencil priority
+│   │   ├── SegmentSelector.tsx          # Level pills with hover delay
+│   │   └── UserLoginModal.tsx           # Multi-user profile login modal
+│   ├── utils/                           # Score calculators and audio synthesizers
+│   ├── App.tsx                          # Root application container & phase manager
+│   ├── main.tsx                         # Entry point
+│   ├── supabaseClient.ts                # Supabase client singleton
+│   └── types.ts                         # Strict TypeScript domain interfaces
+├── index.html                           # HTML entry with KaTeX CSS injection
+├── package.json                         # Dependencies and build scripts
+├── tsconfig.json                        # TypeScript compiler options
+└── vite.config.ts                       # Vite bundler configuration
+```
+
+---
+
+## 3. Notion Knowledge Base Integration ('David Study Workspace')
+
+The Personal Study system is synchronized with the collaborative **David Study Workspace** inside Notion:
+
+- **Master Workspace Page**: `https://app.notion.com/p/41e2c4ea9b0e810c8d33f3f30ad9bb07`
+  - **Title**: *📚 David Study — Learning Platform & Quality Protocols*
+  - **Scope**: Houses the platform architecture, 7-level curriculum map, 4-phase mastery progression, standard operating procedures (SOPs), quality assurance rules, and pre-deployment checklists.
+- **Reference Examples Subpage**: `https://app.notion.com/p/41e2c4ea9b0e81cc92d6d3131c5502f8`
+  - **Title**: *📝 David Study — Concrete Production Examples*
+  - **Scope**: Contains canonical JSON schemas and formatting standards for balanced quiz questions, practical workbook exercises, atomic flashcards, and narrative text guides.
+- **Parent Workspace Hub**: `https://app.notion.com/p/4172c4ea9b0e8018a561f53202866383` (*Data Analysis — Group Project Knowledge Base*).
+- **Dual-Synchronization Protocol**:
+  Whenever curriculum levels, exam rules, or architectural standards are refined, the agent must ensure that both this `SKILL.md` file and the Notion Knowledge Base pages are synchronously updated to maintain complete alignment across all AI tools and team members.
+
+---
+
+## 4. Per-Device & Per-Person User Login (Isolated Data Architecture)
 
 - **Device Login & Profile Key**:
-  - Each person logs in with their student name (e.g. `David`, `Sarah`, `Alex`).
+  - Each person logs in with their student name (e.g. `David`, `Sarah`, `Manu`, `Rodrigo`).
   - **No Automatic Default to David**: The app must NEVER default to or automatically assign `David`. If `localStorage.getItem('david_study_user')` is not set, `currentUser` is `null`, and `UserLoginModal` is displayed immediately on open, prompting the student to enter their name or select a recent profile on that device.
   - Normalized database key: `username = name.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '')`.
 - **Database Partitioning**:
@@ -69,7 +136,7 @@ This skill defines the operational specifications, system architecture, database
 
 ---
 
-## 3. Text Formatting, Math Rendering & Pedagogy
+## 5. Text Formatting, Math Rendering & Pedagogy
 
 1. **Full Narrative Prose (No Fragmented Bullet Outlines)**:
    - Deliver rich, readable paragraphs that build intuition from the ground up.
@@ -85,20 +152,28 @@ This skill defines the operational specifications, system architecture, database
 
 ---
 
-## 4. Curriculum Architecture & Learning Units (Data Analysis)
+## 6. Curriculum Architecture & Learning Units (Data Analysis)
 
-Divide university courses into **granular, highly focused learning units** directly aligned with official course materials (lecture slides and practical exercise workbooks):
+The academic curriculum is structured into **7 granular, highly focused learning units** directly aligned with official lecture slides and practical exercise workbooks:
+
 - **Discipline**: *Multivariate Data Analysis (MDA)* (`data-analysis`).
 - **Chapter 1: Foundations & Measurement Scales**:
   - **L1**: Variable Typologies & Measurement Scales (Nominal, Ordinal, Interval, Ratio, Permissible Transformations, Dummy Variable Design Matrix) (`ch1-scales-methods`).
+    - *Source Slide*: `materials/01_Chapter_1_Scales_and_Distances.pdf`
   - **L2**: Data Manipulation Fundamentals & Distance Metrics (Sums of Squares, Covariance, Correlation, Euclidean vs Statistical vs Mahalanobis $D^2$, Metric Space Axioms) (`ch1-manipulation-distances`).
+    - *Source Slide*: `materials/01_Chapter_1_Scales_and_Distances.pdf`
 - **Chapter 2: Principal Component Analysis (PCA)**:
-  - **L3**: Geometric Foundations & Projections (12-Customer Bivariate Case, Coordinate Rotation $\theta = 43.26^\circ$, Variance Maximization along $PC_1$, Orthogonal Complement $PC_2$, Centered Subspace $\min(p, n-1)$) (`ch2-pca-geometry`).
-  - **L4**: Covariance vs. Correlation, Loadings & Retention Diagnostics (The Scale Sensitivity Problem: $c^2$ Variance Inflation, Standardized Correlation PCA $\text{tr}(R) = p$, 25 US Cities Food Prices, 4 Fundamental Quantities: $\lambda_i, w_i, t_{hi}, l_{ji}$, Kaiser Criterion $\lambda > 1$, Cattell Scree Elbow Rule, Cumulative Variance $\ge 70\%$, Portuguese 7 Regions Case Study, SAS `PROC PRINCOMP COV` vs Python `StandardScaler` + `PCA`) (`ch2-pca-analytical`).
+  - **L3**: Geometric Foundations & Projections (12-Customer Bivariate Case, Coordinate Rotation $	heta = 43.26^circ$, Variance Maximization along $PC_1$, Orthogonal Complement $PC_2$, Centered Subspace $min(p, n-1)$) (`ch2-pca-geometry`).
+    - *Source Slide*: `materials/02_Chapter_2_Principal_Component_Analysis.pdf`
+  - **L4**: Covariance vs. Correlation, Loadings & Retention Diagnostics (The Scale Sensitivity Problem: $c^2$ Variance Inflation, Standardized Correlation PCA $	ext{tr}(R) = p$, 25 US Cities Food Prices, 4 Fundamental Quantities: $lambda_i, w_i, t_{hi}, l_{ji}$, Kaiser Criterion $lambda > 1$, Cattell Scree Elbow Rule, Cumulative Variance $ge 70%$, Portuguese 7 Regions Case Study, SAS `PROC PRINCOMP COV` vs Python `StandardScaler` + `PCA`) (`ch2-pca-analytical`).
+    - *Source Slide*: `materials/02_Chapter_2_Principal_Component_Analysis.pdf`
 - **Chapter 3: Factor Analysis (FA)**:
-  - **L5**: Latent Variable Theory & Variance Decomposition (Spearman Common Factor Model, 6-Course Grades, Total Variance Decomposition $1.0 = h_j^2 + u_j^2$, Communality vs Uniqueness, Reproduced Correlations $\hat{r}_{jk}$, Reflective vs Formative Models) (`ch3-fa-theory`).
-  - **L6**: Indeterminacies & Extraction Methods (The Two Inherent Indeterminacies: Factor Rotation & Communality Estimation Circularity, Principal Component Factoring vs Iterated Principal Axis Factoring, Residual Matrix $R_{\text{res}} = R - \hat{R}$, RMSR $\le 0.08$) (`ch3-fa-extraction`).
+  - **L5**: Latent Variable Theory & Variance Decomposition (Spearman Common Factor Model, 6-Course Grades, Total Variance Decomposition $1.0 = h_j^2 + u_j^2$, Communality vs Uniqueness, Reproduced Correlations $hat{r}_{jk}$, Reflective vs Formative Models) (`ch3-fa-theory`).
+    - *Source Slide*: `materials/03_Chapter_3_Factor_Analysis.pdf`
+  - **L6**: Indeterminacies & Extraction Methods (The Two Inherent Indeterminacies: Factor Rotation & Communality Estimation Circularity, Principal Component Factoring vs Iterated Principal Axis Factoring, Residual Matrix $R_{	ext{res}} = R - hat{R}$, RMSR $le 0.08$) (`ch3-fa-extraction`).
+    - *Source Slide*: `materials/03_Chapter_3_Factor_Analysis.pdf`
   - **L7**: Sampling Adequacy, Rotations & FA vs PCA (Kaiser-Meyer-Olkin MSA Benchmarks, Bartlett Sphericity, Anti-Image Matrix, Varimax vs Quartimax vs Oblique Promax, Pattern vs Structure Matrices, Heywood Cases, 6 Systematic Differences PCA vs FA) (`ch3-fa-rotation-evaluation`).
+    - *Source Slide*: `materials/03_Chapter_3_Factor_Analysis.pdf`
 
 ### New Discipline: Financial Analysis & Management Control (`financial-analysis`)
 
@@ -128,95 +203,71 @@ Do not call a new discipline complete based on database row counts alone. Before
 
 ---
 
-## 5. Four-Phase Mastery Progression per Segment
+## 7. Four-Phase Mastery Progression per Segment
 
 Each learning unit follows a rigorous 4-phase mastery progression:
 
 ### Phase 1: Comprehensive Text Guide
 - Exhaustive foundational prose with worked examples and formula walkthroughs.
 - Auto-generates clean URL/anchor slugs on all `##` and `###` headers.
-- **Universal Reference Anchoring & Highlighting (All Levels 1–8, Quizzes, Workbook & Flashcards)**:
-  - Every single question (all 96 across L1–L8), workbook exercise (all 8 across L1–L8), and flashcard (all 64 across L1–L8) has dedicated `section_reference` and `section_anchor` populated in Supabase.
-  - When jumped to from a live quiz question, workbook exercise, or flashcard, the target section is highlighted with an amber callout border (`border: 2.5px solid #d97706`, `#fffbeb`) and a dynamic badge:
-    `"📍 Active Question Reference (Question X)"`, `"📍 Active Exercise Reference (Exercise X)"`, or `"📍 Active Concept Reference (Flashcard X)"`.
+- **Universal Reference Anchoring & Highlighting**:
+  - Every single question (84 quiz questions across L1–L7), workbook exercise (8 across L1–L7), and flashcard (56 across L1–L7) has dedicated `section_reference` and `section_anchor` populated in Supabase.
+  - When jumped to from a live quiz question, workbook exercise, or flashcard, the target section is highlighted with an amber callout border (`border: 2.5px solid #d97706`, `#fffbeb`) and a dynamic badge.
   - Automatically smooth-scrolls the highlighted section into view (`scrollMarginTop: 110px`).
   - Displays a sticky top banner with bidirectional return:
     `[← Return to Question X]`, `[← Return to Workbook Exercise X]`, or `[← Return to Flashcards]`.
-  - All quiz progress (question index, selections, inclinations), workbook drafts/submissions, and flashcard progress (mastered cards, queue) are maintained with zero resets.
-- Clicking **"Mark Text as Understood & Take Quiz"** (or `"Return to Level Quiz (12 Qs)"`) navigates to Phase 2.
+  - All quiz progress, workbook drafts/submissions, and flashcard queues are maintained with zero resets.
+- Clicking **"Mark Text as Understood & Take Quiz"** navigates to Phase 2.
 
 ### Phase 2: Level Quiz (1 Question at a Time • Immediate Reset on Error)
 - **Question Format**: Exactly **12 substantive questions** (4 elemental, 4 conceptual, 4 advanced) with **6 choices each (A–F)**.
 - **Strict Prohibition of Length Cues & Longest-Option Bias ("Anti-Verbosity Bias")**:
   - The correct answer must **never** be predictably longer, more descriptive, or more grammatically complex than distractors.
-  - Distractors must match the correct answer in academic depth, technical vocabulary, sentence length, and structural detail (length variance should generally remain within ~15–25%).
-  - Across any question set or bank, the correct option must be the longest option in at most ~10–16.7% of questions (matching uniform random expectation among 6 choices), never dominating as the longest choice.
+  - Distractors must match the correct answer in academic depth, technical vocabulary, sentence length, and structural detail (length variance strictly within 15–25%).
+  - Across any question set or bank, the correct option must be the longest option in at most ~10–16.7% of questions (matching uniform random expectation among 6 choices).
 - **Strict Uniform Option & Letter Distribution**:
-  - Across every 12-question quiz, correct choices must be strictly and uniformly distributed across A, B, C, D, E, F (exactly 2 of each letter per 12 questions).
+  - Across every 12-question quiz, correct choices must be strictly and uniformly distributed across A, B, C, D, E, F (**exactly 2 of each letter per 12 questions**).
   - In aggregate question pools and exams, every letter option (A–F) must maintain an equal ~16.7% frequency.
 - **Strict Curriculum Grounding (Authoritative Lecture Slides & Practical Exercises Only)**:
-  - Every quiz question, exercise, and flashcard must be **strictly and exclusively grounded in the provided course materials** (official university lecture slides and practical exercise workbooks).
-  - **Zero Overcomplication**: Strictly avoid inventing untelegraphed graduate-level linear algebra minutiae (such as Taylor series expansions of rotation matrices, coordinate reflection proofs, or abstract matrix lemmas) that are neither taught in the slides nor present in the practical exercise sheets.
-  - **Zero Programmatic / Robotic Distractor Filler**: NEVER programmatically append repetitive boilerplate academic suffixes (such as `", which would distort the estimation of standard errors across empirical models"` or `", introducing severe estimation bias into secondary structural equation equations"`) to balance length. All distractors must be substantive, plausible domain-specific misconceptions directly tied to course topics (e.g., confusing covariance vs correlation PCA scale sensitivity, eigenvalues vs eigenvectors, unities vs iterated communalities, orthogonal vs oblique rotations, reflective vs formative models).
-- **Strict Content Alignment Across All Levels**:
-  - Every single question across all 8 levels is directly grounded in the concepts, definitions, and formulas taught in that specific Learning Unit's text guide.
-  - Each question stores `section_reference` (e.g. `Section 3: Classification of Methods`) and `section_anchor` (e.g. `classification-of-multivariate-methods`).
-- **Non-Resetting Quiz Navigation**:
-  - When the user clicks `"📖 Reference Text Guide"` during a quiz, the quiz state **is preserved and does NOT reset** (retains question index $i$ of 12, chosen options, and inclination tags).
+  - Every quiz question, exercise, and flashcard must be **strictly and exclusively grounded in the provided course materials**.
+  - **Zero Overcomplication**: Avoid untelegraphed graduate-level linear algebra minutiae (such as Taylor series expansions of rotation matrices or coordinate reflection proofs) that are neither taught in the slides nor present in the exercise sheets.
+  - **Zero Programmatic / Robotic Distractor Filler**: NEVER programmatically append repetitive boilerplate academic suffixes to balance length. All distractors must be substantive, plausible domain-specific misconceptions directly tied to course topics.
 - **Strict Reset on Failure**:
   - The user must score **12/12 in a single consecutive run**!
   - If the user selects an incorrect answer on ANY question, the quiz is reset back to Question 1 (0/12).
 - **Large, Fundamental Explanations on Failure**:
   - Failure cards display a comprehensive theoretical breakdown explaining the underlying mathematical principles, analytical derivations, why the correct answer holds, and why each distractor is invalid.
-  - Side-by-side visual comparison displays `"You Selected (Option X)"` in soft red and `"Correct Answer (Option Y)"` in soft green.
 - **"What am I inclined" Helper Feature (Elimination & Pre-decision Tag)**:
-  - Appears on the right side of every multiple choice option (A–F) in both the Level Quiz, Exercise Zone, and 50-Min Exam.
+  - Appears on the right side of every multiple choice option (A–F).
   - Fixed-width button cycling: Faded No -> Active No (Red) -> Maybe (Amber) -> Yes (Green) -> Unclicked.
-- **Immediate Retake for Practice & Robust Restart State**:
-  - When a student who has already completed or mastered a quiz clicks **"Retake Quiz for Practice"**, the quiz must immediately enter active retake mode (`isRetaking = true`, `isAllCompleted = false`, `currentIndex = 0`) and present Question 1 of 12. It must **never** loop back to or trap the student on the completion screen.
-  - If a student fails a question during a retake and clicks **"Restart Quiz (12-in-a-Row Required)"**, the state must keep `isRetaking = true` so they restart at Question 1 rather than being bounced back to the passed completion screen.
-- Upon scoring 12/12, the user unlocks Phase 3 (Workbook Exercises) and sees a direct button: `"Proceed to Phase 3: Workbook"`.
+- **Immediate Retake for Practice**:
+  - Clicking **"Retake Quiz for Practice"** immediately presents Question 1 of 12 for active re-testing without being bounced back to completion screen.
 
 ### Phase 3: Practical Workbook Exercises (In-Depth Course Problem Sets)
-- **Pedagogical Purpose**: Moves beyond multiple-choice recognition into active, open-ended problem solving directly reflecting university course workbooks (e.g. NOVA IMS Chapter 2 and Chapter 3 Exercise Workbooks).
-- **Curriculum Calibration (When, Where, and How Many)**:
-  - **Calculation-Heavy & Analytical Topics**: Topics involving formal matrix derivations, eigenvalue optimization, Mahalanobis distances, factor loading rotations, or reproduced correlations require substantive, multi-part workbook exercises with concrete numbers and datasets.
-  - **Conceptual & Taxonomic Topics**: Focus on scale invariance proofs, dummy variable matrix singularities, and comparative methodological trade-offs (e.g. PCA vs PAF vs ML factor analysis).
-  - The agent determines the number of exercises per segment based on topic depth (typically 1–2 exhaustive multi-part challenge exercises per learning unit).
+- **Pedagogical Purpose**: Moves beyond multiple-choice recognition into active, open-ended problem solving directly reflecting university course workbooks (e.g. `materials/04_Practical_Workbook_Exercises.pdf`).
 - **Interactive Writing Zone & Scratchpad**:
   - Large expandable text area below the prompt allowing the student to write formulas, derivations, matrix values, and conclusions.
-  - Live draft autosaving in `localStorage` (`david_study_wb_draft_${username}_${exerciseId}`) so work is never lost on refresh or navigation.
-  - Live character counter.
+  - Live draft autosaving in `localStorage` (`david_study_wb_draft_${username}_${exerciseId}`).
 - **Copy for AI & Consistent Tooling Naming**:
-  - **"Copy for AI" on All Exercises & Solutions**: Every workbook exercise features a standard **"Copy for AI"** button on the problem card, plus a **"Copy Solution for AI"** button on the revealed solution card. Clicking copies the problem statement, curriculum references, draft responses, and worked mathematical solutions formatted for immediate AI prompting.
-  - **Strict Terminology Consistency**: The notes and drawing tool is **strictly named "Scratchpad / Notes"** (desktop) and **"Notes"** (mobile) everywhere across the application. The agent must **NEVER invent new, one-off, or arbitrary names** (e.g. "Apple Pencil Canvas") for existing app features. All navigation pills and action buttons must maintain unified names across Text Guides, Quizzes, Workbook, and Flashcards.
+  - **"Copy for AI" on All Exercises & Solutions**: Every workbook exercise features a standard **"Copy for AI"** button on the problem card, plus a **"Copy Solution for AI"** button on the revealed solution card.
+  - **Strict Terminology Consistency**: The notes and drawing tool is **strictly named "Scratchpad / Notes"** (desktop) and **"Notes"** (mobile). The agent must **NEVER invent new, one-off, or arbitrary names** (e.g. "Apple Pencil Canvas").
 - **Turn-In & Self-Assessment Workflow**:
   1. **"Turn In Exercise & Check Solution"**: Commits the student's written response to Supabase table `study_workbook_submissions`.
   2. **Authoritative Worked Solution**: Immediately unrolls the complete step-by-step mathematical proof, matrix transformations, and numerical answers rendered via KaTeX.
   3. **Self-Assessment Feedback Bar**: The student compares their response against the authoritative worked solution and self-evaluates with two tactile buttons:
-     - `[ ✕ No, I made mistakes ]` (Crimson red): Plays subdued wrong tone, marks submission as needing improvement, and encourages reviewing the text guide or re-attempting.
-     - `[ ✓ Yes, I got it right! ]` (Vibrant green): Plays correct chime, bursts confetti, records success in `study_workbook_submissions`, marks `workbook_passed = true` in `study_progress`, and unlocks Phase 4 (Flashcards).
-  4. **"Edit / Re-attempt" Action**: Allows resetting the exercise state and refining the response at any time.
+     - `[ ✕ No, I made mistakes ]` (Crimson red): Records need for improvement.
+     - `[ ✓ Yes, I got it right! ]` (Vibrant green): Confetti burst, marks `workbook_passed = true`, unlocks Phase 4.
 
 ### Phase 4: High-Yield Flashcards
 - Fast-recall cards with question on front, answer/insight on back.
-- **Universal Reference Text Guide Link**:
-  - Every flashcard across all 8 levels features a `"📖 Reference Text Guide"` button on the active card deck.
-  - Clicking jumps directly to the corresponding concept heading in Phase 1 text guide without losing queue or mastered card progress.
+- **Universal Reference Text Guide Link**: Every card features a `"📖 Reference Text Guide"` button for instant jumps.
 - Self-assessment: **Yes (Green)** vs **No (Red)**.
 - **100% Mastery Rule**: All cards must be answered "Yes" to complete the deck.
-- **Non-Resetting Mastery Persistence**:
-  - Maintained in the DOM with `display: activePhase === 'flashcards' ? 'block' : 'none'`, so navigating back to Phase 1 (Text Guide), Phase 2 (Quiz), or Phase 3 (Workbook) **never resets** the flashcard queue or active card position.
-  - Persisted in `localStorage` under `david_study_fc_${username}_${segmentId}` so even reloads and profile switches preserve mastered card progress for that segment.
-  - "Review Again" explicitly restarts and resets the queue for fresh practice.
-- **Segment-Isolated Queue Synchronization & Fingerprinting**:
-  - Flashcards must strictly be filtered by `segment_id === currentSegment.id` before initializing or evaluating the flashcard deck.
-  - Tracks a unique card ID fingerprint (`cardsFingerprint`) so that when the user advances to a new level, the component immediately initializes that specific level's flashcard deck rather than retaining or leaking cards from earlier levels.
-  - Displays a clean inline loading state if flashcards for a newly selected segment are still in flight.
+- **Non-Resetting Mastery Persistence**: Preserved in DOM and `localStorage` under `david_study_fc_${username}_${segmentId}`.
 
 ---
 
-## 6. Exercise Zone & 50-Minute Comprehensive Exam
+## 8. Exercise Zone & 50-Minute Comprehensive Exam
 
 The Exercise Zone provides three specialized training modes:
 
@@ -229,99 +280,34 @@ The Exercise Zone provides three specialized training modes:
 - Tracks Current Streak (🔥) and all-time Best Streak (🏆).
 
 ### Mode C: 50-Minute Comprehensive Exam Paper Simulation
-- **Full Course Coverage**: Proportional sampling across all 8 learning units (25 substantive questions).
-- **Continuous Paper Format**: All 25 questions are presented in a row on a single paper. Students can answer in any order, scroll through the paper, and change answers before submission.
+- **Full Course Coverage**: Proportional sampling across all 7 learning units (25 substantive questions).
+- **Continuous Paper Format**: All 25 questions presented in a row on a single paper.
 - **50-Minute Countdown Clock**: Prominent timer with yellow and red alerts for the final 5 minutes; auto-submits on expiration.
-- **Sticky Jump Navigator**: Horizontal swipeable bar (1..25) highlighting answered, unanswered, and flagged questions without consuming excessive vertical space on mobile devices.
-- **Flag for Review**: Allows bookmarking challenging questions to revisit before final submission.
-- **Comprehensive Grading & Review**:
-  - Generates final score percentage, letter grade / tier (Distinction 85%+, Merit 75%+, Pass 50%+).
-  - Question-by-question review showing selected answer vs correct answer, with deep theoretical KaTeX derivations.
-  - Filterable by All, Incorrect, or Correct.
-  - Direct impact on Preparation Score: Contributes up to 20 full points!
+- **Sticky Jump Navigator**: Horizontal swipeable bar (1..25) highlighting answered, unanswered, and flagged questions.
+- **Comprehensive Grading & Review**: Generates score %, tier (Distinction 85%+, Merit 75%+, Pass 50%+), question-by-question review with KaTeX solutions.
 
-### "Copy for AI" Formatted Exercise Clipboard Feature
-- Available on every question in the **Level Quiz**, **Exercise Zone**, **50-Min Exam**, and **Scratchpad HUD**.
-- Automatically formats the exercise for prompt engineering (Topic metadata, Question text, markdown choices `[A]` through `[F]`, or open-ended derivation prompt).
-- Appends prompt guidance or full analytical solution based on state.
-
----
-
-## 7. The Preparation Score Algorithm (0% to 100%)
-
-The Preparation Score is a weighted index reflecting the student's exam readiness:
-
+### Preparation Score Algorithm (0% to 100%)
 $$\text{Preparation Score} = \min(100, \text{round}(C + A + E + P + D))$$
 
-1. **Curriculum Completion ($C$, up to 40 points)**:
-   - Evaluates completed learning units (Text read + Quiz 12/12 passed + Workbook completed + Flashcards completed).
-   - $C = 40 \times \frac{\text{completed\_segments}}{\text{total\_segments}}$.
-2. **Quiz First-Time Efficiency ($A$, up to 20 points)**:
-   - Rewards passing quizzes on the first attempt; penalizes repeated restarts.
-   - For each passed segment:
-     - 1st attempt: 100% credit ($\approx 2.5$ pts per segment for 8 segments).
-     - 2nd attempt: 75% credit.
-     - 3rd attempt: 50% credit.
-     - 4+ attempts: 25% credit.
-3. **50-Minute Comprehensive Exam ($E$, up to 20 points)**:
-   - Directly rewards mock exam mastery: $E = \min(20, \frac{\text{exam\_best\_score}}{100} \times 20)$.
-4. **Random Practice Volume ($P$, up to 10 points)**:
-   - Rewards answering questions in the Exercise Zone: $P = \min(10, \text{random\_exercises\_completed} \times 0.5)$.
-5. **Sudden Death Streak ($D$, up to 10 points)**:
-   - Rewards high performance under pressure: $D = \min(10, \text{best\_streak} \times 0.5)$.
-
-Total maximum score: $40 + 20 + 20 + 10 + 10 = 100\%$.
+1. **Curriculum Completion ($C$, up to 40 points)**: $C = 40 \times \frac{\text{completed\_segments}}{\text{total\_segments}}$.
+2. **Quiz First-Time Efficiency ($A$, up to 20 points)**: Rewards passing quizzes on 1st attempt ($2.85$ pts per segment for 7 segments).
+3. **50-Minute Comprehensive Exam ($E$, up to 20 points)**: $E = \min(20, \frac{\text{exam\_best\_score}}{100} \times 20)$.
+4. **Random Practice Volume ($P$, up to 10 points)**: $P = \min(10, \text{random\_exercises\_completed} \times 0.5)$.
+5. **Sudden Death Streak ($D$, up to 10 points)**: $D = \min(10, \text{best\_streak} \times 0.5)$.
 
 ---
 
-## 8. Global Scratchpad / Calculation Canvas
+## 9. Global Scratchpad / Calculation Canvas
 
-- **Openable Everywhere & Live Question Sync**:
-  - Available across all screens via a floating action button (FAB) at the bottom-right, top bar, and inside question/workbook cards.
-  - Clicking "Scratchpad / Notes" on ANY quiz question, workbook exercise, or exam question dynamically passes the currently active question (`onOpenScratchpad(currentQ)`), ensuring the corner HUD reference card matches the exact live problem being solved rather than defaulting to Question 1.
-- **Apple Pencil & Stylus Priority**:
-  - Uses `PointerEvent` with strict pen prioritization: when an Apple Pencil touches down (`e.pointerType === 'pen'`), it preempts any resting hand or touch contact and locks active drawing to the stylus.
-  - Stylus touches (`touch.touchType === 'stylus'`) are bypassed by pinch-zoom listeners so resting palm contacts never trigger zoom or cancel active pen strokes.
-  - Single tap immediately generates an initial round dot (`ctx.arc` / `ctx.fill`) so periods, decimal points, and dots render instantly.
-- **Palm Rejection & iOS Callout Suppression ("Search with AI" / "Copy")**:
-  - Complete suppression of iOS 18 native edit callout menu (`[Copy | Search with AI | Look Up]`): `touch-action: none !important; -webkit-touch-callout: none !important; -webkit-user-select: none !important; user-select: none !important;` applied dynamically to `<body>` and `<canvas>` while scratchpad is open.
-  - Intercepts and cancels single-touch `touchstart` to suppress iOS long-press callout timers while preserving two-finger pinch-zoom gestures.
-  - Captures stylus/touch pointer events via `canvas.setPointerCapture(e.pointerId)` on pointerdown and releases on pointerup/cancel to prevent iOS callouts.
-  - Traps and prevents `selectstart`, `selectionchange`, and `contextmenu` events while the scratchpad is active.
-- **Faded Warm Graph Paper Grid**:
-  - Rendered on a warm cream notepad sheet (`#fffdfa`) resting on a subtle desk surface (`#ece6dc`) with an authentic drop shadow.
-  - Very subtle faded grid: 24px minor squares (`rgba(120, 53, 15, 0.04)`) and 120px major squares (`rgba(120, 53, 15, 0.12)`).
-  - The grid scales dynamically with zoom and pan, giving immediate visual cues of zoom scale and spatial orientation.
-  - Canvas bitmap is transparent (`ctx.clearRect`), allowing the grid to shine through.
-  - Eraser uses `ctx.globalCompositeOperation = 'destination-out'` so erasing removes ink back to transparent without ever erasing the grid lines.
-- **Two-Finger Pinch Zoom & Rolling Wheel Pan**:
-  - Two fingers dynamically scale the canvas (0.4x to 3.5x).
-  - Mouse wheel pans vertically and horizontally; Ctrl+Wheel zooms.
-  - Floating zoom controls: `[-]`, `zoom %` (click to reset view to 100%), `[+]`, and `RotateCcw` reset buttons in the top toolbar.
-- **Corner HUD**: Collapsible floating card with the current question/exercise, options (if multiple choice), and a `"Copy for AI"` one-click button.
+- **Openable Everywhere & Live Question Sync**: Passing the active question dynamically updates the corner HUD reference card.
+- **Apple Pencil & Stylus Priority**: Preempts resting hand contacts, bypasses pinch-zoom for pen strokes, renders single-tap dots instantly.
+- **Palm Rejection & iOS Callout Suppression**: Suppresses native iOS 18 callouts (`[Copy | Search with AI]`) via pointer capture, touch-action, and selection event interception.
+- **Faded Warm Graph Paper Grid**: Subtle 24px minor and 120px major grid lines scaling with zoom/pan. Transparent canvas bitmap allows grid to show through.
+- **Two-Finger Pinch Zoom & Rolling Wheel Pan**: Scale from 0.4x to 3.5x with floating zoom reset HUD.
 
 ---
 
-## 9. Mobile & Touch Screen Optimization
-
-- **2-Tier Mobile Header**:
-  - **Tier 1**: Brand logo & title on the left; Preparation score pill (`Prep: X%`) and User profile pill (`[ 👤 Name ]`) on the right.
-  - **Tier 2**: Full-width unified row with Mode switcher (`[ 📖 Levels ]` flex-1 and `[ 🔥 Exercise Zone ]` flex-1), Quick Notes button, and compact Course dropdown.
-- **Phase Navigation Stepper**:
-  - Segmented control format using `flex: 1` per tab.
-  - Chevrons hidden on mobile (`.hide-on-mobile`).
-  - Responsive labels: `1. Text`, `2. Quiz`, `3. Work`, `4. Cards` on mobile viewports so all 4 phases fit cleanly on 1 line without wrapping.
-- **Continuous Exam Header**:
-  - Compact sticky top bar (`top: clamp(58px, 12vw, 88px)`).
-  - Horizontal swipeable jump bar (`.mobile-scroll-x`) prevents 25 buttons from wrapping into 3–4 tall rows, preserving screen space for the exam questions.
-- **Safe Area & Tap Targets**:
-  - Minimum 38–48px touch targets for all multiple-choice cards, workbook buttons, and action pills.
-  - FAB positioned with safe area padding: `bottom: max(16px, env(safe-area-inset-bottom, 16px))`.
-  - Global `-webkit-tap-highlight-color: transparent` and `touch-action: manipulation`.
-
----
-
-## 10. Database Architecture (Supabase `tracker` Project)
+## 10. Database Architecture (Supabase tracker Project)
 
 - **Target Project**: `https://eurqqiebokwcrrhfbihg.supabase.co` (`tracker`).
 - **Strict Prohibition**: Completely avoid `supabase_novae` / Nova UI. Never touch calorie tracker tables (`food_items`, `weight_logs`).
@@ -334,74 +320,59 @@ Total maximum score: $40 + 20 + 20 + 10 + 10 = 100\%$.
   - `study_flashcards`: `id, segment_id, order_index, category, front, back, created_at`
   - `study_progress`: `id, username, discipline_id, segment_id, text_completed, quiz_passed, quiz_score, quiz_attempts, workbook_passed, flashcards_passed, completed, manually_unlocked, updated_at`
   - `study_user_settings`: `id (username), username, unlock_all, active_discipline_id, preparation_score, sudden_death_best_streak, sudden_death_current_streak, random_exercises_completed, total_correct_answers, total_wrong_answers, exam_best_score, exam_last_score, exam_attempts, updated_at`
-- **Double-Click Unlocking**: Double-clicking any level pill unlocks it directly, toggling `manually_unlocked = true` in `study_progress`.
+- **Double-Click Unlocking**: Double-clicking any level pill unlocks it directly, setting `manually_unlocked = true`.
 
 ---
 
-## 11. Web Audio Sound Effects
+## 11. Standard Operating Procedures (Workflows)
 
-- **Zero-Dependency Procedural Audio**: Uses the Web Audio API (`AudioContext`) to synthesize instant, crisp acoustic feedback without needing external MP3/WAV files.
-- **Audio Palette**:
-  - `playCorrectSound()`: Pleasant, ascending sine-wave chime (E5 -> A5) played immediately upon selecting a correct answer or self-evaluating workbook "Yes".
-  - `playWrongSound()`: Low, subdued downward triangle-wave tone played when an incorrect answer triggers a quiz/sudden death reset, or when self-evaluating workbook "No".
-  - `playSuccessChime()`: Triumphant 4-note ascending major arpeggio (C5 -> E5 -> G5 -> C6) for passing 12/12 quiz questions, submitting workbook exercises, mastering all flashcards, or hitting exam milestones.
-  - `playClickSound()`: Subtle, crisp 900 Hz acoustic tick for card flips, tab changes, and UI buttons.
+### SOP 1: Ingesting New Slides/Workbooks into a Discipline
+1. Copy official PDFs into `PersonalStudy/materials/`.
+2. Map lecture slides into granular, focused learning units (2 to 4 segments per chapter).
+3. Insert metadata records into `study_segments` via Supabase.
+4. Update local curriculum seed scripts (`scripts/levels-data-part1.js` or `part2.js`).
+
+### SOP 2: Formulating & Balancing Quiz Questions
+1. Formulate 12 substantive questions grounded strictly in official slides.
+2. Formulate 5 high-yield distractors per question targeting authentic student misconceptions.
+3. Enforce length parity: no option may deviate by >25% from average option length.
+4. Assign correct options uniformly across choices: **exactly 2 A, 2 B, 2 C, 2 D, 2 E, 2 F**.
+5. Populate `section_reference` and `section_anchor` on every question.
+6. Seed to Supabase table `study_questions` using `scripts/apply-all-balanced-questions.js`.
+
+### SOP 3: Authoring Practical Workbook Exercises
+1. Extract authentic problem sets from `materials/04_Practical_Workbook_Exercises.pdf`.
+2. Construct detailed multi-part prompt statements with concrete datasets.
+3. Write complete step-by-step worked solutions rendered in KaTeX.
+4. Seed to Supabase table `study_workbook_exercises`.
+
+### SOP 4: Pre-Deployment Build & Verification
+1. Run `npm run build` inside `PersonalStudy/` to ensure zero TypeScript/JSX errors.
+2. Run database audit script verifying 12 questions per quiz, 8 flashcards, and uniform distribution.
+3. Commit and push to `origin main`.
 
 ---
 
-## 12. Turnkey Ingestion Protocol for New Disciplines (Uploaded Files Setup)
+## 12. Quality Assurance Guidelines Ensuring Final Product Excellence
 
-When the user uploads course files (slides, syllabi, lecture notes, textbook chapters, or exercises) to create or populate a new discipline, the agent executes the following turnkey pipeline from start to finish:
+1. **Anti-Verbosity Rule**: The correct answer must NEVER dominate as the longest choice. Across any bank, correct answer is longest in at most ~16.7% of questions.
+2. **Zero Robotic Filler**: Never use repetitive boilerplate academic suffixes to artificially inflate distractor length.
+3. **Strict Grounding**: Never introduce abstract graduate-level lemmas not found in the lecture slides.
+4. **No Discipline Deletion**: Prohibit any delete buttons for disciplines in the user interface.
+5. **KaTeX HTML Only**: Configure KaTeX with `output: 'html'` to prevent duplicate number rendering.
+6. **Anti-Instant Popup**: Require 550ms hover delay on desktop and 600ms hold on touch for level preview cards.
+7. **Apple Pencil Priority**: Lock stylus pointer events; suppress iOS 18 text selection and AI callouts during drawing.
+8. **Zero Asterisks**: Never leave raw `*` in text guide prose; use semantic HTML headings and spans.
 
-1. **File Ingestion & Syllabus Parsing**:
-   - Inspect and extract content from all uploaded files (PDFs, PPTX, DOCX, TXT) in the conversation or artifacts directory.
-   - Map out the academic scope: course title, standard abbreviation/code (e.g. `MDA`, `ECON`, `FIN`, `ML`), foundational chapters, formal mathematical definitions, notation systems, core formulas, and worked exercises.
+---
 
-2. **Discipline Registration**:
-   - Derive a clean URL-friendly slug `id` (e.g. `econometrics-finance`).
-   - Insert the new discipline record into `study_disciplines` (`id`, `name`, `code`, `description`).
+## 13. Pre-Deployment Quality Checklist
 
-3. **Granular 4–5 Segment Subdivision per Chapter**:
-   - Deconstruct each chapter into **granular 4–5 segment learning units per chapter** (e.g. Chapter 1 -> L1 to L4; Chapter 2 -> L5 to L8).
-   - Insert rows into `study_segments` (`discipline_id`, `order_index`, `title`, `subtitle`, `summary_markdown`).
-
-4. **Phase 1: Comprehensive Text Guide Authoring**:
-   - Write exhaustive narrative prose building deep mathematical and practical intuition from the ground up (no superficial bullet lists, no visible raw asterisks `*`, true `##` and `###` section headings).
-   - Render all mathematical equations in KaTeX (`$...$` inline, `$$...$$` display) strictly configured with `output: 'html'`.
-   - Incorporate concrete numerical walkthroughs and step-by-step formula derivations.
-   - Ensure all concept headings generate clean anchor slugs (e.g. `### Autoregressive Models` -> `#autoregressive-models`) for bidirectional question/workbook/flashcard linking.
-
-5. **Phase 2: 12-Question Substantive Quiz Formulation (Per Segment)**:
-   - Construct exactly **12 substantive questions** per segment (4 elemental, 4 conceptual, 4 advanced).
-   - Provide **6 choices each (A–F)**.
-   - **Enforce Anti-Verbosity Bias Prohibition**: Correct answers must NEVER be predictably longer or more descriptive than distractors. Distractors must match the correct option in academic depth, grammar, and length (length variance strictly within 15–25%). Across any question pool, the correct option must be the longest option in at most ~10–16.7% of questions.
-   - **Enforce Uniform Option Distribution**: Distribute correct answers equally across choices (exactly 2 of each letter A, B, C, D, E, F per 12-question quiz; 16.67% across aggregate banks).
-   - Populate `section_reference` and `section_anchor` on every single question.
-   - Author comprehensive failure explanations with deep theoretical and mathematical derivations.
-   - Insert into `study_questions` (`pool_type = 'quiz'`).
-
-6. **Phase 3: Practical Workbook Exercises Formulation (Per Segment)**:
-   - Extract or formulate deep open-ended problem sets directly reflecting course workbook problem sets and exam-style assignments.
-   - Author multi-part problem statements with authentic datasets, tables, and analytical derivations.
-   - Write authoritative, step-by-step worked solutions formatted in KaTeX with complete proofs and numerical verifications.
-   - Populate `section_reference` and `section_anchor` on every exercise.
-   - Insert into `study_workbook_exercises`.
-
-7. **Phase 4: High-Yield Flashcard Deck Formulation (Per Segment)**:
-   - Formulate exactly **8 high-recall flashcards** per segment focusing on core definitions, formula interpretation, and critical decision rules.
-   - Populate `section_reference` and `section_anchor` on each card for 1-click text guide jumps.
-   - Insert into `study_flashcards`.
-
-8. **Database Seeding & Migration**:
-   - Execute insertions directly into the Supabase `tracker` project (`https://eurqqiebokwcrrhfbihg.supabase.co`).
-   - Never touch calorie tracker tables (`food_items`, `weight_logs`) or `supabase_novae`.
-
-9. **Automated Verification & Integrity Audit**:
-   - Verify question count (exactly 12 per segment), workbook exercise presence, and flashcard count (exactly 8 per segment).
-   - Verify exact uniform distribution (2 A's, 2 B's, 2 C's, 2 D's, 2 E's, 2 F's per 12-question quiz).
-   - Verify that the correct option is not consistently the longest.
-   - Verify all `section_anchor` tags exist in the text guide.
-   - Run `npm run build` to ensure zero TypeScript, JSX, or bundling errors.
-
-10. **Self-Updating Skill Persistence**:
-    - Immediately update Section 4 of `SKILL.md` across all 5 mirror paths to document the new discipline, chapter structure, and segment mappings.
+Before publishing new content or deploying application updates, verify:
+- [ ] Exactly 12 questions per quiz with 6 choices each (A–F).
+- [ ] Exactly 2 of each option letter (2 A, 2 B, 2 C, 2 D, 2 E, 2 F) per 12-question quiz.
+- [ ] Correct answer is not predictably the longest option (length variance <20%).
+- [ ] KaTeX formulas render cleanly without duplicate numbers or broken syntax.
+- [ ] Every question, exercise, and flashcard has a valid `section_anchor` linking to the text guide.
+- [ ] All workbook exercises include a writing zone, "Copy for AI", and self-evaluation buttons.
+- [ ] `npm run build` exits with code 0.
