@@ -217,14 +217,25 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
           initialOffset: { ...offset },
         };
       } else {
-        // Single finger, resting palm, or Apple Pencil:
-        // PREVENT DEFAULT to stop iOS Safari from starting tap-and-hold / text selection / "Search with AI" callout!
+        // Single finger, resting palm, or Apple Pencil on canvas:
+        // Check if the touch target is on the toolbar, buttons, or HUD
+        const target = e.target as HTMLElement | null;
+        if (target && target.closest('button, [role="button"], input, a, select, .scratchpad-toolbar, .scratchpad-hud')) {
+          // Never cancel touches on interactive controls, allowing instant tablet/mobile taps!
+          return;
+        }
+
+        // PREVENT DEFAULT on canvas to stop iOS Safari from starting tap-and-hold / text selection / "Search with AI" callout!
         // Pointer events will continue firing cleanly for Apple Pencil writing and drawing.
         e.preventDefault();
       }
     };
 
     const onTouchMove = (e: TouchEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target && target.closest('button, [role="button"], input, a, select, .scratchpad-toolbar, .scratchpad-hud')) {
+        return;
+      }
       const hasStylus = Array.from(e.touches).some((t: any) => t.touchType === 'stylus');
       if (hasStylus || isPenActiveRef.current) {
         return;
@@ -502,21 +513,29 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
       }}
     >
       {/* Top Floating Tools Bar */}
-      <div style={{
-        position: 'absolute',
-        top: '12px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        zIndex: 210,
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.4rem',
-        padding: '0.4rem 0.65rem',
-        backgroundColor: '#ffffff',
-        border: '1.5px solid #78350f',
-        borderRadius: '999px',
-        boxShadow: '0 6px 20px rgba(120, 53, 15, 0.15)'
-      }}>
+      <div 
+        className="scratchpad-toolbar"
+        onTouchStart={(e) => e.stopPropagation()}
+        onTouchMove={(e) => e.stopPropagation()}
+        onTouchEnd={(e) => e.stopPropagation()}
+        onPointerDown={(e) => e.stopPropagation()}
+        style={{
+          position: 'absolute',
+          top: '12px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 220,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.4rem',
+          padding: '0.4rem 0.65rem',
+          backgroundColor: '#ffffff',
+          border: '1.5px solid #78350f',
+          borderRadius: '999px',
+          boxShadow: '0 6px 20px rgba(120, 53, 15, 0.15)',
+          touchAction: 'manipulation',
+          pointerEvents: 'auto'
+        }}>
         {/* Pen Button */}
         <button
           onClick={() => setTool('pen')}
@@ -722,23 +741,30 @@ export const ScratchpadModal: React.FC<ScratchpadModalProps> = ({
         {/* Close Button */}
         <button
           onClick={handleClose}
+          onTouchEnd={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleClose();
+          }}
           style={{
             display: 'flex',
             alignItems: 'center',
             gap: '0.3rem',
-            padding: '0.35rem 0.8rem',
+            padding: '0.4rem 0.9rem',
             borderRadius: '999px',
             border: 'none',
             backgroundColor: '#15803d',
             color: '#ffffff',
             fontWeight: 800,
-            fontSize: '0.78rem',
+            fontSize: '0.8rem',
             cursor: 'pointer',
-            marginLeft: '0.2rem'
+            marginLeft: '0.2rem',
+            touchAction: 'manipulation',
+            pointerEvents: 'auto'
           }}
         >
           <span>Done</span>
-          <Check size={13} strokeWidth={3} />
+          <Check size={14} strokeWidth={3} />
         </button>
       </div>
 

@@ -63,21 +63,36 @@ export const App: React.FC = () => {
     return name.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '') || 'david';
   };
 
-  // 1. Load disciplines on mount
+  // 1. Load disciplines on mount or when currentUser changes
   useEffect(() => {
     fetchDisciplines();
-  }, []);
-
-  // Reload user settings and progress whenever currentUser changes
-  useEffect(() => {
-    if (currentUser) {
-      const uKey = normalizeUserKey(currentUser);
-      fetchUserSettings(uKey);
-      if (currentDiscipline) {
-        fetchSegmentsAndProgress(currentDiscipline.id, currentUser);
-      }
-    }
   }, [currentUser]);
+
+  // Reactive Persistence: Auto-save active discipline, segment, and phase for returning users
+  useEffect(() => {
+    if (currentUser && currentDiscipline) {
+      const uKey = normalizeUserKey(currentUser);
+      localStorage.setItem(`david_study_last_disc_${uKey}`, currentDiscipline.id);
+      supabase.from('study_user_settings').update({
+        active_discipline_id: currentDiscipline.id,
+        updated_at: new Date().toISOString()
+      }).eq('id', uKey).then(() => {});
+    }
+  }, [currentDiscipline?.id, currentUser]);
+
+  useEffect(() => {
+    if (currentUser && currentDiscipline && currentSegment) {
+      const uKey = normalizeUserKey(currentUser);
+      localStorage.setItem(`david_study_last_seg_${uKey}_${currentDiscipline.id}`, currentSegment.id);
+    }
+  }, [currentSegment?.id, currentDiscipline?.id, currentUser]);
+
+  useEffect(() => {
+    if (currentUser && currentSegment) {
+      const uKey = normalizeUserKey(currentUser);
+      localStorage.setItem(`david_study_last_phase_${uKey}_${currentSegment.id}`, activePhase);
+    }
+  }, [activePhase, currentSegment?.id, currentUser]);
 
   const fetchUserSettings = async (uKey: string) => {
     try {
@@ -133,11 +148,12 @@ export const App: React.FC = () => {
 
   const fetchDisciplines = async () => {
     setLoading(true);
+    const uKey = normalizeUserKey(currentUser);
     try {
       const { data, error } = await supabase
         .from('study_disciplines')
         .select('*')
-        .order('created_at', { ascending: true });
+        .order('created_at', { ascending: false }); // Newest discipline first (data[0] is the most recently added)
 
       if (error) {
         console.error('Error fetching disciplines:', error);
@@ -146,8 +162,33 @@ export const App: React.FC = () => {
 
       if (data && data.length > 0) {
         setDisciplines(data);
-        const defaultDisc = data.find(d => d.id === 'data-analysis') || data[0];
-        setCurrentDiscipline(defaultDisc);
+
+        let targetDisc: Discipline | null = null;
+
+        // If returning user: restore where they were
+        if (currentUser) {
+          const savedDiscId = localStorage.getItem(`david_study_last_disc_${uKey}`);
+          if (savedDiscId) {
+            targetDisc = data.find(d => d.id === savedDiscId) || null;
+          }
+          if (!targetDisc) {
+            const { data: userSettings } = await supabase
+              .from('study_user_settings')
+              .select('active_discipline_id')
+              .eq('id', uKey)
+              .maybeSingle();
+            if (userSettings?.active_discipline_id) {
+              targetDisc = data.find(d => d.id === userSettings.active_discipline_id) || null;
+            }
+          }
+        }
+
+        // For first users (or no saved history): always open the most recently added one (data[0])!
+        if (!targetDisc) {
+          targetDisc = data[0];
+        }
+
+        setCurrentDiscipline(targetDisc);
       }
     } finally {
       setLoading(false);
@@ -158,17 +199,28 @@ export const App: React.FC = () => {
   useEffect(() => {
     if (!currentDiscipline) return;
     fetchSegmentsAndProgress(currentDiscipline.id, currentUser);
-  }, [currentDiscipline]);
+  }, [currentDiscipline?.id]);
 
   const fetchSegmentsAndProgress = async (disciplineId: string, uName?: string | null) => {
     setLoading(true);
-    const uKey = normalizeUserKey(uName !== undefined ? uName : currentUser);
+    const activeUser = uName !== undefined ? uName : currentUser;
+    const uKey = normalizeUserKey(activeUser);
     try {
-      const { data: segData, error: segError } = await supabase
-        .from('study_segments')
-        .select('*')
-        .eq('discipline_id', disciplineId)
-        .order('order_index', { ascending: true });
+      const [
+        { data: segData, error: segError },
+        { data: progData, error: progError }
+      ] = await Promise.all([
+        supabase
+          .from('study_segments')
+          .select('*')
+          .eq('discipline_id', disciplineId)
+          .order('order_index', { ascending: true }),
+        supabase
+          .from('study_progress')
+          .select('*')
+          .eq('username', uKey)
+          .eq('discipline_id', disciplineId)
+      ]);
 
       if (segError) {
         console.error('Error fetching segments:', segError);
@@ -176,26 +228,50 @@ export const App: React.FC = () => {
       }
 
       setSegments(segData || []);
-      if (segData && segData.length > 0) {
-        setCurrentSegment(segData[0]);
-      } else {
-        setCurrentSegment(null);
+
+      const progressLookup: Record<string, SegmentProgress> = {};
+      if (progData) {
+        progData.forEach(p => {
+          progressLookup[p.segment_id] = p;
+        });
+        setProgressMap(progressLookup);
       }
 
-      const { data: progData, error: progError } = await supabase
-        .from('study_progress')
-        .select('*')
-        .eq('username', uKey)
-        .eq('discipline_id', disciplineId);
+      if (segData && segData.length > 0) {
+        let chosenSeg: Segment | null = null;
 
-      if (progError) {
-        console.error('Error fetching progress:', progError);
-      } else if (progData) {
-        const map: Record<string, SegmentProgress> = {};
-        progData.forEach(p => {
-          map[p.segment_id] = p;
-        });
-        setProgressMap(map);
+        if (activeUser) {
+          // 1. Check local storage for this user and discipline
+          const savedSegId = localStorage.getItem(`david_study_last_seg_${uKey}_${disciplineId}`);
+          if (savedSegId) {
+            chosenSeg = segData.find(s => s.id === savedSegId) || null;
+          }
+
+          // 2. Cloud fallback: Find most recently updated progress for this user in this discipline
+          if (!chosenSeg && progData && progData.length > 0) {
+            const sortedByRecent = [...progData].sort((a, b) => 
+              new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+            );
+            if (sortedByRecent[0]) {
+              chosenSeg = segData.find(s => s.id === sortedByRecent[0].segment_id) || null;
+            }
+          }
+        }
+
+        // 3. For first-time users or no saved history: default to the first segment of the discipline
+        if (!chosenSeg) {
+          chosenSeg = segData[0];
+        }
+
+        setCurrentSegment(chosenSeg);
+
+        // Check if user had a saved phase for this segment
+        const savedPhase = localStorage.getItem(`david_study_last_phase_${uKey}_${chosenSeg.id}`);
+        if (savedPhase && ['text', 'quiz', 'workbook', 'flashcards'].includes(savedPhase)) {
+          setActivePhase(savedPhase as any);
+        }
+      } else {
+        setCurrentSegment(null);
       }
     } finally {
       setLoading(false);
